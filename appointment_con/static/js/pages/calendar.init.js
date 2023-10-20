@@ -30,7 +30,14 @@ document.addEventListener("DOMContentLoaded", function () {
     var y = date.getFullYear();
     var Draggable = FullCalendar.Draggable;
     var externalEventContainerEl = document.getElementById('external-events');
-    var defaultEvents = [{
+    fetch('get_events/')
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+    })
+    var defaultEvents = [
+       
+       {
             id: 1,
             title: "World Braille Day",
             start: "2022-01-04",
@@ -38,78 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
             allDay: true
 
         },
-        {
-            id: 2,
-            title: "World Leprosy Day",
-            start: "2022-01-30",
-            className: "bg-info-subtle",
-            allDay: true
-        },
 
-        {
-            id: 3,
-            title: "International Mother Language Day",
-            start: "2022-02-21",
-            className: "bg-info-subtle",
-            allDay: true
-        },
-
-        {
-            id: 4,
-            title: "International Women's Day",
-            start: "2022-03-08",
-            className: "bg-info-subtle",
-            allDay: true
-        },
-
-        {
-            id: 5,
-            title: "World Thinking Day",
-            start: "2022-02-22",
-            className: "bg-info-subtle",
-            allDay: true
-        },
-
-        {
-            id: 6,
-            title: "International Mother Language Day",
-            start: "2022-03-21",
-            className: "bg-info-subtle",
-            allDay: true
-        },
-
-        {
-            id: 7,
-            title: "World Water Day",
-            start: "2022-03-22",
-            className: "bg-info-subtle",
-            allDay: true
-        },
-
-        {
-            id: 8,
-            title: "World Health Day",
-            start: "2022-04-07",
-            className: "bg-info-subtle",
-            allDay: true
-        },
-
-
-        {
-            id: 9,
-            title: "International Special Librarians Day",
-            start: "2022-04-16",
-            className: "bg-info-subtle",
-            allDay: true
-        },
-
-        {
-            id: 10,
-            title: "Earth Day",
-            start: "2022-04-22",
-            className: "bg-info-subtle",
-            allDay: true
-        },
         {
             id: 153,
             title: 'All Day Event',
@@ -185,27 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             description: 'Strategies for Creating Your Weekly Schedule'
         },
-        {
-            id: 875,
-            title: 'Birthday Party',
-            start: new Date(y, m, d + 1, 19, 0),
-            allDay: true,
-            className: 'bg-success-subtle',
-            location: 'Los Angeles, US',
-            extendedProps: {
-                department: 'Birthday Party'
-            },
-            description: 'Family slumber party – Bring out the blankets and pillows and have a family slumber party! Play silly party games, share special snacks and wind down the fun with a special movie.'
-        },
-        {
-            id: 783,
-            title: 'Click for Google',
-            start: new Date(y, m, 28),
-            end: new Date(y, m, 29),
-            allDay: true,
-            url: 'http://google.com/',
-            className: 'bg-dark-subtle',
-        },
+
         {
             id: 456,
             title: 'Velzon Project Discussion with Team',
@@ -282,7 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
             var newView = getInitialView();
             calendar.changeView(newView);
         },
-        eventResize: function(info) {
+        eventResize: function (info) {
             var indexOfSelectedEvent = defaultEvents.findIndex(function (x) {
                 return x.id == info.event.id
             });
@@ -342,11 +258,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 return [year, month, day].join('-');
             };
             var updateDay = null
-            if(ed_date != null){
+            if (ed_date != null) {
                 var endUpdateDay = new Date(ed_date);
                 updateDay = endUpdateDay.setDate(endUpdateDay.getDate() - 1);
             }
-            
+
             var r_date = ed_date == null ? (str_dt(st_date)) : (str_dt(st_date)) + ' to ' + (str_dt(updateDay));
             var er_date = ed_date == null ? (date_r(st_date)) : (date_r(st_date)) + ' to ' + (date_r(updateDay));
 
@@ -558,23 +474,23 @@ function flatPickrInit() {
     };
     var date_range = flatpickr(
         start_date, {
-            enableTime: false,
-            mode: "range",
-            minDate: "today",
-            onChange: function (selectedDates, dateStr, instance) {
-                var date_range = dateStr;
-                var dates = date_range.split("to");
-                if (dates.length > 1) {
-                    document.getElementById('event-time').setAttribute("hidden", true);
-                } else {
-                    document.getElementById("timepicker1").parentNode.classList.remove("d-none");
-                    document.getElementById("timepicker1").classList.replace("d-none", "d-block");
-                    document.getElementById("timepicker2").parentNode.classList.remove("d-none");
-                    document.getElementById("timepicker2").classList.replace("d-none", "d-block");
-                    document.getElementById('event-time').removeAttribute("hidden");
-                }
-            },
-        });
+        enableTime: false,
+        mode: "range",
+        minDate: "today",
+        onChange: function (selectedDates, dateStr, instance) {
+            var date_range = dateStr;
+            var dates = date_range.split("to");
+            if (dates.length > 1) {
+                document.getElementById('event-time').setAttribute("hidden", true);
+            } else {
+                document.getElementById("timepicker1").parentNode.classList.remove("d-none");
+                document.getElementById("timepicker1").classList.replace("d-none", "d-block");
+                document.getElementById("timepicker2").parentNode.classList.remove("d-none");
+                document.getElementById("timepicker2").classList.replace("d-none", "d-block");
+                document.getElementById('event-time').removeAttribute("hidden");
+            }
+        },
+    });
     flatpickr(timepicker1, config);
     flatpickr(timepicker2, config);
 
@@ -612,7 +528,7 @@ function editEvent(data) {
     var data_id = data.getAttribute("data-id");
     if (data_id == 'new-event') {
         document.getElementById('modal-title').innerHTML = "";
-        document.getElementById('modal-title').innerHTML = "Add Event";
+        document.getElementById('modal-title').innerHTML = "Yeni ekle";
         document.getElementById("btn-save-event").innerHTML = "Add Event";
         eventTyped();
     } else if (data_id == 'edit-event') {
@@ -659,20 +575,20 @@ function upcomingEvent(a) {
         if (element.end) {
             endUpdatedDay = new Date(element.end);
             var updatedDay = endUpdatedDay.setDate(endUpdatedDay.getDate() - 1);
-          }
+        }
         var e_dt = updatedDay ? updatedDay : undefined;
         if (e_dt == "Invalid Date" || e_dt == undefined) {
             e_dt = null;
         } else {
             const newDate = new Date(e_dt).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
             e_dt = new Date(newDate)
-              .toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
-              .split(" ")
-              .join(" ");
+                .toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                })
+                .split(" ")
+                .join(" ");
         }
         var st_date = element.start ? str_dt(element.start) : null;
         var ed_date = updatedDay ? str_dt(updatedDay) : null;
@@ -685,13 +601,13 @@ function upcomingEvent(a) {
         } else {
             const newDate = new Date(startDate).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
             startDate = new Date(newDate)
-              .toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
-              .split(" ")
-              .join(" ");
+                .toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                })
+                .split(" ")
+                .join(" ");
         }
 
         var end_dt = (e_dt) ? " to " + e_dt : '';

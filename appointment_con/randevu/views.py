@@ -27,13 +27,16 @@ from datetime import datetime
 #         form=RandevuForm()
 #     return render(request,'randevu/randevu.html',{'form':form}) 
 
+def get_events(request):
+    events = Events.objects.all().values()
+    return JsonResponse(list(events), safe=False)
 
 def calendar(request):
     all_events = Events.objects.all()
     context = {
         "events":all_events,
     }
-    return render(request,'randevu.html',context)
+    return render(request,'randevu/randevu.html',context)
 
 def all_events(request):                                                                                                 
     all_events = Events.objects.all()                                                                               

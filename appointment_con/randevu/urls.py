@@ -1,5 +1,6 @@
+from . import views
 from django.urls import path
-from .views import calendar, add_event, update, remove, all_events
+from .views import *
 
 urlpatterns = [
     path('calendar', calendar, name='calendar'),
@@ -7,6 +8,7 @@ urlpatterns = [
     path('update', update, name='update'),
     path('remove', remove, name='remove'),
     path('all_events', all_events, name='all_events'),
+    path('get_events/', views.get_events, name='get_events'),
 ]
 
 
