@@ -1,0 +1,66 @@
+{% extends 'account/base.html' %}
+{% load static %}
+
+
+{% block title %}Giriş Yap{% endblock title %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        <div class="card mt-4">
+
+            <div class="card-body p-4">
+                <div class="text-center mt-2">
+                    <h5 class="text-primary"> MCBÜ </h5>
+
+                </div>
+                <div class="mt-4">
+                    <form method="POST"  action="{% url 'login' %}">
+                        {% csrf_token %}
+                       
+                  
+                        <div class="mb-3">
+                            <label for="e-mail" class="form-label">E-Mail</label>
+                            <input type="text" class="form-control" name="username" id="e-mail"
+                                placeholder="E-Mail ">
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="float-end">
+                                <a href="" class="text-muted">Şifremi unuttum</a>
+                            </div>
+                            <label class="form-label" for="password-input">Şifre</label>
+                            <div class="position-relative auth-pass-inputgroup mb-3">
+                                <input type="password" class="form-control pe-5 password-input" name="password"
+                                    placeholder="Şifrenizi giriniz" id="password-input">
+                                <button
+                                    class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+                                    type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                            </div>
+                            
+                        </div>
+                        <div class="mt-4">
+                            <button  class="btn btn-success w-100" type="submit">Giriş Yap</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <!-- end card body -->
+        </div>
+        <!-- end card -->
+
+        <div class="mt-4 text-center">
+            <p class="mb-0">Yeni hesap oluştur ? <a href=""
+                    class="fw-semibold text-primary text-decoration-underline"> Üye Ol </a> </p>
+        </div>
+
+    </div>
+</div>
+<!-- end row -->
+{% endblock content %}
+
+{% block extra_js %}
+<!-- password-addon init -->
+<script src="{% static 'js/pages/password-addon.init.js'%}"></script>
+{% endblock extra_js %}

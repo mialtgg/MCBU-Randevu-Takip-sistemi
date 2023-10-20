@@ -1,0 +1,58 @@
+{% extends 'account/base.html' %}
+{% load static %}
+
+
+{% block title %}Giriş Yap{% endblock title %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6 col-xl-5">
+        <div class="card mt-4">
+
+            <div class="card-body p-4">
+                <div class="text-center mt-2">
+                    <h5 class="text-primary">contact </h5>
+
+                </div>
+                <div class="mt-4">
+                    <form method="POST"  action="{% url 'contact' %}">
+                        {% csrf_token %}
+                       
+                  
+                        <div class="mb-3">
+                            {{form.first_name}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="e-mail" class="form-label">Last name</label>
+                            <input type="text" class="form-control" name="e-mail" id="e-mail"
+                                placeholder="Last  name ">
+                        </div>
+                        <div class="mb-6">
+                            <label for="e-mail" class="form-label"></label>
+                            <input type="text" class="form-control" name="e-mail" id="e-mail"
+                                placeholder="Buraya notunuzu yazabilirsiniz">
+                        </div>
+
+                        
+                        <div class="mt-4">
+                            <button  class="btn btn-success w-100" type="submit">Gönder</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <!-- end card body -->
+        </div>
+        <!-- end card -->
+
+       
+
+    </div>
+</div>
+<!-- end row -->
+{% endblock content %}
+
+{% block extra_js %}
+<!-- password-addon init -->
+<script src="{% static 'js/pages/password-addon.init.js'%}"></script>
+{% endblock extra_js %}

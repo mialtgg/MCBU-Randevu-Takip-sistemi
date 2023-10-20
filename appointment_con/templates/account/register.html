@@ -1,0 +1,104 @@
+{% extends 'account/base.html' %}
+{% load static %}
+
+
+
+
+{% block title %}Kayıt Ol{% endblock title %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-12 col-xl-12">
+            <div class="card mt-4">
+                 {% if messages %}
+                        
+                        <ul class="messages">
+                            {% for message in messages %}
+                            <div class="alert alert-danger" role="alert">
+                               <li style="list-style: no;" {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                              </div>
+                            
+                            
+                                {% endfor %}
+                        </ul>
+                        {% endif %}
+    
+
+            <div class="card-body p-4">
+                <div class="text-center mt-2">
+                    <h5 class="text-primary">Yeni Hesap Oluştur</h5>
+
+                </div>
+                
+                <div class="p-2 mt-4">
+                    <form class="needs-validation" novalidate method="POST" action="{% url 'register' %}">
+                        {% csrf_token %}
+
+                       
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Kullanıcı adı </label>
+                            <input type="text" class="form-control" name="username" id="username"
+                                placeholder="Kullanıcı Adı">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="e-mail" class="form-label">E-Mail Adresiniz</label>
+                            <input type="text" class="form-control" name="email" id="e-mail" placeholder="E-Mail ">
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label" for="password-input">Şifreniz</label>
+                            <div class="position-relative auth-pass-inputgroup mb-3">
+                                <input type="password" class="form-control pe-5 password-input" name="password1"
+                                    placeholder="Şifrenizi giriniz" id="password-input">
+                                <button
+                                    class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+                                    type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label" for="password2">Şifreyi Tekrarla </label>
+                            <div class="position-relative auth-pass-inputgroup mb-3">
+                                <input class="form-control pe-5 password-input" type="password" id="password2"
+                                    placeholder="Şifrenizi giriniz" name="password2" required><br><br>
+
+                                <button
+                                    class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+                                    type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                            </div>
+                        </div>
+
+
+                        <div class="mt-4">
+                            <button class="btn btn-success w-100" type="submit" id="login_btn">Giriş Yap</button>
+                        </div>
+
+
+                    </form>
+
+
+
+                </div>
+            </div>
+            <!-- end card body -->
+        </div>
+        <!-- end card -->
+
+        <div class="mt-4 text-center">
+            <p class="mb-0">Hesabınız var mı? <a href="{{ login_url }}"
+                    class="fw-semibold text-primary text-decoration-underline"> Giriş Yap </a> </p>
+        </div>
+
+    </div>
+</div>
+<!-- end row -->
+{% endblock content %}
+{% block extra_js %}
+<!-- password-addon init -->
+<script src="{% static 'js/pages/password-addon.init.js'%}"></script>
+{% endblock extra_js %}
