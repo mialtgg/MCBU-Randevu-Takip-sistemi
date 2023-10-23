@@ -91,7 +91,7 @@ WSGI_APPLICATION = "appointment.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'randevu',
+        'NAME': 'test',
         'HOST': 'MINE\MSSQLSERVER02',
         'PORT': '',
         'OPTIONS': {

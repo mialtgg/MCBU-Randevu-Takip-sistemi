@@ -30,112 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var y = date.getFullYear();
     var Draggable = FullCalendar.Draggable;
     var externalEventContainerEl = document.getElementById('external-events');
-    fetch('get_events/')
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-    })
-    var defaultEvents = [
-       
-       {
-            id: 1,
-            title: "World Braille Day",
-            start: "2022-01-04",
-            className: "bg-info-subtle",
-            allDay: true
-
-        },
-
-        {
-            id: 153,
-            title: 'All Day Event',
-            start: new Date(y, m, 1),
-            className: 'bg-primary-subtle',
-            location: 'San Francisco, US',
-            allDay: true,
-            extendedProps: {
-                department: 'All Day Event'
-            },
-            description: 'An all-day event is an event that lasts an entire day or longer'
-        },
-        {
-            id: 136,
-            title: 'Visit Online Course',
-            start: new Date(y, m, d - 5),
-            end: new Date(y, m, d - 2),
-            allDay: true,
-            className: 'bg-warning-subtle',
-            extendedProps: {
-                department: 'Long Event'
-            },
-            description: 'Long Term Event means an incident that last longer than 12 hours.'
-        },
-        {
-            id: 999,
-            title: 'Client Meeting with Alexis',
-            start: new Date(y, m, d + 22, 20, 0),
-            end: new Date(y, m, d + 24, 16, 0),
-            allDay: true,
-            className: 'bg-danger-subtle',
-            location: 'California, US',
-            extendedProps: {
-                department: 'Meeting with Alexis'
-            },
-            description: 'A meeting is a gathering of two or more people that has been convened for the purpose of achieving a common goal through verbal interaction, such as sharing information or reaching agreement.'
-        },
-        {
-            id: 991,
-            title: 'Repeating Event',
-            start: new Date(y, m, d + 4, 16, 0),
-            end: new Date(y, m, d + 9, 16, 0),
-            allDay: true,
-            className: 'bg-primary-subtle',
-            location: 'Las Vegas, US',
-            extendedProps: {
-                department: 'Repeating Event'
-            },
-            description: 'A recurring or repeating event is simply any event that you will occur more than once on your calendar. ',
-        },
-        {
-            id: 112,
-            title: 'Meeting With Designer',
-            start: new Date(y, m, d, 12, 30),
-            allDay: true,
-            className: 'bg-success-subtle',
-            location: 'Head Office, US',
-            extendedProps: {
-                department: 'Meeting'
-            },
-            description: 'Tell how to boost website traffic'
-        },
-        {
-            id: 113,
-            title: 'Weekly Strategy Planning',
-            start: new Date(y, m, d + 9),
-            end: new Date(y, m, d + 11),
-            allDay: true,
-            className: 'bg-danger-subtle',
-            location: 'Head Office, US',
-            extendedProps: {
-                department: 'Lunch'
-            },
-            description: 'Strategies for Creating Your Weekly Schedule'
-        },
-
-        {
-            id: 456,
-            title: 'Velzon Project Discussion with Team',
-            start: new Date(y, m, d + 23, 20, 0),
-            end: new Date(y, m, d + 24, 16, 0),
-            allDay: true,
-            className: 'bg-info-subtle',
-            location: 'Head Office, US',
-            extendedProps: {
-                department: 'Discussion'
-            },
-            description: 'Tell how to boost website traffic'
-        },
-    ];
+    var defaultEvents = [];
 
     // init draggable
     new Draggable(externalEventContainerEl, {
@@ -198,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
             var newView = getInitialView();
             calendar.changeView(newView);
         },
-        eventResize: function (info) {
+        eventResize: function(info) {
             var indexOfSelectedEvent = defaultEvents.findIndex(function (x) {
                 return x.id == info.event.id
             });
@@ -258,11 +153,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 return [year, month, day].join('-');
             };
             var updateDay = null
-            if (ed_date != null) {
+            if(ed_date != null){
                 var endUpdateDay = new Date(ed_date);
                 updateDay = endUpdateDay.setDate(endUpdateDay.getDate() - 1);
             }
-
+            
             var r_date = ed_date == null ? (str_dt(st_date)) : (str_dt(st_date)) + ' to ' + (str_dt(updateDay));
             var er_date = ed_date == null ? (date_r(st_date)) : (date_r(st_date)) + ' to ' + (date_r(updateDay));
 
@@ -334,12 +229,12 @@ document.addEventListener("DOMContentLoaded", function () {
         eventReceive: function (info) {
             var newid = parseInt(info.event.id);
             var newEvent = {
-                id: newid,
                 title: info.event.title,
+                description: info.event.extendedProps.description,
                 start: info.event.start,
-                allDay: info.event.allDay,
-                className: info.event.classNames[0]
-            };
+                end: info.event.end,
+                allDay: info.event.allDay
+              };
             defaultEvents.push(newEvent);
             upcomingEvent(defaultEvents);
         },
@@ -362,7 +257,35 @@ document.addEventListener("DOMContentLoaded", function () {
 
     calendar.render();
 
-    upcomingEvent(defaultEvents);
+    fetch('get_events/')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('HTTP Error: ' + response.status);
+        }
+        return response.json();
+      })
+      .then(data => {
+        data.forEach(item => {
+          var event = {
+            title: item.name,
+            description: item.description,
+            start: item.date,
+            end: item.date,
+            allDay: item.all_day
+          };
+          defaultEvents.push(event);
+        });
+    
+        calendar.refetchEvents();
+        upcomingEvent(defaultEvents); // fetch işlemi tamamlandığında çağırılıyor
+      })
+      .catch(error => {
+        console.error(error);
+        upcomingEvent(defaultEvents); // Hata durumunda da çağırılabilir
+      });
+    
+   
+    
     /*Add new event*/
     // Form to add new event
     formEvent.addEventListener('submit', function (ev) {
@@ -474,23 +397,23 @@ function flatPickrInit() {
     };
     var date_range = flatpickr(
         start_date, {
-        enableTime: false,
-        mode: "range",
-        minDate: "today",
-        onChange: function (selectedDates, dateStr, instance) {
-            var date_range = dateStr;
-            var dates = date_range.split("to");
-            if (dates.length > 1) {
-                document.getElementById('event-time').setAttribute("hidden", true);
-            } else {
-                document.getElementById("timepicker1").parentNode.classList.remove("d-none");
-                document.getElementById("timepicker1").classList.replace("d-none", "d-block");
-                document.getElementById("timepicker2").parentNode.classList.remove("d-none");
-                document.getElementById("timepicker2").classList.replace("d-none", "d-block");
-                document.getElementById('event-time').removeAttribute("hidden");
-            }
-        },
-    });
+            enableTime: false,
+            mode: "range",
+            minDate: "today",
+            onChange: function (selectedDates, dateStr, instance) {
+                var date_range = dateStr;
+                var dates = date_range.split("to");
+                if (dates.length > 1) {
+                    document.getElementById('event-time').setAttribute("hidden", true);
+                } else {
+                    document.getElementById("timepicker1").parentNode.classList.remove("d-none");
+                    document.getElementById("timepicker1").classList.replace("d-none", "d-block");
+                    document.getElementById("timepicker2").parentNode.classList.remove("d-none");
+                    document.getElementById("timepicker2").classList.replace("d-none", "d-block");
+                    document.getElementById('event-time').removeAttribute("hidden");
+                }
+            },
+        });
     flatpickr(timepicker1, config);
     flatpickr(timepicker2, config);
 
@@ -528,7 +451,7 @@ function editEvent(data) {
     var data_id = data.getAttribute("data-id");
     if (data_id == 'new-event') {
         document.getElementById('modal-title').innerHTML = "";
-        document.getElementById('modal-title').innerHTML = "Yeni ekle";
+        document.getElementById('modal-title').innerHTML = "Add Event";
         document.getElementById("btn-save-event").innerHTML = "Add Event";
         eventTyped();
     } else if (data_id == 'edit-event') {
@@ -575,20 +498,20 @@ function upcomingEvent(a) {
         if (element.end) {
             endUpdatedDay = new Date(element.end);
             var updatedDay = endUpdatedDay.setDate(endUpdatedDay.getDate() - 1);
-        }
+          }
         var e_dt = updatedDay ? updatedDay : undefined;
         if (e_dt == "Invalid Date" || e_dt == undefined) {
             e_dt = null;
         } else {
             const newDate = new Date(e_dt).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
             e_dt = new Date(newDate)
-                .toLocaleDateString("en-GB", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                })
-                .split(" ")
-                .join(" ");
+              .toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })
+              .split(" ")
+              .join(" ");
         }
         var st_date = element.start ? str_dt(element.start) : null;
         var ed_date = updatedDay ? str_dt(updatedDay) : null;
@@ -601,17 +524,18 @@ function upcomingEvent(a) {
         } else {
             const newDate = new Date(startDate).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
             startDate = new Date(newDate)
-                .toLocaleDateString("en-GB", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                })
-                .split(" ")
-                .join(" ");
+              .toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })
+              .split(" ")
+              .join(" ");
         }
 
         var end_dt = (e_dt) ? " to " + e_dt : '';
-        var category = (element.className).split("-");
+        var category = (element.className && element.className.includes("-")) ? element.className.split("-") : ["default"];
+
         var description = (element.description) ? element.description : "";
         var e_time_s = tConvert(getTime(element.start));
         var e_time_e = tConvert(getTime(updatedDay));

@@ -26,10 +26,11 @@ from datetime import datetime
 #         print('9')
 #         form=RandevuForm()
 #     return render(request,'randevu/randevu.html',{'form':form}) 
-
+# endpoint için
 def get_events(request):
     events = Events.objects.all().values()
     return JsonResponse(list(events), safe=False)
+
 
 def calendar(request):
     all_events = Events.objects.all()
@@ -42,13 +43,18 @@ def all_events(request):
     all_events = Events.objects.all()                                                                               
     out = []                                                                                                             
     for event in all_events:   
-        print(event.start)
-        times=event.start                                                                           
-        out.append({                                                                                                     
-            'title': event.name,                                                                                         
-            'id': event.id,                                                                                              
-            'start': event.start.strftime("%m/%d/%Y, %H:%M:%S"),                                                   
-            'end': event.end.strftime("%m/%d/%Y, %H:%M:%S"),                                                             
+        print(event.date)
+        times=event.date                                                                          
+        out.append({ 
+            'id': event.id,
+            'name': event.name,
+            'description': event.description,
+            'priority': event.get_priority_display(),  # Öncelik değerini okunabilir şekilde alıyoruz
+            'date': event.date,
+            'all_day': event.all_day,
+            'start_time': event.start_time.strftime("%H:%M:%S") if event.start_time else None,
+            'end_time': event.end_time.strftime("%H:%M:%S") if event.end_time else None,                                                                                                    
+
         })                                                                                                               
                                                                                                                      
     return JsonResponse(out, safe=False)  
