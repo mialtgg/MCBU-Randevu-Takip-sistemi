@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         return cookieValue;
     }
-    
+
 
     function addNewEvent(info) {
         document.getElementById('form-event').reset();
@@ -92,7 +92,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
-        timeZone: 'local',
+        locale: 'tr',
+        timeZone: 'Europe/Istanbul',
+
         editable: true,
         droppable: true,
         selectable: true,
@@ -104,6 +106,14 @@ document.addEventListener("DOMContentLoaded", function () {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
         },
+        locale: 'tr', // Türkçe dil ayarı
+        buttonText: {
+            today: 'Bugün',
+            month: 'Ay',
+            week: 'Hafta',
+            day: 'Gün'
+        },
+        // Diğer ayarlar...
         windowResize: function (view) {
             var newView = getInitialView();
             calendar.changeView(newView);
@@ -380,8 +390,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        
-        
+
+
         //formun içi 
 
         // Etkinlik bilgilerini topladığınızdan emin olun 

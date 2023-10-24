@@ -12,7 +12,7 @@
                     <div class="container-fluid">
 
                         {% block pagetitle %}
-                        {% include "partials/page-title.html" with pagetitle="Apps" title="Calendar" %}
+                      
                         {% endblock pagetitle %}
 
                         <div class="row">
@@ -22,34 +22,33 @@
                                         <div class="card card-h-100">
                                             <div class="card-body">
                                                 <button class="btn btn-primary w-100" id="btn-new-event"><i
-                                                        class="mdi mdi-plus"></i> Create New Event</button>
+                                                        class="mdi mdi-plus"></i> Randevu Oluştur</button>
         
                                                 <div id="external-events">
                                                     <br>
                                                     <p class="text-muted">Drag and drop your event or click in the calendar</p>
                                                     <div class="external-event fc-event bg-success-subtle text-success" data-class="bg-success-subtle">
-                                                        <i class="mdi mdi-checkbox-blank-circle me-2"></i>New Event
-                                                        Planning
+                                                        <i class="mdi mdi-checkbox-blank-circle me-2"></i>Full gün etkinlik
                                                     </div>
                                                     <div class="external-event fc-event bg-info-subtle text-info" data-class="bg-info-subtle">
-                                                        <i class="mdi mdi-checkbox-blank-circle me-2"></i>Meeting
+                                                        <i class="mdi mdi-checkbox-blank-circle me-2"></i>İzinli Tarih
                                                     </div>
                                                     <div class="external-event fc-event bg-warning-subtle text-warning" data-class="bg-warning-subtle">
                                                         <i
-                                                            class="mdi mdi-checkbox-blank-circle me-2"></i>Generating
+                                                            class="mdi mdi-checkbox-blank-circle me-2"></i>Okul Gezisi
                                                         Reports
                                                     </div>
                                                     <div class="external-event fc-event bg-danger-subtle text-danger" data-class="bg-danger-subtle">
-                                                        <i class="mdi mdi-checkbox-blank-circle me-2"></i>Create
-                                                        New theme
+                                                        <i class="mdi mdi-checkbox-blank-circle me-2"></i>Makam Ziyaretleri
+                                                       
                                                     </div>
                                                 </div>
         
                                             </div>
                                         </div>
                                         <div>
-                                            <h5 class="mb-1">Upcoming Events</h5>
-                                            <p class="text-muted">Don't miss scheduled events</p>
+                                            <h5 class="mb-1">Yaklaşan Randevularım</h5>
+                                            <p class="text-muted">Randevularınızı kaçırmayın. </p>
                                             <div class="pe-2 me-n1 mb-3" data-simplebar style="height: 400px">
                                                 <div id="upcoming-event-list"></div>
                                             </div>
@@ -62,8 +61,8 @@
                                                         <i data-feather="calendar" class="text-info icon-dual-info"></i>
                                                     </div>
                                                     <div class="flex-grow-1 ms-3">
-                                                        <h6 class="fs-15">Welcome to your Calendar!</h6>
-                                                        <p class="text-muted mb-0">Event that applications book will appear here. Click on an event to see the details and manage applicants event.</p>
+                                                        <h6 class="fs-15">Randevu Sistemim!</h6>
+                                                        <p class="text-muted mb-0">Bir randevu ekleyebilir ya da  mevcut etkinliklerden sürükleyip listenizi oluşturabilirsiniz.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -133,30 +132,30 @@
                                                     <div class="row event-form">
                                                         <div class="col-12">
                                                             <div class="mb-3">
-                                                                <label class="form-label">Type</label>
+                                                                <label class="form-label">Öncelik Derecesi</label>
                                                                 <select class="form-select d-none" name="category" id="event-category"  required>
-                                                                    <option value="bg-danger-subtle">Danger</option>
-                                                                    <option value="bg-success-subtle">Success</option>
-                                                                    <option value="bg-primary-subtle">Primary</option>
-                                                                    <option value="bg-info-subtle">Info</option>
-                                                                    <option value="bg-dark-subtle">Dark</option>
-                                                                    <option value="bg-warning-subtle">Warning</option>
+                                                                    <option value="bg-danger-subtle">1.Derece öncelikli</option>
+                                                                    <option value="bg-success-subtle">2.Derece öncelikli</option>
+                                                                    <option value="bg-primary-subtle">3.Derece öncelikli</option>
+                                                                    <option value="bg-info-subtle">4.Derece öncelikli</option>
+                                                                    <option value="bg-dark-subtle">5.Derece öncelikli</option>
+                                                                    <option value="bg-warning-subtle">6.Derece öncelikli</option>
                                                                 </select>
-                                                                <div class="invalid-feedback">Please select a valid event category</div>
+                                                                <div class="invalid-feedback">Lütfen bir Öncelik derecesi belirleyin</div>
                                                             </div>
                                                         </div><!--end col-->
                                                         <div class="col-12">
                                                             <div class="mb-3">
-                                                                <label class="form-label">Event Name</label>
-                                                                <input class="form-control d-none" placeholder="Enter event name" type="text" name="title" id="event-title" required value="" />
-                                                                <div class="invalid-feedback">Please provide a valid event name</div>
+                                                                <label class="form-label">Ad Soyad</label>
+                                                                <input class="form-control d-none" placeholder="Randevuyu Talep eden Kişi" type="text" name="title" id="event-title" required value="" />
+                                                                <div class="invalid-feedback">Lütfen bir isim girin derecesi belirleyin</div>
                                                             </div>
                                                         </div><!--end col-->
                                                         <div class="col-12">
                                                             <div class="mb-3">
-                                                                <label>Event Date</label>
+                                                                <label>Tarih</label>
                                                                 <div class="input-group d-none">
-                                                                    <input type="text" id="event-start-date" class="form-control flatpickr flatpickr-input" placeholder="Select date" readonly required>
+                                                                    <input type="text" id="event-start-date" class="form-control flatpickr flatpickr-input" placeholder="Lütfen Bir Tarih Seçiniz" readonly required>
                                                                     <span class="input-group-text"><i class="ri-calendar-event-line"></i></span>
                                                                 </div>
                                                             </div>
@@ -165,19 +164,19 @@
                                                             <div class="row">
                                                                 <div class="col-6">
                                                                     <div class="mb-3">
-                                                                        <label class="form-label">Start Time</label>
+                                                                        <label class="form-label">Başalangıç zamanı</label>
                                                                         <div class="input-group d-none">
                                                                             <input id="timepicker1" type="text"
-                                                                                class="form-control flatpickr flatpickr-input" placeholder="Select start time" readonly>
+                                                                                class="form-control flatpickr flatpickr-input" placeholder="Saati Seçin" readonly>
                                                                             <span class="input-group-text"><i class="ri-time-line"></i></span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-6">
                                                                     <div class="mb-3">
-                                                                        <label class="form-label">End Time</label>
+                                                                        <label class="form-label">Bitiş zamanı</label>
                                                                         <div class="input-group d-none">
-                                                                            <input id="timepicker2" type="text" class="form-control flatpickr flatpickr-input" placeholder="Select end time" readonly>
+                                                                            <input id="timepicker2" type="text" class="form-control flatpickr flatpickr-input" placeholder="Saati Seçin" readonly>
                                                                             <span class="input-group-text"><i class="ri-time-line"></i></span>
                                                                         </div>
                                                                     </div>
@@ -186,23 +185,23 @@
                                                         </div><!--end col-->
                                                         <div class="col-12">
                                                             <div class="mb-3">
-                                                                <label for="event-location">Location</label>
+                                                                <label for="event-location">Durumu</label>
                                                                 <div>
-                                                                    <input type="text" class="form-control d-none" name="event-location" id="event-location" placeholder="Event location">
+                                                                    <input type="text" class="form-control d-none" name="event-location" id="event-location" placeholder="Durumu">
                                                                 </div>
                                                             </div>
                                                         </div><!--end col-->
                                                         <input type="hidden" id="eventid" name="eventid" value="" />
                                                         <div class="col-12">
                                                             <div class="mb-3">
-                                                                <label class="form-label">Description</label>
-                                                                <textarea class="form-control d-none" id="event-description" placeholder="Enter a description" rows="3" spellcheck="false"></textarea>
+                                                                <label class="form-label">Randevu Talep Etme Konusu</label>
+                                                                <textarea class="form-control d-none" id="event-description" placeholder="Randevu Talep Konusu" rows="3" spellcheck="false"></textarea>
                                                             </div>
                                                         </div><!--end col-->
                                                     </div><!--end row-->
                                                     <div class="hstack gap-2 justify-content-end">
-                                                        <button type="button" class="btn btn-soft-danger" id="btn-delete-event"><i class="ri-close-line align-bottom"></i> Delete</button>
-                                                        <button type="submit" class="btn btn-success" id="btn-save-event">Add Event</button>
+                                                        <button type="button" class="btn btn-soft-danger" id="btn-delete-event"><i class="ri-close-line align-bottom"></i> Sil</button>
+                                                        <button type="submit" class="btn btn-success" id="btn-save-event">Randevu Oluştur</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -230,4 +229,7 @@
 
     <!-- Calendar init -->
     <script src="{% static 'js/pages/calendar.init.js'%}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/locales/tr.js"></script>
+
 {% endblock extra_js %}
