@@ -9,18 +9,12 @@ urlpatterns = [
     path('remove', remove, name='remove'),
     path('all_events', all_events, name='all_events'),
     path('get_events/', views.get_events, name='get_events'),
+    path('add_event/', add_event, name='add_event'),
 ]
 
 
 
-# urlpatterns = [
-    
-    
-#     path("",views.randevu ,name="randevu"),
- 
-  
-# ]
-    
+
 
     
     

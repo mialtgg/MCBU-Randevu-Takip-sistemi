@@ -7,7 +7,8 @@ from .models import Events
 from .forms import RandevuForm
 from django.http import HttpResponse, JsonResponse
 from datetime import datetime
-
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 # def randevu(request):
 #     print("12233")
 #     if request.method == "POST":
@@ -127,6 +128,48 @@ def remove(request):
 #     }
 #     return render(request,'admin/poll/event_management.html',context)
 
+
+
+
+@csrf_exempt  # CSRF korumasını devre dışı bırakmak için kullanabilirsiniz, güvenlik gereksinimlerinize bağlıdır
+@require_POST  # Sadece POST isteklerini kabul etmek için kullanılır
+def add_event(request):
+    if request.method == 'POST':
+        try:
+                        # JSON veriyi işleme
+            data = json.loads(request.body)
+            print(data)
+            # Etkinlik bilgilerini alın
+            title = data.get('title')
+            description = data.get('description')
+            priority = data.get('priority')
+            date = data.get('date')
+            all_day = data.get('all_day')
+            start_time = data.get('start_time')
+            end_time = data.get('end_time')
+            location = data.get('location')
+
+            # Etkinliği veritabanına kaydedin
+            event = Events(
+                name=title,
+                description=description,
+                priority=priority,
+                date=date,
+                all_day=all_day,
+                start_time=start_time,
+                end_time=end_time,
+                location=location
+            )
+     
+            event.save()
+            
+
+            return JsonResponse({'message': 'Etkinlik başarıyla kaydedildi'})
+        
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'JSON verisi işlenemedi'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
 
 
 

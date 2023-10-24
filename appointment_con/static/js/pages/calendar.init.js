@@ -47,6 +47,21 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     var calendarEl = document.getElementById('calendar');
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
 
     function addNewEvent(info) {
         document.getElementById('form-event').reset();
@@ -93,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
             var newView = getInitialView();
             calendar.changeView(newView);
         },
-        eventResize: function(info) {
+        eventResize: function (info) {
             var indexOfSelectedEvent = defaultEvents.findIndex(function (x) {
                 return x.id == info.event.id
             });
@@ -153,11 +168,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 return [year, month, day].join('-');
             };
             var updateDay = null
-            if(ed_date != null){
+            if (ed_date != null) {
                 var endUpdateDay = new Date(ed_date);
                 updateDay = endUpdateDay.setDate(endUpdateDay.getDate() - 1);
             }
-            
+
             var r_date = ed_date == null ? (str_dt(st_date)) : (str_dt(st_date)) + ' to ' + (str_dt(updateDay));
             var er_date = ed_date == null ? (date_r(st_date)) : (date_r(st_date)) + ' to ' + (date_r(updateDay));
 
@@ -234,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 start: info.event.start,
                 end: info.event.end,
                 allDay: info.event.allDay
-              };
+            };
             defaultEvents.push(newEvent);
             upcomingEvent(defaultEvents);
         },
@@ -258,34 +273,34 @@ document.addEventListener("DOMContentLoaded", function () {
     calendar.render();
 
     fetch('get_events/')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('HTTP Error: ' + response.status);
-        }
-        return response.json();
-      })
-      .then(data => {
-        data.forEach(item => {
-          var event = {
-            title: item.name,
-            description: item.description,
-            start: item.date,
-            end: item.date,
-            allDay: item.all_day
-          };
-          defaultEvents.push(event);
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('HTTP Error: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            data.forEach(item => {
+                var event = {
+                    title: item.name,
+                    description: item.description,
+                    start: item.date,
+                    end: item.date,
+                    allDay: item.all_day
+                };
+                defaultEvents.push(event);
+            });
+
+            calendar.refetchEvents();
+            upcomingEvent(defaultEvents); // fetch işlemi tamamlandığında çağırılıyor
+        })
+        .catch(error => {
+            console.error(error);
+            upcomingEvent(defaultEvents); // Hata durumunda da çağırılabilir
         });
-    
-        calendar.refetchEvents();
-        upcomingEvent(defaultEvents); // fetch işlemi tamamlandığında çağırılıyor
-      })
-      .catch(error => {
-        console.error(error);
-        upcomingEvent(defaultEvents); // Hata durumunda da çağırılabilir
-      });
-    
-   
-    
+
+
+
     /*Add new event*/
     // Form to add new event
     formEvent.addEventListener('submit', function (ev) {
@@ -363,7 +378,50 @@ document.addEventListener("DOMContentLoaded", function () {
             addEvent.hide();
             upcomingEvent(defaultEvents);
         }
+
+
+        
+        
+        //formun içi 
+
+        // Etkinlik bilgilerini topladığınızdan emin olun 
+        var eventData = {
+            id: e_id,
+            title: updatedTitle,
+            start: start_date,
+            end: end_date,
+            allDay: all_day,
+            className: updatedCategory,
+            description: eventDescription,
+            location: event_location
+        };
+        // Django CSRF token'ını almak için getCookie fonksiyonunu kullanın
+        var csrftoken = getCookie('csrftoken');
+        // POST isteği yapma
+        fetch('add_event/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken  // Django CSRF korumasını sağlamak için gerekli
+            },
+            body: JSON.stringify(eventData)  // JSON formatındaki etkinlik bilgilerini isteğe ekle
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Django'dan dönen yanıtı işleyin
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Etkinlik ekleme hatası:', error);
+            });
+
+
     });
+
+
+    // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
+
+
 
     document.getElementById("btn-delete-event").addEventListener("click", function (e) {
         if (selectedEvent) {
@@ -397,23 +455,23 @@ function flatPickrInit() {
     };
     var date_range = flatpickr(
         start_date, {
-            enableTime: false,
-            mode: "range",
-            minDate: "today",
-            onChange: function (selectedDates, dateStr, instance) {
-                var date_range = dateStr;
-                var dates = date_range.split("to");
-                if (dates.length > 1) {
-                    document.getElementById('event-time').setAttribute("hidden", true);
-                } else {
-                    document.getElementById("timepicker1").parentNode.classList.remove("d-none");
-                    document.getElementById("timepicker1").classList.replace("d-none", "d-block");
-                    document.getElementById("timepicker2").parentNode.classList.remove("d-none");
-                    document.getElementById("timepicker2").classList.replace("d-none", "d-block");
-                    document.getElementById('event-time').removeAttribute("hidden");
-                }
-            },
-        });
+        enableTime: false,
+        mode: "range",
+        minDate: "today",
+        onChange: function (selectedDates, dateStr, instance) {
+            var date_range = dateStr;
+            var dates = date_range.split("to");
+            if (dates.length > 1) {
+                document.getElementById('event-time').setAttribute("hidden", true);
+            } else {
+                document.getElementById("timepicker1").parentNode.classList.remove("d-none");
+                document.getElementById("timepicker1").classList.replace("d-none", "d-block");
+                document.getElementById("timepicker2").parentNode.classList.remove("d-none");
+                document.getElementById("timepicker2").classList.replace("d-none", "d-block");
+                document.getElementById('event-time').removeAttribute("hidden");
+            }
+        },
+    });
     flatpickr(timepicker1, config);
     flatpickr(timepicker2, config);
 
@@ -498,20 +556,20 @@ function upcomingEvent(a) {
         if (element.end) {
             endUpdatedDay = new Date(element.end);
             var updatedDay = endUpdatedDay.setDate(endUpdatedDay.getDate() - 1);
-          }
+        }
         var e_dt = updatedDay ? updatedDay : undefined;
         if (e_dt == "Invalid Date" || e_dt == undefined) {
             e_dt = null;
         } else {
             const newDate = new Date(e_dt).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
             e_dt = new Date(newDate)
-              .toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
-              .split(" ")
-              .join(" ");
+                .toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                })
+                .split(" ")
+                .join(" ");
         }
         var st_date = element.start ? str_dt(element.start) : null;
         var ed_date = updatedDay ? str_dt(updatedDay) : null;
@@ -524,13 +582,13 @@ function upcomingEvent(a) {
         } else {
             const newDate = new Date(startDate).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
             startDate = new Date(newDate)
-              .toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
-              .split(" ")
-              .join(" ");
+                .toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                })
+                .split(" ")
+                .join(" ");
         }
 
         var end_dt = (e_dt) ? " to " + e_dt : '';
