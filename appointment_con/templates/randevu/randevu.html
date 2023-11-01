@@ -1,6 +1,7 @@
 {% extends "partials/base.html" %}
 {% load static %}
-{% block title %}Calendar{% endblock title %}
+ <link rel="shortcut icon" href="{% static 'images/mcbü/logo.ico'%}">
+{% block title %}Randevu Ekle{% endblock title %}
 
 {% block content %}
             <!-- ============================================================== -->
@@ -11,9 +12,7 @@
                 <div class="page-content">
                     <div class="container-fluid">
 
-                        {% block pagetitle %}
                       
-                        {% endblock pagetitle %}
 
                         <div class="row">
                             <div class="col-12">
@@ -231,5 +230,6 @@
     <script src="{% static 'js/pages/calendar.init.js'%}"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/locales/tr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 {% endblock extra_js %}

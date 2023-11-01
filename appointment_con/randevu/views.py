@@ -139,7 +139,11 @@ def add_event(request):
                         # JSON veriyi işleme
             data = json.loads(request.body)
             print(data)
+            
             # Etkinlik bilgilerini alın
+
+
+
             title = data.get('title')
             description = data.get('description')
             priority = data.get('priority')
