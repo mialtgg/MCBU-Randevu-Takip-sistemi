@@ -136,9 +136,34 @@ def remove(request):
 def add_event(request):
     if request.method == 'POST':
         try:
-                        # JSON veriyi işleme
+             # JSON veriyi işleme
             data = json.loads(request.body)
             print(data)
+            date_string_start = data.get('start')
+            date_format = "%Y-%m-%dT%H:%M:%S.%fZ"
+            parsed_date = datetime.strptime(date_string_start, date_format)
+            date1 = parsed_date.date()  # Sadece tarih
+            time1 = parsed_date.time()  # Sadece saat
+
+            date_string_end = data.get('end')
+            date_format = "%Y-%m-%dT%H:%M:%S.%fZ"
+            parsed_date = datetime.strptime(date_string_end, date_format)
+            date2 = parsed_date.date()  # Sadece tarih
+            time2 = parsed_date.time()  # Sadece saat
+
+
+            response_data = {
+        'date': date1,
+        'time': time1,
+        
+       
+    }
+            print(response_data)
+      
+
+
+
+
             
             # Etkinlik bilgilerini alın
 
@@ -146,11 +171,13 @@ def add_event(request):
 
             title = data.get('title')
             description = data.get('description')
-            priority = data.get('priority')
-            date = data.get('date')
-            all_day = data.get('all_day')
-            start_time = data.get('start_time')
-            end_time = data.get('end_time')
+            priority = data.get('className')
+            if(priority=="bg-danger-subtle"):
+                priority="Yüksek"
+            date = date1
+            all_day = data.get('allDay')
+            start_time = time1
+            end_time = time2
             location = data.get('location')
 
             # Etkinliği veritabanına kaydedin
@@ -164,6 +191,28 @@ def add_event(request):
                 end_time=end_time,
                 location=location
             )
+
+    #         date_string = data.get('start')
+    #         date_format = "%Y-%m-%dT%H:%M:%S.%fZ"
+    #         parsed_date = datetime.strptime(date_string, date_format)
+    #         year = parsed_date.year
+    #         month = parsed_date.month
+    #         day = parsed_date.day
+    #         hour = parsed_date.hour
+    #         minute = parsed_date.minute
+    #         date = parsed_date.date()  # Sadece tarih
+    #         time = parsed_date.time()  # Sadece saat
+            
+
+    #         response_data = {
+    #     'year': year,
+    #     'month': month,
+    #     'day': day,
+    #     'hour': hour,
+    #     'minute': minute,
+       
+    # }
+    #         print(response_data)
      
             event.save()
             

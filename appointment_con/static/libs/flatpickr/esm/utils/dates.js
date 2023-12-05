@@ -2,7 +2,7 @@ import { tokenRegex, revFormat, formats, } from "./formatting";
 import { defaults } from "../types/options";
 import { english } from "../l10n/default";
 export var createDateFormatter = function (_a) {
-    var _b = _a.config, config = _b === void 0 ? defaults : _b, _c = _a.l10n, l10n = _c === void 0 ? turkish : _c, _d = _a.isMobile, isMobile = _d === void 0 ? false : _d;
+    var _b = _a.config, config = _b === void 0 ? defaults : _b, _c = _a.l10n, l10n = _c === void 0 ? english : _c, _d = _a.isMobile, isMobile = _d === void 0 ? false : _d;
     return function (dateObj, frmt, overrideLocale) {
         var locale = overrideLocale || l10n;
         if (config.formatDate !== undefined && !isMobile) {

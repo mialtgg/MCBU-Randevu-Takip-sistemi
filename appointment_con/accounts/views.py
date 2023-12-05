@@ -24,7 +24,7 @@ def user_login(request):
                     login(request,user)
                     
                     
-                    return redirect('logout')
+                    return redirect('calendar')
                 else:
                     messages.info(request,'Disabled Account')
                     print("mine1")

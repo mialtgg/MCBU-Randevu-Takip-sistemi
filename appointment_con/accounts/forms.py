@@ -4,8 +4,6 @@ from django.contrib.auth.models import User
 
 
 
-
-
 class LoginForm(forms.Form):
     username=forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control' ,
@@ -60,5 +58,11 @@ class RegisterForm(UserCreationForm) :
 
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Şifreler eşleşmiyor.")
+    
+   
+
+
+
+
         
 

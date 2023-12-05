@@ -30,7 +30,196 @@ document.addEventListener("DOMContentLoaded", function () {
     var y = date.getFullYear();
     var Draggable = FullCalendar.Draggable;
     var externalEventContainerEl = document.getElementById('external-events');
-    var defaultEvents = [];
+    var defaultEvents = [{
+            id: 1,
+            title: "World Braille Day",
+            start: "2022-01-04",
+            className: "bg-info-subtle",
+            allDay: true
+
+        },
+        {
+            id: 2,
+            title: "World Leprosy Day",
+            start: "2022-01-30",
+            className: "bg-info-subtle",
+            allDay: true
+        },
+
+        {
+            id: 3,
+            title: "International Mother Language Day",
+            start: "2022-02-21",
+            className: "bg-info-subtle",
+            allDay: true
+        },
+
+        {
+            id: 4,
+            title: "International Women's Day",
+            start: "2022-03-08",
+            className: "bg-info-subtle",
+            allDay: true
+        },
+
+        {
+            id: 5,
+            title: "World Thinking Day",
+            start: "2022-02-22",
+            className: "bg-info-subtle",
+            allDay: true
+        },
+
+        {
+            id: 6,
+            title: "International Mother Language Day",
+            start: "2022-03-21",
+            className: "bg-info-subtle",
+            allDay: true
+        },
+
+        {
+            id: 7,
+            title: "World Water Day",
+            start: "2022-03-22",
+            className: "bg-info-subtle",
+            allDay: true
+        },
+
+        {
+            id: 8,
+            title: "World Health Day",
+            start: "2022-04-07",
+            className: "bg-info-subtle",
+            allDay: true
+        },
+
+
+        {
+            id: 9,
+            title: "International Special Librarians Day",
+            start: "2022-04-16",
+            className: "bg-info-subtle",
+            allDay: true
+        },
+
+        {
+            id: 10,
+            title: "Earth Day",
+            start: "2022-04-22",
+            className: "bg-info-subtle",
+            allDay: true
+        },
+        {
+            id: 153,
+            title: 'All Day Event',
+            start: new Date(y, m, 1),
+            className: 'bg-primary-subtle',
+            location: 'San Francisco, US',
+            allDay: true,
+            extendedProps: {
+                department: 'All Day Event'
+            },
+            description: 'An all-day event is an event that lasts an entire day or longer'
+        },
+        {
+            id: 136,
+            title: 'Visit Online Course',
+            start: new Date(y, m, d - 5),
+            end: new Date(y, m, d - 2),
+            allDay: true,
+            className: 'bg-warning-subtle',
+            extendedProps: {
+                department: 'Long Event'
+            },
+            description: 'Long Term Event means an incident that last longer than 12 hours.'
+        },
+        {
+            id: 999,
+            title: 'Client Meeting with Alexis',
+            start: new Date(y, m, d + 22, 20, 0),
+            end: new Date(y, m, d + 24, 16, 0),
+            allDay: true,
+            className: 'bg-danger-subtle',
+            location: 'California, US',
+            extendedProps: {
+                department: 'Meeting with Alexis'
+            },
+            description: 'A meeting is a gathering of two or more people that has been convened for the purpose of achieving a common goal through verbal interaction, such as sharing information or reaching agreement.'
+        },
+        {
+            id: 991,
+            title: 'Repeating Event',
+            start: new Date(y, m, d + 4, 16, 0),
+            end: new Date(y, m, d + 9, 16, 0),
+            allDay: true,
+            className: 'bg-primary-subtle',
+            location: 'Las Vegas, US',
+            extendedProps: {
+                department: 'Repeating Event'
+            },
+            description: 'A recurring or repeating event is simply any event that you will occur more than once on your calendar. ',
+        },
+        {
+            id: 112,
+            title: 'Meeting With Designer',
+            start: new Date(y, m, d, 12, 30),
+            allDay: true,
+            className: 'bg-success-subtle',
+            location: 'Head Office, US',
+            extendedProps: {
+                department: 'Meeting'
+            },
+            description: 'Tell how to boost website traffic'
+        },
+        {
+            id: 113,
+            title: 'Weekly Strategy Planning',
+            start: new Date(y, m, d + 9),
+            end: new Date(y, m, d + 11),
+            allDay: true,
+            className: 'bg-danger-subtle',
+            location: 'Head Office, US',
+            extendedProps: {
+                department: 'Lunch'
+            },
+            description: 'Strategies for Creating Your Weekly Schedule'
+        },
+        {
+            id: 875,
+            title: 'Birthday Party',
+            start: new Date(y, m, d + 1, 19, 0),
+            allDay: true,
+            className: 'bg-success-subtle',
+            location: 'Los Angeles, US',
+            extendedProps: {
+                department: 'Birthday Party'
+            },
+            description: 'Family slumber party – Bring out the blankets and pillows and have a family slumber party! Play silly party games, share special snacks and wind down the fun with a special movie.'
+        },
+        {
+            id: 783,
+            title: 'Click for Google',
+            start: new Date(y, m, 28),
+            end: new Date(y, m, 29),
+            allDay: true,
+            url: 'http://google.com/',
+            className: 'bg-dark-subtle',
+        },
+        {
+            id: 456,
+            title: 'Velzon Project Discussion with Team',
+            start: new Date(y, m, d + 23, 20, 0),
+            end: new Date(y, m, d + 24, 16, 0),
+            allDay: true,
+            className: 'bg-info-subtle',
+            location: 'Head Office, US',
+            extendedProps: {
+                department: 'Discussion'
+            },
+            description: 'Tell how to boost website traffic'
+        },
+    ];
 
     // init draggable
     new Draggable(externalEventContainerEl, {
@@ -47,21 +236,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     var calendarEl = document.getElementById('calendar');
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
 
     function addNewEvent(info) {
         document.getElementById('form-event').reset();
@@ -92,9 +266,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
-        locale: 'tr',
-        timeZone: 'Europe/Istanbul',
-
+        timeZone: 'local',
         editable: true,
         droppable: true,
         selectable: true,
@@ -106,19 +278,11 @@ document.addEventListener("DOMContentLoaded", function () {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
         },
-        locale: 'tr', // Türkçe dil ayarı
-        buttonText: {
-            today: 'Bugün',
-            month: 'Ay',
-            week: 'Hafta',
-            day: 'Gün'
-        },
-        // Diğer ayarlar...
         windowResize: function (view) {
             var newView = getInitialView();
             calendar.changeView(newView);
         },
-        eventResize: function (info) {
+        eventResize: function(info) {
             var indexOfSelectedEvent = defaultEvents.findIndex(function (x) {
                 return x.id == info.event.id
             });
@@ -178,11 +342,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 return [year, month, day].join('-');
             };
             var updateDay = null
-            if (ed_date != null) {
+            if(ed_date != null){
                 var endUpdateDay = new Date(ed_date);
                 updateDay = endUpdateDay.setDate(endUpdateDay.getDate() - 1);
             }
-
+            
             var r_date = ed_date == null ? (str_dt(st_date)) : (str_dt(st_date)) + ' to ' + (str_dt(updateDay));
             var er_date = ed_date == null ? (date_r(st_date)) : (date_r(st_date)) + ' to ' + (date_r(updateDay));
 
@@ -254,11 +418,11 @@ document.addEventListener("DOMContentLoaded", function () {
         eventReceive: function (info) {
             var newid = parseInt(info.event.id);
             var newEvent = {
+                id: newid,
                 title: info.event.title,
-                description: info.event.extendedProps.description,
                 start: info.event.start,
-                end: info.event.end,
-                allDay: info.event.allDay
+                allDay: info.event.allDay,
+                className: info.event.classNames[0]
             };
             defaultEvents.push(newEvent);
             upcomingEvent(defaultEvents);
@@ -282,35 +446,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     calendar.render();
 
-    fetch('get_events/')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('HTTP Error: ' + response.status);
-            }
-            return response.json();
-        })
-        .then(data => {
-            data.forEach(item => {
-                var event = {
-                    title: item.name,
-                    description: item.description,
-                    start: item.date,
-                    end: item.date,
-                    allDay: item.all_day
-                };
-                defaultEvents.push(event);
-            });
-
-            calendar.refetchEvents();
-            upcomingEvent(defaultEvents); // fetch işlemi tamamlandığında çağırılıyor
-        })
-        .catch(error => {
-            console.error(error);
-            upcomingEvent(defaultEvents); // Hata durumunda da çağırılabilir
-        });
-
-
-
+    upcomingEvent(defaultEvents);
     /*Add new event*/
     // Form to add new event
     formEvent.addEventListener('submit', function (ev) {
@@ -388,50 +524,7 @@ document.addEventListener("DOMContentLoaded", function () {
             addEvent.hide();
             upcomingEvent(defaultEvents);
         }
-
-
-
-
-        //formun içi 
-
-        // Etkinlik bilgilerini topladığınızdan emin olun 
-        var eventData = {
-            id: e_id,
-            title: updatedTitle,
-            start: start_date,
-            end: end_date,
-            allDay: all_day,
-            className: updatedCategory,
-            description: eventDescription,
-            location: event_location
-        };
-        // Django CSRF token'ını almak için getCookie fonksiyonunu kullanın
-        var csrftoken = getCookie('csrftoken');
-        // POST isteği yapma
-        fetch('add_event/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken  // Django CSRF korumasını sağlamak için gerekli
-            },
-            body: JSON.stringify(eventData)  // JSON formatındaki etkinlik bilgilerini isteğe ekle
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Django'dan dönen yanıtı işleyin
-                console.log(data);
-            })
-            .catch(error => {
-                console.error('Etkinlik ekleme hatası:', error);
-            });
-
-
     });
-
-
-    // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
-
-
 
     document.getElementById("btn-delete-event").addEventListener("click", function (e) {
         if (selectedEvent) {
@@ -465,23 +558,23 @@ function flatPickrInit() {
     };
     var date_range = flatpickr(
         start_date, {
-        enableTime: false,
-        mode: "range",
-        minDate: "today",
-        onChange: function (selectedDates, dateStr, instance) {
-            var date_range = dateStr;
-            var dates = date_range.split("to");
-            if (dates.length > 1) {
-                document.getElementById('event-time').setAttribute("hidden", true);
-            } else {
-                document.getElementById("timepicker1").parentNode.classList.remove("d-none");
-                document.getElementById("timepicker1").classList.replace("d-none", "d-block");
-                document.getElementById("timepicker2").parentNode.classList.remove("d-none");
-                document.getElementById("timepicker2").classList.replace("d-none", "d-block");
-                document.getElementById('event-time').removeAttribute("hidden");
-            }
-        },
-    });
+            enableTime: false,
+            mode: "range",
+            minDate: "today",
+            onChange: function (selectedDates, dateStr, instance) {
+                var date_range = dateStr;
+                var dates = date_range.split("to");
+                if (dates.length > 1) {
+                    document.getElementById('event-time').setAttribute("hidden", true);
+                } else {
+                    document.getElementById("timepicker1").parentNode.classList.remove("d-none");
+                    document.getElementById("timepicker1").classList.replace("d-none", "d-block");
+                    document.getElementById("timepicker2").parentNode.classList.remove("d-none");
+                    document.getElementById("timepicker2").classList.replace("d-none", "d-block");
+                    document.getElementById('event-time').removeAttribute("hidden");
+                }
+            },
+        });
     flatpickr(timepicker1, config);
     flatpickr(timepicker2, config);
 
@@ -566,20 +659,20 @@ function upcomingEvent(a) {
         if (element.end) {
             endUpdatedDay = new Date(element.end);
             var updatedDay = endUpdatedDay.setDate(endUpdatedDay.getDate() - 1);
-        }
+          }
         var e_dt = updatedDay ? updatedDay : undefined;
         if (e_dt == "Invalid Date" || e_dt == undefined) {
             e_dt = null;
         } else {
             const newDate = new Date(e_dt).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
             e_dt = new Date(newDate)
-                .toLocaleDateString("en-GB", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                })
-                .split(" ")
-                .join(" ");
+              .toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })
+              .split(" ")
+              .join(" ");
         }
         var st_date = element.start ? str_dt(element.start) : null;
         var ed_date = updatedDay ? str_dt(updatedDay) : null;
@@ -592,18 +685,17 @@ function upcomingEvent(a) {
         } else {
             const newDate = new Date(startDate).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
             startDate = new Date(newDate)
-                .toLocaleDateString("en-GB", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                })
-                .split(" ")
-                .join(" ");
+              .toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })
+              .split(" ")
+              .join(" ");
         }
 
         var end_dt = (e_dt) ? " to " + e_dt : '';
-        var category = (element.className && element.className.includes("-")) ? element.className.split("-") : ["default"];
-
+        var category = (element.className).split("-");
         var description = (element.description) ? element.description : "";
         var e_time_s = tConvert(getTime(element.start));
         var e_time_e = tConvert(getTime(updatedDay));
