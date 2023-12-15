@@ -1,10 +1,91 @@
-{% load static %}
 {% extends "partials/base.html" %}
-   
-{% block title %}Python Django Ajax FullCalender CRUD (Create, Read, Update and Delete){% endblock title %}
-   
+{% load static %}
+{% block title %}Chartjs{% endblock title %}
+{% block extra_css %}
+{% endblock extra_css %}
 {% block content %}
-<div class="col-md-12">    
-    <div id='calendar'></div> 
-</div> 
-{% endblock content %} 
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+
+                    {% block pagetitle %}
+                    {% include "partials/page-title.html" with pagetitle="Charts" title="Chartjs" %}
+                    {% endblock pagetitle %}
+
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title mb-0">Günlük Randevu Sayısı</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="bar" class="chartjs-chart" data-colors='["--vz-primary-rgb, 0.8", "--vz-primary-rgb, 0.9"]'></canvas>
+                                    
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+
+                        <div class="col-xl-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title mb-0">Haftalık Randevu Sayısı</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="bar" class="chartjs-chart" data-colors='["--vz-primary-rgb, 0.8", "--vz-primary-rgb, 0.9"]'></canvas>
+                                    
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
+
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title mb-0">Aylık Randevu Sayısı</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="bar" class="chartjs-chart" data-colors='["--vz-primary-rgb, 0.8", "--vz-primary-rgb, 0.9"]'></canvas>
+                                    
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+                        <div class="col-xl-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title mb-0">Yıllık Randevu Sayısı</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="bar2" class="chartjs-chart" data-colors='["--vz-primary-rgb, 0.8", "--vz-primary-rgb, 0.9"]'></canvas>
+                                    
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+
+                       
+                    </div> <!-- end row -->
+
+                  
+                    
+                </div>
+                <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+
+        {% block footer %}
+        {% include "partials/footer.html" %}
+        {% endblock footer %}
+        </div>
+        <!-- end main content-->
+{% endblock content %}
+{% block extra_js %}
+    <!-- Chart JS -->
+    <script src="{% static 'libs/chart.js/chart.umd.js'%}"></script>
+
+    <!-- chartjs init -->
+    <script src="{% static 'js/pages/chartjs.init.js'%}"></script>         
+{% endblock extra_js %}

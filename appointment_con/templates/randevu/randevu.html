@@ -1,10 +1,6 @@
 {% extends "partials/base.html" %}
 {% load static %}
-<link rel="shortcut icon" href="{% static 'images/mcbü/logo.ico'%}">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
-
-{% block title %}Randevu Ekle{% endblock title %}
+{% block title %}Calendar{% endblock title %}
 
 {% block content %}
 <!-- ============================================================== -->
@@ -15,7 +11,9 @@
     <div class="page-content">
         <div class="container-fluid">
 
-
+            {% block pagetitle %}
+            {% include "partials/page-title.html" with pagetitle="Apps" title="Calendar" %}
+            {% endblock pagetitle %}
 
             <div class="row">
                 <div class="col-12">
@@ -24,37 +22,37 @@
                             <div class="card card-h-100">
                                 <div class="card-body">
                                     <button class="btn btn-primary w-100" id="btn-new-event"><i
-                                            class="mdi mdi-plus"></i> Randevu Oluştur</button>
+                                            class="mdi mdi-plus"></i> Create New Event</button>
 
                                     <div id="external-events">
                                         <br>
-                                        <p class="text-muted">Bir randevu ekleyebilir ya da mevcut etkinliklerden
-                                            sürükleyip listenizi oluşturabilirsiniz.</p>
+                                        <p class="text-muted">Drag and drop your event or click in the calendar</p>
                                         <div class="external-event fc-event bg-success-subtle text-success"
                                             data-class="bg-success-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>Full gün etkinlik
+                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>New Event
+                                            Planning
                                         </div>
                                         <div class="external-event fc-event bg-info-subtle text-info"
                                             data-class="bg-info-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>İzinli Tarih
+                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>Meeting
                                         </div>
                                         <div class="external-event fc-event bg-warning-subtle text-warning"
                                             data-class="bg-warning-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>Okul Gezisi
+                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>Generating
                                             Reports
                                         </div>
                                         <div class="external-event fc-event bg-danger-subtle text-danger"
                                             data-class="bg-danger-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>Makam Ziyaretleri
-
+                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>Create
+                                            New theme
                                         </div>
                                     </div>
 
                                 </div>
                             </div>
                             <div>
-                                <h5 class="mb-1">Yaklaşan Randevularım</h5>
-                                <p class="text-muted">Randevularınızı kaçırmayın. </p>
+                                <h5 class="mb-1">Upcoming Events</h5>
+                                <p class="text-muted">Don't miss scheduled events</p>
                                 <div class="pe-2 me-n1 mb-3" data-simplebar style="height: 400px">
                                     <div id="upcoming-event-list"></div>
                                 </div>
@@ -67,8 +65,9 @@
                                             <i data-feather="calendar" class="text-info icon-dual-info"></i>
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <h6 class="fs-15">Randevu Sistemim!</h6>
-
+                                            <h6 class="fs-15">Welcome to your Calendar!</h6>
+                                            <p class="text-muted mb-0">Event that applications book will appear here.
+                                                Click on an event to see the details and manage applicants event.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -87,158 +86,7 @@
                     <div style='clear:both'></div>
 
                     <!-- Add New Event MODAL -->
-                    <div class="modal fade" id="event-modal" tabindex="-1">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content border-0">
-                                <div class="modal-header p-3 bg-info-subtle">
-                                    <h5 class="modal-title" id="modal-title">Event</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-hidden="true"></button>
-                                </div>
-                                <div class="modal-body p-4">
-                                    <form class="needs-validation" name="event-form" id="form-event" novalidate>
-                                        <div class="text-end">
-                                            <a href="#" class="btn btn-sm btn-soft-primary" id="edit-event-btn"
-                                                data-id="edit-event" onclick="editEvent(this)" role="button">Edit</a>
-                                        </div>
-                                        <div class="event-details">
-                                            <div class="d-flex mb-2">
-                                                <div class="flex-grow-1 d-flex align-items-center">
-                                                    <div class="flex-shrink-0 me-3">
-                                                        <i class="ri-calendar-event-line text-muted fs-16"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        <h6 class="d-block fw-semibold mb-0" id="event-start-date-tag">
-                                                        </h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center mb-2">
-                                                <div class="flex-shrink-0 me-3">
-                                                    <i class="ri-time-line text-muted fs-16"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <h6 class="d-block fw-semibold mb-0"><span
-                                                            id="event-timepicker1-tag"></span> - <span
-                                                            id="event-timepicker2-tag"></span></h6>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center mb-2">
-                                                <div class="flex-shrink-0 me-3">
-                                                    <i class="ri-map-pin-line text-muted fs-16"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <h6 class="d-block fw-semibold mb-0"> <span
-                                                            id="event-location-tag"></span></h6>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex mb-3">
-                                                <div class="flex-shrink-0 me-3">
-                                                    <i class="ri-discuss-line text-muted fs-16"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <p class="d-block text-muted mb-0" id="event-description-tag"></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row event-form">
-                                            <div class="col-12">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Öncelik Derecesi</label>
-                                                    <select class="form-select d-none" name="category"
-                                                        id="event-category" required>
-                                                        <option value="bg-danger-subtle">1.Derece öncelikli</option>
-                                                        <option value="bg-success-subtle">2.Derece öncelikli</option>
-                                                        <option value="bg-primary-subtle">3.Derece öncelikli</option>
-                                                        <option value="bg-info-subtle">4.Derece öncelikli</option>
-                                                        <option value="bg-dark-subtle">5.Derece öncelikli</option>
-                                                        <option value="bg-warning-subtle">6.Derece öncelikli</option>
-                                                    </select>
-                                                    <div class="invalid-feedback">Lütfen bir Öncelik derecesi belirleyin
-                                                    </div>
-                                                </div>
-                                            </div><!--end col-->
-                                            <div class="col-12">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Ad Soyad</label>
-                                                    <input class="form-control d-none"
-                                                        placeholder="Randevuyu Talep eden Kişi" type="text" name="title"
-                                                        id="event-title" required value="" />
-                                                    <div class="invalid-feedback">Lütfen bir isim girin derecesi
-                                                        belirleyin</div>
-                                                </div>
-                                            </div><!--end col-->
-                                            <div class="col-12">
-                                                <div class="mb-3">
-                                                    <label>Tarih</label>
-                                                    <div class="input-group d-none">
-                                                        <input type="text" id="event-start-date"
-                                                            class="form-control flatpickr flatpickr-input "
-                                                            placeholder="Lütfen Bir Tarih Seçiniz" readonly required>
-                                                        <span class="input-group-text"><i
-                                                                class="ri-calendar-event-line"></i></span>
-                                                    </div>
-                                                </div>
-                                            </div><!--end col-->
-                                            <div class="col-12" id="event-time">
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Başlangıç zamanı</label>
-                                                            <div class="input-group d-none">
-                                                                <input id="timepicker1" type="text"
-                                                                    class="form-control flatpickr flatpickr-input"
-                                                                    placeholder="Saati Seçin" readonly>
-                                                                <span class="input-group-text"><i
-                                                                        class="ri-time-line"></i></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Bitiş zamanı</label>
-                                                            <div class="input-group d-none">
-                                                                <input id="timepicker2" type="text"
-                                                                    class="form-control flatpickr flatpickr-input"
-                                                                    placeholder="Saati Seçin" readonly>
-                                                                <span class="input-group-text"><i
-                                                                        class="ri-time-line"></i></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div><!--end col-->
-                                            <div class="col-12">
-                                                <div class="mb-3">
-                                                    <label for="event-location">Durumu</label>
-                                                    <div>
-                                                        <input type="text" class="form-control d-none"
-                                                            name="event-location" id="event-location"
-                                                            placeholder="Durumu">
-                                                    </div>
-                                                </div>
-                                            </div><!--end col-->
-                                            <input type="hidden" id="eventid" name="eventid" value="" />
-                                            <div class="col-12">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Randevu Talep Etme Konusu</label>
-                                                    <textarea class="form-control d-none" id="event-description"
-                                                        placeholder="Randevu Talep Konusu" rows="3"
-                                                        spellcheck="false"></textarea>
-                                                </div>
-                                            </div><!--end col-->
-                                        </div><!--end row-->
-                                        <div class="hstack gap-2 justify-content-end">
-                                            <button type="button" class="btn btn-soft-danger" id="btn-delete-event"><i
-                                                    class="ri-close-line align-bottom"></i> Sil</button>
-                                            <button type="submit" class="btn btn-success" id="btn-save-event">Randevu
-                                                Oluştur</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div> <!-- end modal-content-->
-                        </div> <!-- end modal dialog-->
-                    </div> <!-- end modal-->
+ <!-- end modal-->
                     <!-- end modal-->
                 </div>
             </div> <!-- end row-->
@@ -255,19 +103,97 @@
 <!-- end main content-->
 {% endblock content %}
 {% block extra_js %}
-<script src='fullcalendar/core/locales/tr.global.js'></script>
-
-    <!-- calendar min js -->
+<!-- calendar min js -->
 <script src="{% static 'libs/fullcalendar/index.global.min.js' %}"></script>
 
-  
-
-
+<!-- Calendar init -->
 <script src="{% static 'js/pages/calendar.init.js'%}"></script>
 
 
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
 
 
+        // Function to handle form submission using Ajax
+        $("#form-event").submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Get CSRF token
+            var csrfToken = $("[name=csrfmiddlewaretoken]").val();
+
+
+
+
+
+
+            // Get form data
+            var formData = {
+                category: $("#event-category").val(),
+                title: $("#event-title").val(),
+                start_date: $("#event-start-date").val(),
+                start_time: $("#timepicker1").val(),
+                end_time: $("#timepicker2").val(),
+                location: $("#event-location").val(),
+                description: $("#event-description").val(),
+                eventId: $("#eventid").val(),
+
+                csrfmiddlewaretoken: csrfToken // Include CSRF token
+
+
+            };
+            // Eğer startDate doluysa ve boş bir değilse, split işlemi gerçekleştir
+            
+
+
+
+
+
+
+            // Perform Ajax request
+            $.ajax({
+                type: "POST",
+                url: "{% url 'save_event' %}", // Replace 'your_backend_view_name' with your actual Django view name
+                data: formData,
+                success: function (data) {
+                    console.log(typeof (startDate))
+                    console.log("Veriler başarıyla gönderildi:", formData); // Verileri konsola yazdır
+                    console.log("Server tarafından dönen cevap:", data);
+                    console.log(data);
+                    // You can update the UI or perform other actions on success
+                },
+                error: function (error) {
+                    // Handle the error response
+                    console.error("Ajax request failed:", error);
+                    console.log("Hata detayları:", error.responseJSON);
+                }
+            });
+        });
+
+        // Additional code for handling delete event button click
+        $("#btn-delete-event").click(function () {
+            var eventId = $("#eventid").val();
+
+            // Perform Ajax request to delete event
+            $.ajax({
+                type: "POST",
+                url: "{% url 'save_event' %}", // Replace 'your_delete_view_name' with your actual Django delete view name
+                data: { eventId: eventId, csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val() }, // Include CSRF token
+                success: function (data) {
+                    // Handle the success response
+                    console.log(data);
+                    // You can update the UI or perform other actions on success
+                },
+                error: function (error) {
+                    // Handle the error response
+                    console.error("Delete event failed:", error);
+                }
+            });
+        });
+    });
+</script>
 
 
 
