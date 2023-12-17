@@ -91,7 +91,7 @@ WSGI_APPLICATION = "appointment.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'test3',
+        'NAME': 'test5',
         'HOST': 'MINE\MSSQLSERVER02',
         'PORT': '',
         'OPTIONS': {

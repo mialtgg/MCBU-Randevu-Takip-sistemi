@@ -1,17 +1,13 @@
 from django.db import models
-from datetime import datetime
-
-class Event(models.Model):
-    category = models.CharField(max_length=20)
-    title = models.CharField(max_length=100)
-    start_date =models.TimeField()
-    end_date = models.DateField(null=True, blank=True)
-    start_time = models.TimeField(null=True, blank=True)
-    end_time = models.TimeField(null=True, blank=True)
-    location = models.CharField(max_length=255)
-    description = models.TextField()
-
+class Customer(models.Model):
+    customer_name = models.CharField(max_length=255)
+    konu=models.TextField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    joining_date = models.DateField()
+    status = models.CharField(max_length=20, choices=[('Active', 'Active'), ('Block', 'Block')])
 
     def __str__(self):
-        return self.title
+        return self.customer_name
+
 

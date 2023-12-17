@@ -1,7 +1,10 @@
 {% extends "partials/base.html" %}
 {% load static %}
-{% block title %}Calendar{% endblock title %}
-
+{% block title %}Listjs{% endblock title %}
+{% block extra_css %}
+<!-- Sweet Alert css-->
+<link href="{% static 'libs/sweetalert2/dist/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock extra_css %}
 {% block content %}
 <!-- ============================================================== -->
 <!-- Start right Content here -->
@@ -12,84 +15,109 @@
         <div class="container-fluid">
 
             {% block pagetitle %}
-            {% include "partials/page-title.html" with pagetitle="Apps" title="Calendar" %}
+            {% include "partials/page-title.html" with pagetitle="Tables" title="Listjs" %}
             {% endblock pagetitle %}
 
             <div class="row">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-xl-3">
-                            <div class="card card-h-100">
-                                <div class="card-body">
-                                    <button class="btn btn-primary w-100" id="btn-new-event"><i
-                                            class="mdi mdi-plus"></i> Create New Event</button>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title mb-0">Add, Edit & Remove</h4>
+                        </div><!-- end card header -->
+                        
 
-                                    <div id="external-events">
-                                        <br>
-                                        <p class="text-muted">Drag and drop your event or click in the calendar</p>
-                                        <div class="external-event fc-event bg-success-subtle text-success"
-                                            data-class="bg-success-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>New Event
-                                            Planning
-                                        </div>
-                                        <div class="external-event fc-event bg-info-subtle text-info"
-                                            data-class="bg-info-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>Meeting
-                                        </div>
-                                        <div class="external-event fc-event bg-warning-subtle text-warning"
-                                            data-class="bg-warning-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>Generating
-                                            Reports
-                                        </div>
-                                        <div class="external-event fc-event bg-danger-subtle text-danger"
-                                            data-class="bg-danger-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>Create
-                                            New theme
-                                        </div>
-                                    </div>
-
+                        <form  method="post" action="{% url 'randevu' %}">
+                            {% csrf_token %}
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="nameInput" class="form-label">Name</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control"  name="customer_name" placeholder="Enter your name">
                                 </div>
                             </div>
-                            <div>
-                                <h5 class="mb-1">Upcoming Events</h5>
-                                <p class="text-muted">Don't miss scheduled events</p>
-                                <div class="pe-2 me-n1 mb-3" data-simplebar style="height: 400px">
-                                    <div id="upcoming-event-list"></div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="topInput" class="form-label">konusu</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control" name="konu"  placeholder="Talep Konusu">
                                 </div>
                             </div>
-
-                            <div class="card">
-                                <div class="card-body bg-info-subtle">
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0">
-                                            <i data-feather="calendar" class="text-info icon-dual-info"></i>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="fs-15">Welcome to your Calendar!</h6>
-                                            <p class="text-muted mb-0">Event that applications book will appear here.
-                                                Click on an event to see the details and manage applicants event.</p>
-                                        </div>
-                                    </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="dateInput" class="form-label">Date</label>
                                 </div>
-                            </div><!--end card-->
-                        </div> <!-- end col-->
-
-                        <div class="col-xl-9">
-                            <div class="card card-h-100">
-                                <div class="card-body">
-                                    <div id="calendar"></div>
+                                <div class="col-lg-9">
+                                    <input type="date" name="joining_date" class="form-control" >
                                 </div>
                             </div>
-                        </div><!-- end col -->
-                    </div><!--end row-->
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label">start Time</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="time" class="form-control"  name="start_time">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label">end Time</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="time" class="form-control"  name="end_time">
+                                </div>
+                            </div>
+                         <div class="row mb-3">
+                                   
 
-                    <div style='clear:both'></div>
+                               
+                                <div class="row mb-3">
+                                    <label for="status-field" class="form-label">Status</label>
+                                    <select class="form-control" data-trigger name="status"  required>
+                                        
+                                        <option value="Active">Active</option>
+                                        <option value="Block">Block</option>
+                                    </select>
+                                </div>
+                            </div>
+          
+                     
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary">Add Leave</button>
+                            </div>
+                        </form>
 
-                    <!-- Add New Event MODAL -->
- <!-- end modal-->
-                    <!-- end modal-->
+                   
+                    </div>
+                    <!-- end col -->
                 </div>
-            </div> <!-- end row-->
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+
+
+            <!-- end row -->
+
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!--end modal -->
 
         </div>
         <!-- container-fluid -->
@@ -103,98 +131,47 @@
 <!-- end main content-->
 {% endblock content %}
 {% block extra_js %}
-<!-- calendar min js -->
-<script src="{% static 'libs/fullcalendar/index.global.min.js' %}"></script>
-
-<!-- Calendar init -->
-<script src="{% static 'js/pages/calendar.init.js'%}"></script>
-
-
-<!-- Include jQuery -->
+<!-- jQuery kütüphanesini ekleyin -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+
+
+
+<!-- JavaScript kodlarınız -->
 <script>
-    $(document).ready(function () {
-
-
-        // Function to handle form submission using Ajax
-        $("#form-event").submit(function (e) {
-            e.preventDefault(); // Prevent the default form submission
-
-            // Get CSRF token
-            var csrfToken = $("[name=csrfmiddlewaretoken]").val();
-
-
-
-
-
-
-            // Get form data
-            var formData = {
-                category: $("#event-category").val(),
-                title: $("#event-title").val(),
-                start_date: $("#event-start-date").val(),
-                start_time: $("#timepicker1").val(),
-                end_time: $("#timepicker2").val(),
-                location: $("#event-location").val(),
-                description: $("#event-description").val(),
-                eventId: $("#eventid").val(),
-
-                csrfmiddlewaretoken: csrfToken // Include CSRF token
-
-
-            };
-            // Eğer startDate doluysa ve boş bir değilse, split işlemi gerçekleştir
+$(document).ready(function () {
+    // Müşteri Ekle butonuna tıklandığında
+    $("#add-btn").click(function () {
+        // Form verilerini al
+        var formData = $(".tablelist-form").serialize();
+        console.log(data)
+        // AJAX isteği gönder
+        $.ajax({
             
-
-
-
-
-
-
-            // Perform Ajax request
-            $.ajax({
-                type: "POST",
-                url: "{% url 'save_event' %}", // Replace 'your_backend_view_name' with your actual Django view name
-                data: formData,
-                success: function (data) {
-                    console.log(typeof (startDate))
-                    console.log("Veriler başarıyla gönderildi:", formData); // Verileri konsola yazdır
-                    console.log("Server tarafından dönen cevap:", data);
-                    console.log(data);
-                    // You can update the UI or perform other actions on success
-                },
-                error: function (error) {
-                    // Handle the error response
-                    console.error("Ajax request failed:", error);
-                    console.log("Hata detayları:", error.responseJSON);
-                }
-            });
-        });
-
-        // Additional code for handling delete event button click
-        $("#btn-delete-event").click(function () {
-            var eventId = $("#eventid").val();
-
-            // Perform Ajax request to delete event
-            $.ajax({
-                type: "POST",
-                url: "{% url 'save_event' %}", // Replace 'your_delete_view_name' with your actual Django delete view name
-                data: { eventId: eventId, csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val() }, // Include CSRF token
-                success: function (data) {
-                    // Handle the success response
-                    console.log(data);
-                    // You can update the UI or perform other actions on success
-                },
-                error: function (error) {
-                    // Handle the error response
-                    console.error("Delete event failed:", error);
-                }
-            });
+            type: "POST",
+            url: "/django-view-url/",  // Django görünüm URL'nizi buraya ekleyin
+            
+            data: formData,
+            success: function (data) {
+                console.log(data);  // Sunucudan gelen yanıtı konsola yazdır
+                // İsteğe bağlı olarak yanıtı işleyebilir veya kullanıcıyı yönlendirebilirsiniz
+            },
+            error: function (error) {
+                console.log("Hata:", error);
+            }
         });
     });
+});
+
 </script>
 
+<!-- prismjs plugin -->
+<script src="{% static 'libs/prismjs/prism.js'%}"></script>
+<script src="{% static 'libs/list.js/list.min.js'%}"></script>
+<script src="{% static 'libs/list.pagination.js/dist/list.pagination.min.js'%}"></script>
 
-
+<!-- listjs init -->
+<script src="{% static 'js/pages/listjs.init.js' %}"></script>
+<!-- Sweet Alerts js -->
+<script src="{% static 'libs/sweetalert2/dist/sweetalert2.min.js' %}"></script>
 {% endblock extra_js %}

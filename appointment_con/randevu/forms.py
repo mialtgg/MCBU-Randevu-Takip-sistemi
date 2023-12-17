@@ -1,9 +1,8 @@
 # forms.py
 from django import forms
-from .models import Event
+from .models import Customer
 
-class EventForm(forms.ModelForm):
+class CustomerForm(forms.ModelForm):
     class Meta:
-        model = Event
+        model = Customer
         fields = '__all__'
-

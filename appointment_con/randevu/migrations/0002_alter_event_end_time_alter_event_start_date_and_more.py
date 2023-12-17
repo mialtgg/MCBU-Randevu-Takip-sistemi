@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="event",
             name="start_date",
-            field=models.TimeField(),
+            field=models.DateField(),
         ),
         migrations.AlterField(
             model_name="event",
