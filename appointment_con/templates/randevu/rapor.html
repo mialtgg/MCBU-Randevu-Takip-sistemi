@@ -9,14 +9,19 @@
 <!-- ============================================================== -->
 <!-- Start right Content here -->
 <!-- ============================================================== -->
+
 <div class="main-content d-flex justify-content-center ">
     <div class="col-xl-3 col-md-6 mt-4">
+        
         <div class="card card-animate bg-primary">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <p class="fw-large text-white-50 mb-0">Bugünkü Toplantı sayınız :</p>
-                        <h2 class="mt-4 ff-secondary fw-semibold text-white">Bugün toplantı sayısı var</h2>
+                        <p class="fw-large text-white mb-0">Tarih :<b></b> {{ today|date:"d F l" }}</p>
+                        <h2 class="mt-4 ff-secondary fw-semibold text-white">Bugün {{ todayCount }} toplantınız var</h2>
+                        
+
+
                     </div>
                     <div>
                         <div class="avatar-sm flex-shrink-0">
@@ -82,15 +87,14 @@
                                                 <th class="sort" data-sort="start_time">başlangıç saati </th>
                                                 <th class="" data-sort="end_time">bitiş saati</th>
                                                 <th class="" data-sort="status">durum</th>
+                                                
                                                 <th class="" data-sort="action">Düzenle</th>
                                                 
                                             </tr>
                                         </thead>
                                         <tbody class="list form-check-all">
                                             {% for customer in customers %}
-                                            <p>
-                                                {{ customerForm.customer_name }},{{ customer.konu }}
-                                            </p>
+                                    
                                             <tr>
                                             
                                                 <td name="customer_name">{{ customer.customer_name }}</td>
@@ -98,20 +102,19 @@
                                                 <td name="joining_date" >{{ customer.joining_date }}</td>
                                                 <td name="start_time">{{ customer.start_time }}</td>
                                                 <td name="end_time" >{{ customer.end_time }}</td>
-                                                <td name="joining_date">{{ customer.joining_date }}</td>
-                                                        class="badge bg-success-subtle text-success text-uppercase">{{ customer.status }}</span>
-                                                </td>
+                                               
+                                                <td name="status" >{{ customer.status }}</td>
                                                 <td>
                                                     <div class="d-flex gap-2">
                                                         <div class="edit">
                                                             <button class="btn btn-sm btn-success edit-item-btn"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#showModal">Edit</button>
+                                                                data-bs-target="#showModal">Düzenle</button>
                                                         </div>
-                                                        <div class="remove">
+                                                        <div  class="remove">
                                                             <button class="btn btn-sm btn-danger remove-item-btn"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#deleteRecordModal">Remove</button>
+                                                                data-bs-target="#deleteRecordModal">İptal Et</button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -119,11 +122,7 @@
                                             {% endfor %}
                                         </tbody>
                                     </table>
-                                    <script>
-                                        $(document).ready(function () {
-                                            $('#customerTable').DataTable();
-                                        });
-                                    </script>
+                                  
                       
 
                                     <div class="noresult" style="display: none">
@@ -280,6 +279,13 @@
 {% endblock content %}
 {% block extra_js %}
 <!-- prismjs plugin -->
+<script>
+    $(document).ready(function() {
+        $('#myTable').DataTable({
+            searching: true  // Arama özelliğini etkinleştir
+        });
+    });
+</script>
 <script src="{% static 'libs/prismjs/prism.js'%}"></script>
 <script src="{% static 'libs/list.js/dist/list.min.js'%}"></script>
 <script src="{% static 'libs/list.pagination.js/dist/list.pagination.min.js'%}"></script>
