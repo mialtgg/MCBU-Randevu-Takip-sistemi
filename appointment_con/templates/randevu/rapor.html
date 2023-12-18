@@ -9,7 +9,18 @@
 <!-- ============================================================== -->
 <!-- Start right Content here -->
 <!-- ============================================================== -->
+<style>
+    #customerTable {
+        border-collapse: collapse;
+        width: 100%;
+    }
 
+    #customerTable th, #customerTable td {
+        border: 1px solid #dddddd; /* İstenen kenarlık rengini belirtin */
+        padding: 8px;
+        text-align: left;
+    }
+</style>
 <div class="main-content d-flex justify-content-center ">
     <div class="col-xl-3 col-md-6 mt-4">
         
@@ -50,7 +61,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title mb-0">Randevu Ekle</h4>
+                            <h4 class="card-title mb-0"><strong>Randevu Ekle</strong></h4>
                         </div><!-- end card header -->
 
                         <div class="card-body">
@@ -61,16 +72,12 @@
                                             <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal"
                                                 id="create-btn" data-bs-target="#showModal"><i
                                                     class="ri-add-line align-bottom me-1"></i>Ekle</button>
-                                            <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i
-                                                    class="ri-delete-bin-2-line"></i></button>
+                                            
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <div class="d-flex justify-content-sm-end">
-                                            <div class="search-box ms-2">
-                                                <input type="text" class="form-control search" placeholder="İsimlerde Ara">
-                                                <i class="ri-search-line search-icon"></i>
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -114,7 +121,8 @@
                                                         <div  class="remove">
                                                             <button class="btn btn-sm btn-danger remove-item-btn"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#deleteRecordModal">İptal Et</button>
+                                                                data-bs-target="#deleteRecordModal"><i
+                                                                class="ri-delete-bin-2-line"></i></button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -293,6 +301,11 @@
      language: {
          url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/tr.json',
      },
+     ordering: false,  // Sıralama özelliğini devre dışı bırakır
+    columnDefs: [
+        { targets: 'no-sort', }  // Sıralanamayan sütunlara "no-sort" sınıfı ekleyin
+    ],
+    
  });
  </script>
 <script src="{% static 'libs/prismjs/prism.js'%}"></script>
