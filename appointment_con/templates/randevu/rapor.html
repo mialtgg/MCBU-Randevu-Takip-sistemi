@@ -61,7 +61,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title mb-0"><strong>Randevu Ekle</strong></h4>
+                            <h4 class="card-title mb-0">Randevu Ekle</h4>
                         </div><!-- end card header -->
 
                         <div class="card-body">
@@ -235,6 +235,7 @@
                                     </select>
                                 </div>
                             </div>
+                            
 
 
                             <div class="text-end">
@@ -259,14 +260,14 @@
                                     colors="primary:#f7b84b,secondary:#f06548"
                                     style="width:100px;height:100px"></lord-icon>
                                 <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                                    <h4>Are you Sure ?</h4>
-                                    <p class="text-muted mx-4 mb-0">Are you Sure You want to Remove this Record ?</p>
+                                    <h4>Randevuyu silmek İstediğinize emin misiniz?</h4>
+                                    <p class="text-muted mx-4 mb-0"></p>
                                 </div>
                             </div>
                             <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
-                                <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn w-sm btn-danger " id="delete-record">Yes, Delete
-                                    It!</button>
+                                <button type="button" class="btn w-sm btn-primary" data-bs-dismiss="modal">Kapat</button>
+                                <button type="button" class="btn w-sm btn-danger " id="delete-record">Evet,sil!
+                                    </button>
                             </div>
                         </div>
                     </div>
@@ -301,13 +302,11 @@
      language: {
          url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/tr.json',
      },
-     ordering: false,  // Sıralama özelliğini devre dışı bırakır
-    columnDefs: [
-        { targets: 'no-sort', }  // Sıralanamayan sütunlara "no-sort" sınıfı ekleyin
-    ],
+
     
  });
  </script>
+ 
 <script src="{% static 'libs/prismjs/prism.js'%}"></script>
 <script src="{% static 'libs/list.js/dist/list.min.js'%}"></script>
 <script src="{% static 'libs/list.pagination.js/list.pagination.min.js'%}"></script>
