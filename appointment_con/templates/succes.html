@@ -1,0 +1,54 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block title %}Widgets{% endblock title %}
+{% block extra_css %}
+        <!-- plugin css -->
+        <link href="{% static 'libs/jsvectormap/dist/css/jsvectormap.min.css'%}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'libs/swiper/swiper-bundle.min.css'%}" rel="stylesheet" />
+{% endblock extra_css %}
+{% block content %}
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+         <div class="main-content d-flex justify-content-center ">
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-animate bg-primary">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <p class="fw-medium text-white-50 mb-0">Bugünkü Toplantı sayınız :</p>
+                                <h2 class="mt-4 ff-secondary fw-semibold text-white"><span class="counter-value" data-target="3">0</span>m <span class="counter-value" data-target="40">0</span>sec</h2>
+                                <p class="mb-0 text-white-50"><span class="badge bg-white bg-opacity-25 text-white mb-0"><i class="ri-arrow-down-line align-middle"></i> 0.24 % </span> vs. previous month</p>
+                            </div>
+                            <div>
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-white bg-opacity-25 rounded-circle fs-2">
+                                        <i data-feather="clock" class="text-white"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- end card body -->
+                </div> <!-- end card-->
+            </div> <!-- end col-->
+
+         </div>
+            <!-- end main content-->
+{% endblock content %}
+{% block extra_js %}
+    <!-- apexcharts -->
+    <script src="{% static 'libs/apexcharts/apexcharts.min.js'%}"></script>
+
+    <!-- Vector map-->
+    <script src="{% static 'libs/jsvectormap/js/jsvectormap.min.js'%}"></script>
+    <script src="{% static 'libs/jsvectormap/dist/maps/world-merc.js'%}"></script>
+    <!-- <script src="{% static 'libs/jsvectormap/dist/maps/us-merc-en.js'%}"></script> -->
+
+    <!-- Swiper Js -->
+    <script src="{% static 'libs/swiper/swiper-bundle.min.js'%}"></script>
+    <script src="{% static 'js/pages/form-input-spin.init.js'%}"></script>
+    <script src="{% static 'libs/card/dist/card.js'%}"></script>
+
+    <!-- Widget init -->
+    <script  src="{% static 'js/pages/widgets.init.js'%}"></script>
+{% endblock extra_js %}

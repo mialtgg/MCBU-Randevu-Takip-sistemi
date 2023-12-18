@@ -27,20 +27,31 @@
 
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="">
+                            <a class="nav-link menu-link" href="{% url 'rapor' %}">
                                 <i class="ri-honour-line"></i> <span data-key="t-widgets">Ana sayfa</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="">
-                                <i class="ri-file-list-3-line"></i> <span data-key="t-widgets">Randevu Ekle</span>
+                            <a class="nav-link menu-link" href="{% url 'randevu' %}" >
+                                <i class=" bx bx-highlight"></i> <span data-key="t-widgets">Randevu Ekle</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{% url 'rapor' %}" >
-                                <i class=" bx bx-pie-chart-alt-2"></i> <span data-key="t-widgets">Raporlar</span>
+                                <i class=" bx bx-file"></i> <span data-key="t-widgets">Tüm Randevular</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{% url 'chart' %}" >
+                                <i class=" bx bx-bar-chart-alt-2"></i> <span data-key="t-widgets">Rapor</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{% url 'logout' %}" >
+                                <i class=" bx bx-bar-chart-alt-2"></i> <span data-key="t-widgets">Çıkış Yap</span>
+                            </a>
+                        </li>
+
 
 
 

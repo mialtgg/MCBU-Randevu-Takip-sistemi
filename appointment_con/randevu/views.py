@@ -8,10 +8,37 @@ def randevu_view(request):
     return render(request, 'randevu/randevu.html')
 def rapor_view(request):
     return render(request, 'randevu/rapor.html')
+def hata_view(request):
+    return render(request, 'hata.html')
+def succes_view(request):
+    return render(request, 'succes.html')
+def chart_view(request):
+    return render(request, 'randevu/chart.html')
+def customer_list(request):
+    all_customers = Customer.objects.all().count()
+    first_customer = all_customers.first()
+  
+
+# Eğer müşteri varsa, verilerini yazdır
+    if first_customer:
+       print(f"Customer Name: {first_customer.customer_name}")
+    
+  
+    
+   
+    
+    return render(request, 'randevu/rapor.html', {'customers': customers})
+print(Customer.objects.all())
+
+
+
+
 
 def randevu_view(request):
+   
     if request.method == 'POST':
-        # Get data from the form
+    
+        
         customer_name = request.POST.get('customer_name')
         konu = request.POST.get('konu')
         start_time = request.POST.get('start_time')
@@ -21,6 +48,7 @@ def randevu_view(request):
 
         # Create a new Customer object
         customer = Customer.objects.create(
+            
             customer_name=customer_name,
             konu=konu,
             start_time=start_time,
@@ -33,7 +61,11 @@ def randevu_view(request):
         customer.save()
 
         # Redirect to a success page or wherever you want
-        return redirect('success_page')  # Change 'success_page' to your actual success page
+        return redirect('rapor')  # Change 'success_page' to your actual success page
 
-    # Render the form template for GET requests
     return render(request, 'randevu/randevu.html')
+
+
+
+
+
