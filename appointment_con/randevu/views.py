@@ -50,7 +50,7 @@
 #         return redirect('rapor')  # Change 'success_page' to your actual success page
 
 #     return render(request, 'randevu/randevu.html')
-
+from .models import Item
 from collections import Counter
 from datetime import date
 from .models import Customer
@@ -58,20 +58,10 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from .forms import CustomerForm
-def delete_customer_view(request, customer_id):
-    # Retrieve the customer object from the database
-    customer = get_object_or_404(Customer, id=customer_id)
-
-    if request.method == 'POST':
-        # Delete the customer object
-        customer.delete()
-
-        # Redirect to a success page or wherever you want
-        return redirect('logout')  # Change 'success_page' to your actual success page
-
-    # Render the confirmation page with details of the customer
-    return render(request, 'randevu/rapor.html', {'customer': customer})
-
+def delete_item(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    item.delete()
+    return redirect('rapor')
 
 
 def rapor_view(request):

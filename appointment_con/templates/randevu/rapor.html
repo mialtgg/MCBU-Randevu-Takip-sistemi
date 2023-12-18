@@ -15,22 +15,24 @@
         width: 100%;
     }
 
-    #customerTable th, #customerTable td {
-        border: 1px solid #dddddd; /* İstenen kenarlık rengini belirtin */
+    #customerTable th,
+    #customerTable td {
+        border: 1px solid #dddddd;
+        /* İstenen kenarlık rengini belirtin */
         padding: 8px;
         text-align: left;
     }
 </style>
 <div class="main-content d-flex justify-content-center ">
     <div class="col-xl-3 col-md-6 mt-4">
-        
+
         <div class="card card-animate bg-primary">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
                         <p class="fw-large text-white mb-0">Tarih :<b></b> {{ today|date:"d F l" }}</p>
                         <h2 class="mt-4 ff-secondary fw-semibold text-white">Bugün {{ todayCount }} toplantınız var</h2>
-                        
+
 
 
                     </div>
@@ -46,7 +48,7 @@
         </div> <!-- end card-->
     </div> <!-- end col-->
 
- </div>
+</div>
 <div class="main-content">
 
 
@@ -54,7 +56,7 @@
         <div class="container-fluid">
 
             {% block pagetitle %}
-           
+
             {% endblock pagetitle %}
 
             <div class="row">
@@ -72,12 +74,12 @@
                                             <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal"
                                                 id="create-btn" data-bs-target="#showModal"><i
                                                     class="ri-add-line align-bottom me-1"></i>Ekle</button>
-                                            
+
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <div class="d-flex justify-content-sm-end">
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -87,30 +89,30 @@
                                     <table class="table align-middle table-nowrap" id="customerTable">
                                         <thead class="table-light">
                                             <tr>
-                                              
+
                                                 <th class="" data-sort="customer_name">isim</th>
                                                 <th class="" data-sort="konu">konu</th>
                                                 <th class="" data-sort="joining_date">tarih</th>
                                                 <th class="" data-sort="start_time">başlangıç saati </th>
                                                 <th class="" data-sort="end_time">bitiş saati</th>
                                                 <th class="" data-sort="status">durum</th>
-                                                
+
                                                 <th class="" data-sort="action">Düzenle</th>
-                                                
+
                                             </tr>
                                         </thead>
                                         <tbody class="list form-check-all">
                                             {% for customer in customers %}
-                                    
+
                                             <tr>
-                                            
+
                                                 <td name="customer_name">{{ customer.customer_name }}</td>
-                                                <td name="konu" >{{ customer.konu }}</td>
-                                                <td name="joining_date" >{{ customer.joining_date }}</td>
+                                                <td name="konu">{{ customer.konu }}</td>
+                                                <td name="joining_date">{{ customer.joining_date }}</td>
                                                 <td name="start_time">{{ customer.start_time }}</td>
-                                                <td name="end_time" >{{ customer.end_time }}</td>
-                                               
-                                                <td name="status" >{{ customer.status }}</td>
+                                                <td name="end_time">{{ customer.end_time }}</td>
+
+                                                <td name="status">{{ customer.status }}</td>
                                                 <td>
                                                     <div class="d-flex gap-2">
                                                         <div class="edit">
@@ -118,11 +120,11 @@
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#showModal">Düzenle</button>
                                                         </div>
-                                                        <div  class="remove">
-                                                            <button class="btn btn-sm btn-danger remove-item-btn"
+                                                        <div class="remove">
+                                                            <button    class="btn btn-sm btn-danger remove-item-btn"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#deleteRecordModal"><i
-                                                                class="ri-delete-bin-2-line"></i></button>
+                                                                    class="ri-delete-bin-2-line"></i></button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -130,8 +132,8 @@
                                             {% endfor %}
                                         </tbody>
                                     </table>
-                                  
-                      
+
+
 
                                     <div class="noresult" style="display: none">
                                         <div class="text-center">
@@ -235,7 +237,7 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
 
 
                             <div class="text-end">
@@ -265,10 +267,19 @@
                                 </div>
                             </div>
                             <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
-                                <button type="button" class="btn w-sm btn-primary" data-bs-dismiss="modal">Kapat</button>
-                                <button type="button" class="btn w-sm btn-danger " id="delete-record">Evet,sil!
-                                    </button>
+                                <button type="button" class="btn w-sm btn-primary"
+                                    data-bs-dismiss="modal">Kapat</button>
+                                    <li>
+                                        {{ item.name }} - {{ item.description }}
+                                        <form action="{% url 'rapor' %}" method="post">
+                                          {% csrf_token %}
+                                          <button type="submit">Delete</button>
+                                        </form>
+                                      </li>
+                                </td>
                             </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -299,14 +310,14 @@
 <!-- DataTables script -->
 <script>
     var table = new DataTable('#customerTable', {
-     language: {
-         url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/tr.json',
-     },
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/tr.json',
+        },
 
-    
- });
- </script>
- 
+
+    });
+</script>
+
 <script src="{% static 'libs/prismjs/prism.js'%}"></script>
 <script src="{% static 'libs/list.js/dist/list.min.js'%}"></script>
 <script src="{% static 'libs/list.pagination.js/list.pagination.min.js'%}"></script>
