@@ -35,16 +35,40 @@ def rapor_view(request):
 def hata_view(request):
     return render(request, 'hata.html')
 def succes_view(request):
+    print("Ssucces")
     return render(request, 'succes.html')
 def chart_view(request):
-    return render(request, 'randevu/chart.html')
+    try:
+        print("monthly_customer_count fonksiyonu başladı")  # Fonksiyonun başladığını kontrol et
+
+        # Müşteri sayısını aylık olarak getir
+        monthly_counts = Customer.objects.annotate(month=ExtractMonth('joining_date')) \
+            .values('month') \
+            .annotate(count=Count('*')) \
+            .order_by('month')
+
+        # ID'leri terminalde görmek için print kullan
+        for entry in monthly_counts:
+            print(f"Ay {entry['month']} için Müşteri Sayısı: {entry['count']}")
+
+        # View'e aylık müşteri sayıları verisini gönder
+        context = {'monthly_counts': monthly_counts}
+
+        print("monthly_customer_count fonksiyonu başarıyla tamamlandı")  # Fonksiyonun tamamlandığını kontrol et
+        return render(request, 'chart.html', context)
+
+    except Exception as e:
+        print(f"Hata: {e}")  # Hata mesajını terminalde gör
+        return render(request, 'randevu/chart.html')  # Hata olması durumunda hata sayfasına yönlendir
+
+    
 def randevu_view(request):
 
     today = date.today()
     customers = Customer.objects.all()
     todayCount= Customer.objects.filter(joining_date=today).count()
     
-
+    print("lalala")
 
 
     # Template'e gönderilecek verileri hazırla
@@ -88,39 +112,9 @@ def delete_customer(request, customer_id):
     print("delete_customer")
     return redirect('rapor')
 
-def get_customer_ids_and_names(request):
-    
-    # Veritabanındaki tüm müşterilerin id ve customer_name alanlarını getir
-    customers = Customer.objects.values('id', 'customer_name')
-    
-    for customer in customers:
-        print(f"Customer Name: {Customer.customer_name} - ID: {customer.id}")
+# Diğer fonksiyonlar...
 
-    # View'e müşteri bilgilerini gönder
-    context = {'customers': customers}
-    print("get_customer_ids_and_names")
-    return render(request, 'chart.html', context)
 
-def monthly_customer_count(request):
-    # Müşteri sayısını aylık olarak geti
-    print("2")
-    
-    
-    monthly_counts = Customer.objects.annotate(month=ExtractMonth('joining_date')) \
-        .values('month') \
-        .annotate(count=Count('id')) \
-        .order_by('month')
-
-    # View'e aylık müşteri sayıları verisini gönder
-    context = {'monthly_counts': monthly_counts}
-    customers = Customer.objects.all()
-
-    # ID'leri terminalde görmek için print kullan
-    for entry in monthly_counts:
-        print(f"Ay {entry['month']} için Müşteri ID'leri: {entry['id']}")
-        print("monthly_count")
-
-    return render(request, 'chart.html', context)
 
 
 
