@@ -4,79 +4,189 @@
 {% block extra_css %}
 {% endblock extra_css %}
 {% block content %}
-        <!-- ============================================================== -->
-        <!-- Start right Content here -->
-        <!-- ============================================================== -->
-        <div class="main-content">
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                {% block pagetitle %}
+                <h5 class="justify-content align-items-center">RANDEVU GRAFİKLERİ</h5>
+                {% endblock pagetitle %}
 
-            <div class="page-content">
-                <div class="container-fluid">
-
-                    {% block pagetitle %}
-                    <H5 class="justify-content align-items-center">RANDEVU GRAFİKLERİ</H5>
-                    {% endblock pagetitle %}
-
-                    <div class="row">
-                        <h1>Aylık Müşteri Sayıları</h1>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Ay</th>
-                                    <th>Müşteri Sayısı</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for entry in monthly_counts %}
-                                    <tr>
-                                        <td>{{ entry.month }}</td>
-                                        <td>{{ entry.count }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        <div class="col-xl-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title mb-0">Yıllık Randevu Sayısı</h4>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="bar" class="chartjs-chart" data-colors='["--vz-primary-rgb, 0.8", "--vz-primary-rgb, 0.9"]'></canvas>
-                                    
-                                </div>
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">Aylık Randevu Sayısı</h4>
                             </div>
-                        </div> <!-- end col -->
-
-                        <div class="col-xl-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title mb-0">Bar Chart</h4>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="bar1" class="chartjs-chart" data-colors='["--vz-secondary-rgb, 0.8", "--vz-primary-rgb, 0.9"]'></canvas>
-                                    
-                                </div>
+                            <div class="card-body">
+                                <canvas id="monthlyChart"></canvas>
                             </div>
-                        </div> <!-- end col -->
-                    </div> <!-- end row -->
+                        </div>
+                    </div>
 
-
-                    
-                </div>
-                <!-- container-fluid -->
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">Yıllık Randevu Sayısı</h4>
+                            </div>
+                            <div class="card-body">
+                                <!-- Yıllık Müşteri Sayısı İçin Canvas -->
+                                <canvas id="yearlyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Haftalık Müşteri Sayıları</h4>
+                        </div>
+                        <div class="card-body">
+                            <!-- Yıllık Müşteri Sayısı İçin Canvas -->
+                            <canvas id="weeklyChart"></canvas>
+                        </div>
+                    </div>
+                </div><!-- end row -->
             </div>
-            <!-- End Page-content -->
+        </div> <!-- container-fluid -->
+    </div> <!-- End Page-content -->
 
-        {% block footer %}
+    {% block footer %}
         {% include "partials/footer.html" %}
-        {% endblock footer %}
-        </div>
-        <!-- end main content-->
+    {% endblock footer %}
+    </div>
+    <!-- end main content-->
 {% endblock content %}
+
 {% block extra_js %}
     <!-- Chart JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static 'libs/chart.js/chart.umd.js'%}"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
 
     <!-- chartjs init -->
-    <script src="{% static 'js/pages/chartjs.init.js'%}"></script>         
+    <script src="{% static 'js/pages/chartjs.init.js'%}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Yıllık müşteri sayıları verisi
+            var yearlyData = {
+                labels: [{% for entry in yearly_counts %}"{{ entry.year }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+                datasets: [{
+                    label: 'Yıllık Randevu Sayısı',
+                    data: [{% for entry in yearly_counts %}{{ entry.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Bar renkleri
+                    borderColor: 'rgba(75, 192, 192, 1)', // Çerçeve rengi
+                    borderWidth: 1
+                }]
+            };
+
+            // Canvas elementini seç
+            var ctx = document.getElementById('yearlyChart').getContext('2d');
+
+            // Bar grafik oluştur
+            var yearlyChart = new Chart(ctx, {
+                type: 'bar',
+                data: yearlyData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Aylık müşteri sayıları verisi
+            var monthlyData = {
+                labels: [{% for entry in monthly_counts %}"{{ entry.month }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+                datasets: [{
+                    label: 'Aylık Randevu Sayısı',
+                    data: [{% for entry in monthly_counts %}{{ entry.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                    backgroundColor: 'rgba(192, 75, 192, 0.2)', // Bar renkleri
+                    borderColor: 'rgba(192, 75, 192, 1)', // Çerçeve rengi
+                    borderWidth: 1
+                }]
+            };
+    
+            // Canvas elementini seç
+            var monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+    
+            // Bar grafik oluştur
+            var monthlyChart = new Chart(monthlyCtx, {
+                type: 'bar',
+                data: monthlyData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+    
+            // Yıllık müşteri sayıları verisi
+            var yearlyData = {
+                labels: [{% for entry in yearly_counts %}"{{ entry.year }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+                datasets: [{
+                    label: 'Yıllık Müşteri Sayısı',
+                    data: [{% for entry in yearly_counts %}{{ entry.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Bar renkleri
+                    borderColor: 'rgba(75, 192, 192, 1)', // Çerçeve rengi
+                    borderWidth: 1
+                }]
+            };
+    
+            // Canvas elementini seç
+            var yearlyCtx = document.getElementById('yearlyChart').getContext('2d');
+    
+            // Bar grafik oluştur
+            var yearlyChart = new Chart(yearlyCtx, {
+                type: 'bar',
+                data: yearlyData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+<script>
+    // Haftalık Müşteri Sayıları için Veriler
+    var weeklyData = {
+        labels: ['1. Hafta', '2. Hafta', '3. Hafta', '4. Hafta'],
+        datasets: [{
+            label: 'Haftalık Müşteri Sayısı',
+            backgroundColor: 'rgba(0, 123, 255, 0.2)',  // Mavi tonu
+            borderColor: 'rgba(0, 123, 255, 1)',  // Mavi tonu
+            borderWidth: 1,
+            data: [{% for entry in weekly_counts %}{{ entry.count }},{% endfor %}]
+        }]
+    };
+
+    // Haftalık Grafiği için Seçenekler
+    var weeklyOptions = {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    };
+
+    // Haftalık Grafiği Oluştur
+    var weeklyChart = new Chart(document.getElementById('weeklyChart').getContext('2d'), {
+        type: 'bar',
+        data: weeklyData,
+        options: weeklyOptions
+    });
+</script>
+    
 {% endblock extra_js %}

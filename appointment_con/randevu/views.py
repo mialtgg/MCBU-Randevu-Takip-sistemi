@@ -41,6 +41,7 @@ def succes_view(request):
 def chart_view(request):
     try:
         print("chart_view fonksiyonu başladı")  # Fonksiyonun başladığını kontrol et
+     
 
         # Aylık müşteri sayısını getir
         monthly_counts = Customer.objects.annotate(month=ExtractMonth('joining_date')) \
@@ -48,11 +49,16 @@ def chart_view(request):
             .annotate(count=Count('*')) \
             .order_by('month')
 
-        # Haftalık müşteri sayısını getir
-        weekly_counts = Customer.objects.annotate(week=ExtractWeek('joining_date')) \
-            .values('week') \
-            .annotate(count=Count('*')) \
-            .order_by('week')
+        weeks = [f'Hafta {i}' for i in range(1, 53)]# Haftalık müşteri sayısını getir
+        weekly_counts = Customer.objects.filter(
+            joining_date__month=date.today().month
+        ).annotate(
+            week=ExtractWeek('joining_date')
+        ).values(
+            'week'
+        ).annotate(
+            count=Count('*')
+        ).order_by('week')
         # Yıllık müşteri sayısını getir
         yearly_counts = Customer.objects.annotate(year=ExtractYear('joining_date')) \
             .values('year') \
@@ -69,10 +75,10 @@ def chart_view(request):
             print(f"Yıl {entry['year']} için Yıllık Müşteri Sayısı: {entry['count']}")
 
         # View'e aylık, haftalık ve yıllık müşteri sayıları verisini gönder
-        context = {'monthly_counts': monthly_counts, 'weekly_counts': weekly_counts, 'yearly_counts': yearly_counts}
+        context = {'monthly_counts': monthly_counts, 'weekly_counts': weekly_counts, 'yearly_counts': yearly_counts,"weeks":weeks}
 
         # View'e aylık ve haftalık müşteri sayıları verisini gönder
-        context = {'monthly_counts': monthly_counts, 'weekly_counts': weekly_counts, 'yearly_counts': yearly_counts}
+        context = {'monthly_counts': monthly_counts, 'weekly_counts': weekly_counts, 'yearly_counts': yearly_counts,"weeks":weeks}
 
         print("chart_view fonksiyonu başarıyla tamamlandı")  # Fonksiyonun tamamlandığını kontrol et
         return render(request, 'randevu/chart.html', context)
