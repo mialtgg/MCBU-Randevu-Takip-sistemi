@@ -15,6 +15,7 @@ from datetime import datetime
 from django.views.generic import ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Customer
+from django.contrib.auth.decorators import user_passes_test
 
 
 
@@ -41,7 +42,7 @@ class CustomerListView(ListView):
     context_object_name = 'customers'
     def get_queryset(self):
         return Customer.objects.select_related('user')
-
+@user_passes_test(lambda u: u.is_staff, login_url='/login/')
 def rektördatatable_view(request):
     customers = Customer.objects.all()
     return render(request, 'rektördatatable.html', {'customers': customers})
