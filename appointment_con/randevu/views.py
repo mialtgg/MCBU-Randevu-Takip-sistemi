@@ -12,7 +12,7 @@ from django.shortcuts import render
 from django.shortcuts import render
 from .models import Customer
 from datetime import datetime
-
+from django.views.generic import ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Customer
 
@@ -34,11 +34,25 @@ def rapor_view(request):
 
     # Template'i render et ve HTTP response'u döndür
     return render(request, 'randevu/rapor.html',context)
-def hata_view(request):
-    return render(request, 'hata.html')
+
+class CustomerListView(ListView):
+    model = Customer
+    template_name = 'customer_list.html'
+    context_object_name = 'customers'
+    def get_queryset(self):
+        return Customer.objects.select_related('user')
+
+def rektördatatable_view(request):
+    customers = Customer.objects.all()
+    return render(request, 'rektördatatable.html', {'customers': customers})
+  
+
+ 
+  
 def succes_view(request):
-    print("Ssucces")
-    return render(request, 'succes.html')
+    customers = Customer.objects.all()
+    
+    return render(request, 'succes.html',{'customers': customers})
 def chart_view(request):
     today = datetime.today()
     current_month = today.month
