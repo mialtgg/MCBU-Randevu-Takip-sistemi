@@ -1,6 +1,6 @@
 from django.db.models import Count
 from collections import Counter
-from datetime import date
+from datetime import date, timezone
 from operator import countOf
 from .models import Customer
 from django.http import JsonResponse
@@ -36,24 +36,37 @@ def rapor_view(request):
     # Template'i render et ve HTTP response'u döndür
     return render(request, 'randevu/rapor.html',context)
 
+
+
+
+
 class CustomerListView(ListView):
     model = Customer
     template_name = 'customer_list.html'
     context_object_name = 'customers'
     def get_queryset(self):
         return Customer.objects.select_related('user')
+    
 @user_passes_test(lambda u: u.is_staff, login_url='/login/')
 def rektördatatable_view(request):
     customers = Customer.objects.all()
-    return render(request, 'rektördatatable.html', {'customers': customers})
-  
-
- 
-  
-def succes_view(request):
-    customers = Customer.objects.all()
     
-    return render(request, 'succes.html',{'customers': customers})
+    return render(request, 'rektördatatable.html', {'customers': customers})
+
+
+
+
+def succes_view(request):
+    today = date.today()
+    customers_today = Customer.objects.filter(joining_date__gte=today).values('customer_name', 'joining_date', 'start_time')[:6]
+
+    context = {'customers_today': customers_today}
+    print(customers_today)
+    return render(request, 'succes.html', context)
+
+
+
+
 def chart_view(request):
     today = datetime.today()
     current_month = today.month
@@ -113,6 +126,9 @@ def chart_view(request):
     except Exception as e:
         print(f"Hata: {e}")  # Hata mesajını terminalde gör
         return render(request, 'randevu/chart.html')  # Hata olması durumunda hata sayfasına yönlendir
+    
+
+
 def randevu_view(request):
 
     today = date.today()
@@ -157,6 +173,8 @@ def randevu_view(request):
         return render(request, 'randevu/rapor.html',context) 
 
     return render(request, 'randevu/randevu.html')
+
+
 def delete_customer(request, customer_id):
     customer = get_object_or_404(Customer, id=customer_id)
     customer.delete()
