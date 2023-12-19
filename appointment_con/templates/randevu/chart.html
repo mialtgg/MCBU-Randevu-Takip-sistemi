@@ -38,17 +38,32 @@
                         </div>
                     </div>
                 </div> 
-                <div class="col-xl-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Haftalık Müşteri Sayıları</h4>
-                        </div>
-                        <div class="card-body">
-                            <!-- Yıllık Müşteri Sayısı İçin Canvas -->
-                            <canvas id="weeklyChart"></canvas>
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">Haftalık Randevu Sayısı</h4>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="weeklyChart"></canvas>
+                            </div>
                         </div>
                     </div>
-                </div><!-- end row -->
+
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">Günlük Randevu Sayısı</h4>
+                            </div>
+                            <div class="card-body">
+                                <!-- Yıllık Müşteri Sayısı İçin Canvas -->
+                                <canvas id="dailyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+              
+
             </div>
         </div> <!-- container-fluid -->
     </div> <!-- End Page-content -->
@@ -164,7 +179,7 @@
     var weeklyData = {
         labels: ['1. Hafta', '2. Hafta', '3. Hafta', '4. Hafta'],
         datasets: [{
-            label: 'Haftalık Müşteri Sayısı',
+            label: 'Haftalık Randevu Sayısı',
             backgroundColor: 'rgba(0, 123, 255, 0.2)',  // Mavi tonu
             borderColor: 'rgba(0, 123, 255, 1)',  // Mavi tonu
             borderWidth: 1,
@@ -186,6 +201,35 @@
         type: 'bar',
         data: weeklyData,
         options: weeklyOptions
+    });
+</script>
+<script>
+    // Günlük Müşteri Sayıları için Veriler
+    var dailyData = {
+        labels: [{% for entry in daily_counts %}"{{ entry.day }}",{% endfor %}],
+        datasets: [{
+            label: 'Günük Randevu Sayısı',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',  // Kırmızı tonu
+            borderColor: 'rgba(255, 99, 132, 1)',  // Kırmızı tonu
+            borderWidth: 1,
+            data: [{% for entry in daily_counts %}{{ entry.count }},{% endfor %}]
+        }]
+    };
+
+    // Günlük Grafiği için Seçenekler
+    var dailyOptions = {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    };
+
+    // Günlük Grafiği Oluştur
+    var dailyChart = new Chart(document.getElementById('dailyChart').getContext('2d'), {
+        type: 'bar',
+        data: dailyData,
+        options: dailyOptions
     });
 </script>
     

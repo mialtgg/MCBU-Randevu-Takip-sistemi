@@ -7,10 +7,11 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from .forms import CustomerForm
-from django.db.models.functions import ExtractMonth, ExtractWeek, ExtractYear
+from django.db.models.functions import ExtractMonth, ExtractWeek, ExtractYear,ExtractDay
 from django.shortcuts import render
 from django.shortcuts import render
 from .models import Customer
+from datetime import datetime
 
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Customer
@@ -39,8 +40,19 @@ def succes_view(request):
     print("Ssucces")
     return render(request, 'succes.html')
 def chart_view(request):
+    today = datetime.today()
+    current_month = today.month
+    current_year = today.year
+
+    daily_counts = Customer.objects.filter(
+        joining_date__month=current_month,
+        joining_date__year=current_year
+    ).annotate(day=ExtractDay('joining_date')) \
+        .values('day') \
+        .annotate(count=Count('*')) \
+        .order_by('day')
     try:
-        print("chart_view fonksiyonu başladı")  # Fonksiyonun başladığını kontrol et
+        
      
 
         # Aylık müşteri sayısını getir
@@ -75,10 +87,10 @@ def chart_view(request):
             print(f"Yıl {entry['year']} için Yıllık Müşteri Sayısı: {entry['count']}")
 
         # View'e aylık, haftalık ve yıllık müşteri sayıları verisini gönder
-        context = {'monthly_counts': monthly_counts, 'weekly_counts': weekly_counts, 'yearly_counts': yearly_counts,"weeks":weeks}
+        context = {'monthly_counts': monthly_counts, 'weekly_counts': weekly_counts, 'yearly_counts': yearly_counts,"weeks":weeks,'daily_counts': daily_counts}
 
         # View'e aylık ve haftalık müşteri sayıları verisini gönder
-        context = {'monthly_counts': monthly_counts, 'weekly_counts': weekly_counts, 'yearly_counts': yearly_counts,"weeks":weeks}
+        context = {'monthly_counts': monthly_counts, 'weekly_counts': weekly_counts, 'yearly_counts': yearly_counts,"weeks":weeks,'daily_counts': daily_counts}
 
         print("chart_view fonksiyonu başarıyla tamamlandı")  # Fonksiyonun tamamlandığını kontrol et
         return render(request, 'randevu/chart.html', context)
