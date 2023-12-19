@@ -7,7 +7,8 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from .forms import CustomerForm
-from django.db.models.functions import ExtractMonth
+from django.db.models.functions import ExtractMonth, ExtractWeek, ExtractYear
+from django.shortcuts import render
 from django.shortcuts import render
 from .models import Customer
 
@@ -39,29 +40,46 @@ def succes_view(request):
     return render(request, 'succes.html')
 def chart_view(request):
     try:
-        print("monthly_customer_count fonksiyonu başladı")  # Fonksiyonun başladığını kontrol et
+        print("chart_view fonksiyonu başladı")  # Fonksiyonun başladığını kontrol et
 
-        # Müşteri sayısını aylık olarak getir
+        # Aylık müşteri sayısını getir
         monthly_counts = Customer.objects.annotate(month=ExtractMonth('joining_date')) \
             .values('month') \
             .annotate(count=Count('*')) \
             .order_by('month')
 
+        # Haftalık müşteri sayısını getir
+        weekly_counts = Customer.objects.annotate(week=ExtractWeek('joining_date')) \
+            .values('week') \
+            .annotate(count=Count('*')) \
+            .order_by('week')
+        # Yıllık müşteri sayısını getir
+        yearly_counts = Customer.objects.annotate(year=ExtractYear('joining_date')) \
+            .values('year') \
+            .annotate(count=Count('*')) \
+            .order_by('year')
+
         # ID'leri terminalde görmek için print kullan
         for entry in monthly_counts:
-            print(f"Ay {entry['month']} için Müşteri Sayısı: {entry['count']}")
+            print(f"Ay {entry['month']} için Aylık Müşteri Sayısı: {entry['count']}")
 
-        # View'e aylık müşteri sayıları verisini gönder
-        context = {'monthly_counts': monthly_counts}
+        for entry in weekly_counts:
+            print(f"Hafta {entry['week']} için Haftalık Müşteri Sayısı: {entry['count']}")
+        for entry in yearly_counts:
+            print(f"Yıl {entry['year']} için Yıllık Müşteri Sayısı: {entry['count']}")
 
-        print("monthly_customer_count fonksiyonu başarıyla tamamlandı")  # Fonksiyonun tamamlandığını kontrol et
-        return render(request, 'chart.html', context)
+        # View'e aylık, haftalık ve yıllık müşteri sayıları verisini gönder
+        context = {'monthly_counts': monthly_counts, 'weekly_counts': weekly_counts, 'yearly_counts': yearly_counts}
+
+        # View'e aylık ve haftalık müşteri sayıları verisini gönder
+        context = {'monthly_counts': monthly_counts, 'weekly_counts': weekly_counts, 'yearly_counts': yearly_counts}
+
+        print("chart_view fonksiyonu başarıyla tamamlandı")  # Fonksiyonun tamamlandığını kontrol et
+        return render(request, 'randevu/chart.html', context)
 
     except Exception as e:
         print(f"Hata: {e}")  # Hata mesajını terminalde gör
         return render(request, 'randevu/chart.html')  # Hata olması durumunda hata sayfasına yönlendir
-
-    
 def randevu_view(request):
 
     today = date.today()
