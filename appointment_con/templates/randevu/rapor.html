@@ -32,6 +32,7 @@
                     <div>
                         <p class="fw-large text-white mb-0">Tarih :<b></b> {{ today|date:"d F l" }}</p>
                         <h2 class="mt-4 ff-secondary fw-semibold text-white">Bugün {{ todayCount }} toplantınız var</h2>
+                        
 
 
 
@@ -263,6 +264,8 @@
                                     style="width:100px;height:100px"></lord-icon>
                                 <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
                                     <h4>Randevuyu silmek İstediğinize emin misiniz?</h4>
+                                    {{ customer.pk }} dfgfgs
+
                                     <p class="text-muted mx-4 mb-0"></p>
                                 </div>
                             </div>
@@ -271,7 +274,7 @@
                                     data-bs-dismiss="modal">Kapat</button>
                                     <li>
                                         {{ item.name }} - {{ item.description }}
-                                        <form action="{% url 'rapor' %}" method="post">
+                                        <form action="{% url 'delete_customer' %}" method="post">
                                           {% csrf_token %}
                                           <button type="submit">Delete</button>
                                         </form>
