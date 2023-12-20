@@ -135,7 +135,7 @@ def randevu_view(request):
     customers = Customer.objects.all()
     todayCount= Customer.objects.filter(joining_date=today).count()
     
-    print("lalala")
+    
 
 
     # Template'e gönderilecek verileri hazırla
@@ -172,7 +172,7 @@ def randevu_view(request):
         # Redirect to a success page or wherever you want
         return render(request, 'randevu/rapor.html',context) 
 
-    return render(request, 'randevu/randevu.html')
+    return render(request, 'randevu/randevu.html',context)
 
 
 def delete_customer(request, customer_id):
