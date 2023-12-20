@@ -1,6 +1,8 @@
 from django.db.models import Count
 
-from datetime import date, timezone
+from datetime import date, timedelta, timezone
+from django.contrib import messages
+from django.forms import ValidationError
 
 from .models import Customer
 from django.http import HttpResponseServerError, JsonResponse
@@ -48,9 +50,33 @@ class CustomerListView(ListView):
         return Customer.objects.select_related('user')
     
 @user_passes_test(lambda u: u.is_staff, login_url='/login/')
+
+
 def rektördatatable_view(request):
     customers = Customer.objects.all()
-    
+    if request.method == 'POST':
+        user_id=request.user.id
+        customer_name = request.POST.get('customer_name')
+        konu = request.POST.get('konu')
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+        joining_date = request.POST.get('joining_date')
+        status = request.POST.get('status')
+        
+
+        # Create a new Customer object
+        customer = Customer.objects.create(
+            user_id=user_id,
+            customer_name=customer_name,
+            konu=konu,
+            start_time=start_time,
+            end_time=end_time,
+            joining_date=joining_date,
+            status=status
+        )
+
+        # Save the object to the database
+        customer.save()
     return render(request, 'rektördatatable.html', {'customers': customers})
 
 
@@ -130,50 +156,57 @@ def chart_view(request):
 
 
 def randevu_view(request):
-
     today = date.today()
     customers = Customer.objects.all()
-    todayCount= Customer.objects.filter(joining_date=today).count()
-    
-    
-
+    todayCount = Customer.objects.filter(joining_date=today).count()
 
     # Template'e gönderilecek verileri hazırla
     context = {
         'customers': customers,
-        'todayCount':todayCount,
+        'todayCount': todayCount,
     }
-   
+
     if request.method == 'POST':
-        user_id=request.user.id
+        user_id = request.user.id
         customer_name = request.POST.get('customer_name')
         konu = request.POST.get('konu')
-        start_time = request.POST.get('start_time')
-        end_time = request.POST.get('end_time')
+        start_time_str = request.POST.get('start_time')
+        end_time_str = request.POST.get('end_time')
         joining_date = request.POST.get('joining_date')
         status = request.POST.get('status')
-        
 
-        # Create a new Customer object
-        customer = Customer.objects.create(
-            user_id=user_id,
-            customer_name=customer_name,
-            konu=konu,
-            start_time=start_time,
-            end_time=end_time,
-            joining_date=joining_date,
-            status=status
+        # datetime nesnelerini oluştur
+        start_time = datetime.strptime(start_time_str, '%H:%M')
+        end_time = datetime.strptime(end_time_str, '%H:%M')
+
+        # Start ve end time'lar arasında müşteri kontrolü
+        end_time_limit = start_time + timedelta(minutes=60)
+        existing_customers = Customer.objects.filter(
+            start_time__gte=start_time,
+            start_time__lte=end_time_limit,
+            joining_date=joining_date
         )
+        if existing_customers.exists():
+            messages.error(request, "Bu saat aralığında aynı tarihe başka bir randevunuz var,en erken 1 saat sonrasına yeni randevu ekleyebilirsiniz.")
 
-        # Save the object to the database
-        customer.save()
-        
+        else:
+            # Create a new Customer object
+            customer = Customer.objects.create(
+                user_id=user_id,
+                customer_name=customer_name,
+                konu=konu,
+                start_time=start_time,
+                end_time=end_time,
+                joining_date=joining_date,
+                status=status
+            )
 
-        # Redirect to a success page or wherever you want
-        return render(request, 'randevu/rapor.html',context) 
+            # Save the object to the database
+            customer.save()
 
-    return render(request, 'randevu/randevu.html',context)
+            messages.success(request, "Randevu başarıyla oluşturuldu.")
 
+    return render(request, 'randevu/randevu.html', context)
 
 def delete_customer(request, customer_id):
     print(request)

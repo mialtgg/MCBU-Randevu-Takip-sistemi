@@ -51,7 +51,17 @@
 
                         <form method="post" action="{% url 'randevu' %}">
                             {% csrf_token %}
- 
+                            {% if messages %}
+                            
+                            <ul class="messages">
+                                {% for message in messages %}
+                                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                    {% endfor %}
+                            </ul>
+                            {% endif %}
+
+
+
 
                             <!-- İsim Soyisim -->
                             <div class="row mb-3 mt-3" style="margin-left: 10px;">
@@ -117,6 +127,8 @@
                                     </select>
                                 </div>
                             </div>
+
+
 
                             <!-- Submit Button -->
                             <div class="text-center mb-3">
@@ -223,4 +235,20 @@
 <script src="{% static 'js/pages/listjs.init.js' %}"></script>
 <!-- Sweet Alerts js -->
 <script src="{% static 'libs/sweetalert2/dist/sweetalert2.min.js' %}"></script>
+
+<script>
+    // Sayfa yüklendiğinde çalışacak JavaScript
+    document.addEventListener("DOMContentLoaded", function () {
+      // Mesajları seç
+      var messages = document.querySelectorAll('.messages .alert');
+  
+      // Her bir mesaj için
+      messages.forEach(function (message) {
+        // Mesajın kendi süresi kadar bekletip sonra gizle
+        setTimeout(function () {
+          message.style.display = 'none';
+        }, 3000); // 110 saniye (110000 milisaniye)
+      });
+    });
+  </script>
 {% endblock extra_js %}

@@ -96,18 +96,7 @@
 
 
 
-                                    <div class="noresult" style="display: none">
-                                        <div class="text-center">
-                                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                                                colors="primary:#121331,secondary:#08a88a"
-                                                style="width:75px;height:75px">
-                                            </lord-icon>
-                                            <h5 class="mt-2">Sorry! No Result Found</h5>
-                                            <p class="text-muted mb-0">We've searched more than 150+ Orders We did not
-                                                find any
-                                                orders for you search.</p>
-                                        </div>
-                                    </div>
+
                                 </div>
 
                                 <div class="d-flex justify-content-end">
@@ -141,16 +130,26 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                                 id="close-modal"></button>
                         </div>
-                        <form method="post" action="{% url 'randevu' %}">
+                        <form method="post" action="{% url 'rektör_datatable' %}">
                             {% csrf_token %}
 
                             <div class="row mb-3">
                                 <div class="col-lg-3">
-                                    <label for="nameInput" class="form-label">Name</label>
+                                    <label for="nameInput" class="form-label" >Kim İçin</label>
                                 </div>
-                                <div class="col-lg-6">
-                                    <input type="text" class="form-control" name="customer_name"
-                                        placeholder="Enter your name">
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control" name="user_id"
+                                        placeholder="Randevu kim için eklenecek ?" required>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="nameInput" class="form-label">İsim Soyisim</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control" required name="customer_name" placeholder="Randevuyu talep eden kişi"
+                                        >
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -158,51 +157,51 @@
                                     <label for="topInput" class="form-label">Konusu</label>
                                 </div>
                                 <div class="col-lg-9">
-                                    <input type="text" class="form-control" name="konu" placeholder="Talep Konusu">
+                                    <input type="text" class="form-control" required name="konu" placeholder="Talep Konusu">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-lg-3">
-                                    <label for="dateInput" class="form-label">Date</label>
+                                    <label for="dateInput" class="form-label">Tarih</label>
                                 </div>
                                 <div class="col-lg-9">
-                                    <input type="date" name="joining_date" class="form-control">
+                                    <input type="date" required name="joining_date" class="form-control">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-lg-3">
-                                    <label for="timeInput" class="form-label">start Time</label>
+                                    <label for="timeInput"  class="form-label">Başlangıç Saati</label>
                                 </div>
                                 <div class="col-lg-9">
-                                    <input type="time" class="form-control" name="start_time">
+                                    <input type="time" class="form-control" required name="start_time">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-lg-3">
-                                    <label for="timeInput" class="form-label">end Time</label>
+                                    <label for="timeInput" class="form-label">Bitiş Saati</label>
                                 </div>
                                 <div class="col-lg-9">
-                                    <input type="time" class="form-control" name="end_time">
+                                    <input type="time" required class="form-control" name="end_time">
                                 </div>
                             </div>
                             <div class="row mb-3">
-
-
-
-                                <div class="row mb-3">
-                                    <label for="status-field" class="form-label">Status</label>
+                                <div class="col-lg-3">
+                                    <label for="status-field"  class="form-label">Durum</label>
+                                </div>
+                                <div class="col-lg-9">
                                     <select class="form-control" data-trigger name="status" required>
 
-                                        <option value="Active">Active</option>
-                                        <option value="Block">Block</option>
+                                        <option value="Active">Aktif</option>
+                                        <option value="Block">İptal Edildi</option>
                                     </select>
                                 </div>
                             </div>
 
 
 
+
                             <div class="text-end">
-                                <button type="submit" class="btn btn-primary">Add Leave</button>
+                                <button type="submit" class="btn btn-primary">Kaydet</button>
                             </div>
                         </form>
                     </div>
@@ -234,7 +233,7 @@
                                     data-bs-dismiss="modal">Kapat</button>
                                     <li>
                                         {{ item.name }} - {{ item.description }}
-                                        <form action="{% url 'delete_customer' %}" method="post">
+                                        <form action="" method="post">
                                           {% csrf_token %}
                                           <button type="submit">Delete</button>
                                         </form>
