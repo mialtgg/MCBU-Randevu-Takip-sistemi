@@ -1,7 +1,7 @@
 from django.db.models import Count
-from collections import Counter
+
 from datetime import date, timezone
-from operator import countOf
+
 from .models import Customer
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -153,6 +153,7 @@ def randevu_view(request):
         end_time = request.POST.get('end_time')
         joining_date = request.POST.get('joining_date')
         status = request.POST.get('status')
+        
 
         # Create a new Customer object
         customer = Customer.objects.create(
@@ -167,7 +168,7 @@ def randevu_view(request):
 
         # Save the object to the database
         customer.save()
-        print("randevu_view")
+        
 
         # Redirect to a success page or wherever you want
         return render(request, 'randevu/rapor.html',context) 
@@ -178,14 +179,41 @@ def randevu_view(request):
 def delete_customer(request, customer_id):
     customer = get_object_or_404(Customer, id=customer_id)
     customer.delete()
-    print("delete_customer")
     return redirect('rapor')
 
-# Diğer fonksiyonlar...
+def edit_customer(request, customer_id):
+    # URL'den gelen customer_id parametresi ile müşteri objesini al
+    customer = get_object_or_404(Customer, id=customer_id)
+    form = None
+    print("1")
 
+    if request.method == 'POST':
+        print("2")
+        # Eğer HTTP isteği bir POST isteği ise, formdan gelen verileri al
+        customer_name = request.POST.get('customer_name')
+        konu = request.POST.get('konu')
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+        joining_date = request.POST.get('joining_date')
+        status = request.POST.get('status')
 
+        # Varolan müşteri objesini güncelle
+        customer.customer_name = customer_name
+        customer.konu = konu
+        customer.start_time = start_time
+        customer.end_time = end_time
+        customer.joining_date = joining_date
+        customer.status = status
 
+        # Güncellenmiş müşteriyi veritabanına kaydet
+        customer.save()
+        return redirect(rapor_view)
 
+    else:
+        print("3")
+        # Eğer istek bir POST isteği değilse, formu müşteri verileriyle doldur
+        form = CustomerForm(instance=customer)
+        return redirect(rapor_view)
 
-
-
+    # Müşteri objesini ve formu şablonla birlikte render et
+    
