@@ -72,9 +72,11 @@
                                 <div class="row g-4 mb-3">
                                     <div class="col-sm-auto">
                                         <div>
-                                            <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal"
-                                                id="create-btn" data-bs-target="#showModal"><i
-                                                    class="ri-add-line align-bottom me-1"></i>Ekle</button>
+                                            <div class="edit">
+                                                <button class="btn btn-sm btn-success edit-item-btn"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#showModal">Ekle</button>
+                                            </div>
 
                                         </div>
                                     </div>
@@ -169,6 +171,167 @@
                 <!-- end col -->
             </div>
             <!-- end row -->
+            
+            
+            <div class="modal fade" id="showModal{{customer3.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-light p-3">
+                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                id="close-modal"></button>
+                        </div>
+
+                        <form method="post"   action="{% url 'randevu'%}" >
+                            {% csrf_token %}
+
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="nameInput" class="form-label">Talep Eden Kişi</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control" required name="customer_name"
+                                        placeholder="Enter your name">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="topInput" class="form-label">Konusu</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control"required name="konu" placeholder="Talep Konusu">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="dateInput" class="form-label">Tarih</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="date" name="joining_date" required class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label">Başlangıç Zamanı</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="time" class="form-control"  required  name="start_time">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label" >Bitiş Zamanı</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="time" class="form-control" required name="end_time">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="status-field" class="form-label" >Durum</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <select class="form-control" data-trigger name="status" required>
+
+                                        <option value="Active">Aktif</option>
+                                        <option value="Block">İptal Edildi</option>
+                                    </select>
+                                </div>
+                            </div>
+                           
+
+
+
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success">Ekle</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+
+                        {%for customer2 in customers%}
+            <div class="modal fade" id="showModal{{customer2.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-light p-3">
+                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                id="close-modal"></button>
+                        </div>
+                        <form method="post" action="{% url 'edit_customer' customer2.id %}">
+                            {% csrf_token %}
+
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="nameInput" class="form-label">Talep Eden Kişi</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control"  name="customer_name" value="{{customer2.customer_name }}"
+                                        placeholder="Enter your name">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="topInput" class="form-label">Konusu</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control" name="konu" value="{{ customer2.konu }}"placeholder="Talep Konusu">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="dateInput" class="form-label">Tarih</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="date" name="joining_date" value="{{ customer2.joining_date|date:'Y-m-d' }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label">Başlangıç Zamanı</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="time" class="form-control"  value="{{ customer2.start_time|time:'H:i' }}"  name="start_time">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label" >Bitiş Zamanı</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="time" class="form-control" value="{{ customer2.end_time|time:'H:i' }}" name="end_time">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="status-field" class="form-label" value="{{ customer2.status}}">Durum</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <select class="form-control" data-trigger name="status" required>
+
+                                        <option value="Active">Aktif</option>
+                                        <option value="Block">İptal Edildi</option>
+                                    </select>
+                                </div>
+                            </div>
+                           
+
+
+
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success">Kaydet</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
 
 
 
@@ -267,7 +430,7 @@
                                         colors="primary:#f7b84b,secondary:#f06548"
                                         style="width:100px;height:100px"></lord-icon>
                                     <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                                        <h4>Randevuyu silmek İstediğinize emin misiniz? {{ customer1.id }} </h4>
+                                        <h4>Randevuyu silmek İstediğinize emin misiniz? </h4>
                                     
 
                                         <p class="text-muted mx-4 mb-0"></p>
@@ -276,13 +439,14 @@
                                 <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                                     <button type="button" class="btn w-sm btn-primary"
                                         data-bs-dismiss="modal">Kapat</button>
-                                        <li>
-                                            {{ item.name }} - {{ item.description }}
-                                            <form action=""method="post">
+                                       
+                                            {{ item.name }}  {{ item.description }}
+                                            <form action="{% url 'delete_customer' customer1.id %}" method="post">
                                             {% csrf_token %}
-                                            <button type="submit">Delete</button>
+                                            <button type="submit" class="btn w-sm btn-danger"
+                                        data-bs-dismiss="modal">Evet, Sil</button>
                                             </form>
-                                        </li>
+                                  
                                     </td>
                                 </div>
 

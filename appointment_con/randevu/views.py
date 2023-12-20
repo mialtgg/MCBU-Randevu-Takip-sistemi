@@ -3,7 +3,7 @@ from django.db.models import Count
 from datetime import date, timezone
 
 from .models import Customer
-from django.http import JsonResponse
+from django.http import HttpResponseServerError, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from .forms import CustomerForm
@@ -30,7 +30,7 @@ def rapor_view(request):
         'todayCount':todayCount,
         'today' :today,
     }
-    print("rapor_view")
+    
     
 
     # Template'i render et ve HTTP response'u döndür
@@ -145,8 +145,7 @@ def randevu_view(request):
     }
    
     if request.method == 'POST':
-    
-        
+        user_id=request.user.id
         customer_name = request.POST.get('customer_name')
         konu = request.POST.get('konu')
         start_time = request.POST.get('start_time')
@@ -157,7 +156,7 @@ def randevu_view(request):
 
         # Create a new Customer object
         customer = Customer.objects.create(
-            
+            user_id=user_id,
             customer_name=customer_name,
             konu=konu,
             start_time=start_time,
@@ -177,14 +176,27 @@ def randevu_view(request):
 
 
 def delete_customer(request, customer_id):
-    customer = get_object_or_404(Customer, id=customer_id)
-    customer.delete()
-    return redirect('rapor')
+    print(request)
+    try:
+        customer = get_object_or_404(Customer, id=customer_id)
+        print(customer)
+        customer.delete()
+        print("hola")
+        return redirect(rapor_view)
+    except Customer.DoesNotExist as e:
+        print("1")
+        print(f"Customer not found: {e}")
+        return HttpResponseServerError("Customer not found.")
+    except Exception as e:
+        print("23")
+        # Diğer olası hata durumları için özel işlemler ekleyebilirsiniz.
+        print(f"An error occurred: {e}")
+        return HttpResponseServerError(f"An error occurred: {e}")
 
 def edit_customer(request, customer_id):
     # URL'den gelen customer_id parametresi ile müşteri objesini al
     customer = get_object_or_404(Customer, id=customer_id)
-    form = None
+   
     print("1")
 
     if request.method == 'POST':
