@@ -84,7 +84,7 @@ def rektördatatable_view(request):
 
 def succes_view(request):
     today = date.today()
-    customers_today = Customer.objects.filter(joining_date__gte=today).values('customer_name', 'joining_date', 'start_time')[:6]
+    customers_today = Customer.objects.filter(joining_date__gte=today).values('customer_name', 'joining_date', 'start_time')[:10]
 
     context = {'customers_today': customers_today}
     print(customers_today)

@@ -1,6 +1,6 @@
 {% extends "partials/base.html" %}
 {% load static %}
-{% block title %}Calendar{% endblock title %}
+{% block title %}z{% endblock title %}
 
 {% block content %}
 <!-- ============================================================== -->
@@ -12,7 +12,7 @@
         <div class="container-fluid">
 
             {% block pagetitle %}
-            {% include "partials/page-title.html" with pagetitle="Apps" title="Calendar" %}
+
             {% endblock pagetitle %}
 
             <div class="row">
@@ -21,110 +21,93 @@
                         <div class="col-xl-3">
                             <div class="card card-h-100">
                                 <div class="card-body">
-                                    <button class="btn btn-primary w-100"><i class="mdi mdi-plus"></i> Yaklaşan
+                                    <button class="btn btn-primary w-100"><i data-feather="calendar"></i> Yaklaşan
                                         Randevular</button>
-                                   
-                                        <div class="external-event-container">
-                            
-                                        </div>
-                                        
 
-                                    <div id="external-events">
-                                        <br>
-                                        
-                                        <div class="external-event fc-event bg-success-subtle text-success" data-class="bg-success-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>
-                                          Talep eden   {{ customers_today.0.customer_name }} - {{ customers_today.0.joining_date }} - {{ customers_today.0.start_time }}
-                                        </div>
-                                        
-                                        <div class="external-event fc-event bg-info-subtle text-info" data-class="bg-info-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>
-                                            {{ customers_today.1.customer_name }} - {{ customers_today.1.joining_date }} - {{ customers_today.1.start_time }}
-                                        </div>
-                                        
-                                        <div class="external-event fc-event bg-warning-subtle text-warning"
-                                            data-class="bg-warning-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>
-                                            {{ customers_today.2.customer_name }} - {{ customers_today.2.joining_date }} - {{ customers_today.3.start_time }}
+                                    <div class="external-event-container">
 
-
-                                        </div>
-                                        <div class="external-event fc-event bg-danger-subtle text-danger"
-                                            data-class="bg-danger-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>
-                                            {{ customers_today.3.customer_name }} - {{ customers_today.3.joining_date }} - {{ customers_today.3.start_time }}
-
-                                        </div>
-
-                                        <div class="external-event fc-event bg-success-subtle text-success"
-                                            data-class="bg-success-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>
-                                            {{ customers_today.4.customer_name }} - {{ customers_today.4.joining_date }} - {{ customers_today.4.start_time }}
-
-                                        </div>
-                                        <div class="external-event fc-event bg-info-subtle text-info"
-                                            data-class="bg-info-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>
-                                            {{ customers_today.5.customer_name }} - {{ customers_today.5.joining_date }} - {{ customers_today.5.start_time }}
-
-                                        </div>
-                                        <div class="external-event fc-event bg-warning-subtle text-warning"
-                                            data-class="bg-warning-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>
-                                            {{ customers_today.6.customer_name }} - {{ customers_today.6.joining_date }} - {{ customers_today.6.start_time }}
-
-
-                                        </div>
-                                        <div class="external-event fc-event bg-danger-subtle text-danger"
-                                            data-class="bg-danger-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>
-                                        </div>
-
-                                        <div class="external-event fc-event bg-success-subtle text-success"
-                                            data-class="bg-success-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>
-                                        </div>
-                                        <div class="external-event fc-event bg-info-subtle text-info"
-                                            data-class="bg-info-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>
-                                        </div>
-                                        <div class="external-event fc-event bg-warning-subtle text-warning"
-                                            data-class="bg-warning-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>
-
-                                        </div>
-                                        <div class="external-event fc-event bg-danger-subtle text-danger"
-                                            data-class="bg-danger-subtle">
-                                            <i class="mdi mdi-checkbox-blank-circle me-2"></i>
-                                        </div>
                                     </div>
 
-                                </div>
-                            </div>
-                            <div>
-                                <h5 class="mb-1">Upcoming Events</h5>
-                                <p class="text-muted">Don't miss scheduled events</p>
-                                <div class="pe-2 me-n1 mb-3" data-simplebar style="height: 400px">
+
                                     <div>
+                                        <br>
 
+                                        <div class="external-event fc-event bg-success-subtle text-success"
+                                            data-class="bg-success-subtle">
+                                            Talep eden {{ customers_today.0.customer_name }} - {{
+                                            customers_today.0.joining_date }} - {{ customers_today.0.start_time }}
+                                        </div>
+
+                                        <div class="external-event fc-event bg-info-subtle text-info"
+                                            data-class="bg-info-subtle">
+                                            {{ customers_today.1.customer_name }} - {{ customers_today.1.joining_date }}
+                                            - {{ customers_today.1.start_time }}
+                                        </div>
+
+                                        <div class="external-event fc-event bg-warning-subtle text-warning"
+                                            data-class="bg-warning-subtle">
+                                            {{ customers_today.2.customer_name }} - {{ customers_today.2.joining_date }}
+                                            - {{ customers_today.3.start_time }}
+
+
+                                        </div>
+                                        <div class="external-event fc-event bg-danger-subtle text-danger"
+                                            data-class="bg-danger-subtle">
+                                            {{ customers_today.3.customer_name }} - {{ customers_today.3.joining_date }}
+                                            - {{ customers_today.3.start_time }}
+
+                                        </div>
+
+                                        <div class="external-event fc-event bg-success-subtle text-success"
+                                            data-class="bg-success-subtle">
+                                            {{ customers_today.4.customer_name }} - {{ customers_today.4.joining_date }}
+                                            - {{ customers_today.4.start_time }}
+
+                                        </div>
+                                        <div class="external-event fc-event bg-info-subtle text-info"
+                                            data-class="bg-info-subtle">
+                                            {{ customers_today.5.customer_name }} - {{ customers_today.5.joining_date }}
+                                            - {{ customers_today.5.start_time }}
+
+                                        </div>
+                                        <div class="external-event fc-event bg-warning-subtle text-warning"
+                                            data-class="bg-warning-subtle">
+                                            {{ customers_today.6.customer_name }} - {{ customers_today.6.joining_date }}
+                                            - {{ customers_today.6.start_time }}
+
+
+                                        </div>
+
+
+                                        <div class="external-event fc-event bg-success-subtle text-success"
+                                            data-class="bg-success-subtle">
+                                            {{ customers_today.7.customer_name }} - {{ customers_today.7.joining_date }}
+                                            - {{ customers_today.7.start_time }}
+                                        </div>
+                                        <div class="external-event fc-event bg-info-subtle text-info"
+                                            data-class="bg-info-subtle">
+                                            
+                                            {{ customers_today.8.customer_name }} - {{ customers_today.8.joining_date }}
+                                            - {{ customers_today.8.start_time }}
+                                        </div>
+                                        <div class="external-event fc-event bg-warning-subtle text-warning"
+                                            data-class="bg-warning-subtle">
+                                            {{ customers_today.9.customer_name }} - {{ customers_today.9.joining_date }}
+                                            - {{ customers_today.9.start_time }}
+
+                                        </div>
+                                        <div class="external-event fc-event bg-danger-subtle text-danger"
+                                            data-class="bg-danger-subtle">
+                                            {{ customers_today.10.customer_name }} - {{ customers_today.10.joining_date }}
+                                            - {{ customers_today.10.start_time }}
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
 
-                            <div class="card">
-                                <div class="card-body bg-info-subtle">
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0">
-                                            <i data-feather="calendar" class="text-info icon-dual-info"></i>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="fs-15">Welcome to your Calendar!</h6>
-                                            <p class="text-muted mb-0">Event that applications book will appear here.
-                                                Click on an event to see the details and manage applicants event.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--end card-->
+
+
                         </div> <!-- end col-->
 
                         <div class="col-xl-9">
@@ -143,7 +126,7 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content border-0">
                                 <div class="modal-header p-3 bg-info-subtle">
-                                    <h5 class="modal-title" id="modal-title">Event</h5>
+                                    <h5 class="modal-title" id="modal-title">Randevu</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-hidden="true"></button>
                                 </div>
@@ -307,8 +290,106 @@
 {% endblock content %}
 {% block extra_js %}
 <!-- calendar min js -->
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        // Diğer takvim ayarları...
+        locale: 'tr', // Türkçe dil ayarı
+        today: 'bugün', // today ifadesini 'bugün' olarak değiştirme
+
+        // Tarih üzerine tıklama olayını tanımlama
+        dateClick: function (info) {
+            // Seçilen tarihi modal içinde kullanmak için saklayın
+            var selectedDate = info.date;
+
+            // Modalı aç
+            $('#event-modal').modal('show');
+
+            // Formu submit olayını dinle
+            $('#form-event').submit(function (e) {
+                e.preventDefault();
+
+                // Form verilerini alın
+                var category = $('#event-category').val();
+                var eventName = $('#event-title').val();
+                var eventStartDate = $('#event-start-date').val();
+                var eventStartTime = $('#timepicker1').val();
+                var eventEndTime = $('#timepicker2').val();
+                var eventLocation = $('#event-location').val();
+                var eventDescription = $('#event-description').val();
+
+                // Burada form verilerini kullanarak etkinliği işleyebilirsiniz
+                // Örneğin, bu örnek sadece console.log ile gösterildi
+                console.log('Kategori: ' + category);
+                console.log('Etkinlik Adı: ' + eventName);
+                console.log('Başlangıç Tarihi: ' + eventStartDate);
+                console.log('Başlangıç Saati: ' + eventStartTime);
+                console.log('Bitiş Saati: ' + eventEndTime);
+                console.log('Yer: ' + eventLocation);
+                console.log('Açıklama: ' + eventDescription);
+
+                // İşlem tamamlandıktan sonra modalı kapat
+                $('#event-modal').modal('hide');
+            });
+        }
+    });
+
+    calendar.render();
+});
+
+
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // ...
+
+    // Tarih üzerine tıklama olayını tanımlama
+    dateClick: function (info) {
+        // Seçilen tarihi modal içinde kullanmak için saklayın
+        var selectedDate = info.date;
+
+        // Modalı aç
+        $('#event-modal').modal('show');
+
+        // Etkinlik ekleme formunu işleme
+        $('#eventForm').submit(function (e) {
+            e.preventDefault();
+
+            // Form verilerini alın
+            var eventName = $('#eventName').val();
+
+            // Burada etkinlik eklemeyi gerçekleştirebilirsiniz
+
+            // Modalı kapat
+            $('#addEventModal').modal('hide');
+        });
+    }
+});
+
+</script>
+
+<script src="{% static 'libs/fullcalendar/index.global.min.js' %}"></script>
+<script src="{% static 'js/pages/calendar.init.js'%}"></script>
+<!-- jQuery -->
+<script src="{% static 'libs/jquery/jquery.min.js' %}"></script>
+
+<!-- FullCalendar dependencies -->
+<!-- Include any other dependencies here -->
+
+<!-- FullCalendar -->
 <script src="{% static 'libs/fullcalendar/index.global.min.js' %}"></script>
 
 <!-- Calendar init -->
 <script src="{% static 'js/pages/calendar.init.js'%}"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
 {% endblock extra_js %}
