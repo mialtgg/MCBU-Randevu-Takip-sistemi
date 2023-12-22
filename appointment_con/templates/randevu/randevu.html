@@ -10,10 +10,7 @@
 <!-- Start right Content here -->
 <!-- ============================================================== -->
 <!-- customer_count.html -->
-
-
-
-<div class="main-content d-flex justify-content-center mt-4 ">
+<div class="main-content d-flex justify-content-center mt-4  " style="margin-bottom: 0%;">
     <div class="col-xl-3 col-md-6">
         <div class="card card-animate bg-primary">
             <div class="card-body">
@@ -35,9 +32,9 @@
     </div> <!-- end col-->
 
 </div>
-<div class="main-content">
-
-    <div class="page-content">
+<div class="main-content" style="margin-bottom: 0% margirn-bottom=0;">
+ 
+    <div class="page-content" style="margin-bottom: 0%;">
         <div class="container-fluid">
 
             <div class="row">
@@ -53,12 +50,14 @@
                             {% csrf_token %}
                             {% if messages %}
                             
-                            <ul class="messages">
+                            <ul   class="messages">
                                 {% for message in messages %}
                                 <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
                                     {% endfor %}
                             </ul>
+
                             {% endif %}
+                            
 
 
 
@@ -247,7 +246,7 @@
         // Mesajın kendi süresi kadar bekletip sonra gizle
         setTimeout(function () {
           message.style.display = 'none';
-        }, 3000); // 110 saniye (110000 milisaniye)
+        }, 3000); 
       });
     });
   </script>

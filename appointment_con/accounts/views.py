@@ -22,23 +22,23 @@ def user_login(request):
                 if user.is_active:
                    
                     login(request,user)
+                    return redirect('succes')
                     
-                    
-                    return redirect('calendar')
                 else:
                     messages.info(request,'Disabled Account')
-                    print("mine1")
+                    
             else:
                
                messages.info(request,'Email Ya da şifre Yanlış')
-               print("mine12")
+               
         else:
          
             messages.info(request,'Disabled Account')
-            print("mine123")
+          
     else:
        
         form = LoginForm()
+
     return render(request,'account/login.html',{'form':form})
                
                
@@ -60,8 +60,11 @@ def user_register(request):
         form=RegisterForm()
     return render(request,'account/register.html',{'form':form})   
     
-def user_logout(request):
-     return render(request,'account/logout.html')  
+def logout_view(request):
+    logout(request)
+    return redirect('login')  # Çıkış işlemi tamamlandıktan sonra yönlendirilecek sayfanın adını değiştirin
+
+
 
 
 

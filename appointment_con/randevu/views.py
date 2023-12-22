@@ -49,7 +49,7 @@ class CustomerListView(ListView):
     def get_queryset(self):
         return Customer.objects.select_related('user')
     
-@user_passes_test(lambda u: u.is_staff, login_url='/login/')
+#@user_passes_test(lambda u: u.is_staff, login_url='/login/')
 
 
 def rektördatatable_view(request):
@@ -92,6 +92,7 @@ def succes_view(request):
 
 
 
+ay_isimleri = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
 
 def chart_view(request):
     today = datetime.today()
