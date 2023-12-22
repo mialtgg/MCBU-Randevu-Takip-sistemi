@@ -113,50 +113,61 @@
                                     <div class="p-2 mt-4">
        
             
-                                        <form method="POST"  action="{% url 'register' %}">
+                                        <form method="POST" action="{% url 'register' %}">
                                             {% csrf_token %}
-                                           
-                                      
+                                        
+                                            <!-- Diğer form alanları buraya eklenecek -->
+                                        
+                                            {% for error in form.non_field_errors %}
+                                                <div class="alert alert-danger">
+                                                    {{ error }}
+                                                </div>
+                                            {% endfor %}
+                                        
                                             <div class="mb-3">
                                                 <label for="e-mail" class="form-label">E-Mail</label>
-                                                <input type="text" class="form-control" name="username" id="e-mail"
-                                                    placeholder="E-Mail ">
+                                                <input type="text" class="form-control" required name="username" id="e-mail" placeholder="E-Mail">
+                                                {% for error in form.errors.username %}
+                                                    <div class="text-danger">{{ error }}</div>
+                                                {% endfor %}
                                             </div>
-                                            
-                    
+                                        
                                             <div class="mb-3">
-                                                <div class="float-end">
-                                                    <a href="" class="text-muted">Şifremi unuttum</a>
-                                                </div>
                                                 <label class="form-label" for="password-input">Şifre</label>
                                                 <div class="position-relative auth-pass-inputgroup mb-3">
-                                                    <input type="password" class="form-control pe-5 password-input" name="password"
-                                                        placeholder="Şifrenizi giriniz" id="password-input">
-                                                    <button
-                                                        class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
-                                                        type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                                                    <input type="password" class="form-control pe-5 password-input" required name="password" placeholder="Şifrenizi giriniz" id="password-input">
+                                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+                                                            type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
                                                 </div>
-                                                
+                                                {% for error in form.errors.password %}
+                                                    <div class="text-danger">{{ error }}</div>
+                                                {% endfor %}
                                             </div>
+                                        
+                                            <div class="mb-3">
+                                                <label for="confirm-password" class="form-label">Şifre Tekrarı</label>
+                                                <input type="password" class="form-control" required name="confirm_password" placeholder="Şifrenizi tekrar giriniz" id="confirm-password">
+                                                {% for error in form.errors.confirm_password %}
+                                                    <div class="text-danger">{{ error }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        
+                                            <!-- Diğer form alanları buraya eklenecek -->
+                                        
                                             <div class="mt-2 d-flex justify-content-center">
-                                                
-                                                <a href="{% url 'login' %}" class="btn btn-primary" type="submit">Kaydol</a>
-                                                
+                                                <button class="btn btn-primary" type="submit">Kaydol</button>
                                             </div>
-                                            
-                    
-                                            
-                    
                                         </form>
+                                        
 
                                         
 
                                             <div id="password-contain" class="p-3 bg-light mb-2 rounded">
-                                                <h5 class="fs-13">Password must contain:</h5>
-                                                <p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
-                                                <p id="pass-lower" class="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
-                                                <p id="pass-upper" class="invalid fs-12 mb-2">At least <b>uppercase</b> letter (A-Z)</p>
-                                                <p id="pass-number" class="invalid fs-12 mb-0">A least <b>number</b> (0-9)</p>
+                                                <h5 class="fs-13">Şifre :</h5>
+                                                <p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 karakter</b></p>
+                                                <p id="pass-lower" class="invalid fs-12 mb-2"> <b>Küçük Harf</b> (a-z)</p>
+                                                <p id="pass-upper" class="invalid fs-12 mb-2"> <b>Büyük Harf</b>  (A-Z)</p>
+                                                <p id="pass-number" class="invalid fs-12 mb-0"> <b>Rakam</b> (0-9)</p>
                                             </div>
 
                                         

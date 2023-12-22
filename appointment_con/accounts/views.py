@@ -4,61 +4,50 @@ from .forms import LoginForm ,RegisterForm
 from django.contrib import messages
 from django.views.generic.edit import FormView
 
+
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def user_login(request):
-
+    print('1')
+    print(request.method)
     if request.method == "POST":
+        print('2')
         form = LoginForm(request.POST)
+        print("hereee")
+        print(form,"wssds")
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user = authenticate(request,username=username,
-                                password = password)
-            
-
-            if user is not None: #böyle bir kullanıcı varsa
-                if user.is_active:
-                   
-                    login(request,user)
-                    return redirect('succes')
-                    
-                else:
-                    messages.info(request,'Disabled Account')
-                    
+            user = authenticate(request, username=username, password=password)
+            print('3')
+            if user is not None and user.is_active:
+                login(request, user)
+                return redirect('succes')
             else:
-               
-               messages.info(request,'Email Ya da şifre Yanlış')
-               
+                messages.error(request, 'Geçersizz Şifre ya da Kullanıcı adı')
         else:
-         
-            messages.info(request,'Disabled Account')
-          
+            messages.error(request, 'Form is not valid')
     else:
-       
+        print('5')
         form = LoginForm()
 
-    return render(request,'account/login.html',{'form':form})
+    return render(request, 'account/login.html', {'form': form})
                
-               
+@csrf_exempt              
 def user_register(request):
-    
     if request.method == "POST":
-        print("1")
         form = RegisterForm(request.POST)
         if form.is_valid():
-            
-            print("2")
             form.save()
-            messages.success(request,form.errors)
-            return redirect ('login')
+            messages.success(request, 'Kayıt başarılı. Şimdi giriş yapabilirsiniz.')
+            return redirect('login')
         else:
-           print(form.errors)
-           messages.error(request,form.errors)
-    else :
-        form=RegisterForm()
-    return render(request,'account/register.html',{'form':form})   
+            messages.error(request, 'Kayıt başarısız. Lütfen aşağıdaki hataları düzeltin.')
+    else:
+        form = RegisterForm()
+    return render(request, 'account/register.html', {'form': form})
+
     
 def logout_view(request):
     logout(request)
