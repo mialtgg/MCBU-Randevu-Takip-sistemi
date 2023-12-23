@@ -9,6 +9,12 @@
 <!-- ============================================================== -->
 <!-- Start right Content here -->
 <!-- ============================================================== -->
+
+<style>
+    body {
+        overflow: hidden;
+    }
+</style>
 <!-- customer_count.html -->
 <div class="main-content d-flex justify-content-center mt-4  " style="margin-bottom: 0%;">
     <div class="col-xl-3 col-md-6">
@@ -60,7 +66,7 @@
                             
 
 
-
+                            <input type="hidden" name="admin_add_name" value="{{ request.user.get_full_name }}">
 
                             <!-- İsim Soyisim -->
                             <div class="row mb-3 mt-3" style="margin-left: 10px;">

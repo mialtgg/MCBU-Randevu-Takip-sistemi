@@ -1,5 +1,5 @@
 from django.db.models import Count
-
+from django.contrib.auth.decorators import login_required
 from datetime import date, timedelta, timezone
 from django.contrib import messages
 from django.forms import ValidationError
@@ -22,10 +22,11 @@ from django.contrib.auth.decorators import user_passes_test
 
 
 def rapor_view(request):
+    if request.user.is_authenticated:
+     user_id = request.user.id
     today = date.today()
-    customers = Customer.objects.all()
-    todayCount= Customer.objects.filter(joining_date=today).count()
-
+    customers = Customer.objects.filter(user_id=user_id)
+    todayCount = customers.filter(joining_date=date.today()).count()
     # Template'e gönderilecek verileri hazırla
     context = {
         'customers': customers,
@@ -49,11 +50,16 @@ class CustomerListView(ListView):
     def get_queryset(self):
         return Customer.objects.select_related('user')
     
-#@user_passes_test(lambda u: u.is_staff, login_url='/login/')
 
-
+def is_admin(user):
+    return user.is_authenticated and user.is_staff
+    
+@user_passes_test(lambda u: u.is_staff, login_url='/login/')
 def rektördatatable_view(request):
     customers = Customer.objects.all()
+    for user in customers:
+
+        print(f"User ID: {user.id}")
     if request.method == 'POST':
         user_id=request.user.id
         customer_name = request.POST.get('customer_name')
@@ -62,29 +68,20 @@ def rektördatatable_view(request):
         end_time = request.POST.get('end_time')
         joining_date = request.POST.get('joining_date')
         status = request.POST.get('status')
+        admin_add_name =request.POST.get('admin_add_name')
         
 
-        # Create a new Customer object
-        customer = Customer.objects.create(
-            user_id=user_id,
-            customer_name=customer_name,
-            konu=konu,
-            start_time=start_time,
-            end_time=end_time,
-            joining_date=joining_date,
-            status=status
-        )
-
-        # Save the object to the database
-        customer.save()
+      
     return render(request, 'rektördatatable.html', {'customers': customers})
 
 
 
 
+@login_required
 def succes_view(request):
+    user_id = request.user.id
     today = date.today()
-    customers_today = Customer.objects.filter(joining_date__gte=today).values('customer_name', 'joining_date', 'start_time')[:10]
+    customers_today = Customer.objects.filter(user_id=user_id, joining_date__gte=today).values('customer_name', 'joining_date', 'start_time')[:10]
 
     context = {'customers_today': customers_today}
     print(customers_today)
@@ -92,32 +89,38 @@ def succes_view(request):
 
 
 
-ay_isimleri = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
 
+@login_required
 def chart_view(request):
+    user_id = request.user.id
+
     today = datetime.today()
     current_month = today.month
     current_year = today.year
 
     daily_counts = Customer.objects.filter(
+        user_id=user_id,
         joining_date__month=current_month,
         joining_date__year=current_year
     ).annotate(day=ExtractDay('joining_date')) \
         .values('day') \
         .annotate(count=Count('*')) \
         .order_by('day')
-    try:
-        
-     
 
+    try:
         # Aylık müşteri sayısını getir
-        monthly_counts = Customer.objects.annotate(month=ExtractMonth('joining_date')) \
+        monthly_counts = Customer.objects.filter(
+            user_id=user_id
+        ).annotate(month=ExtractMonth('joining_date')) \
             .values('month') \
             .annotate(count=Count('*')) \
             .order_by('month')
 
-        weeks = [f'Hafta {i}' for i in range(1, 53)]# Haftalık müşteri sayısını getir
+        weeks = [f'Hafta {i}' for i in range(1, 53)]
+
+        # Haftalık müşteri sayısını getir
         weekly_counts = Customer.objects.filter(
+            user_id=user_id,
             joining_date__month=date.today().month
         ).annotate(
             week=ExtractWeek('joining_date')
@@ -126,89 +129,96 @@ def chart_view(request):
         ).annotate(
             count=Count('*')
         ).order_by('week')
+
         # Yıllık müşteri sayısını getir
-        yearly_counts = Customer.objects.annotate(year=ExtractYear('joining_date')) \
+        yearly_counts = Customer.objects.filter(
+            user_id=user_id
+        ).annotate(year=ExtractYear('joining_date')) \
             .values('year') \
             .annotate(count=Count('*')) \
             .order_by('year')
 
-        # ID'leri terminalde görmek için print kullan
-        for entry in monthly_counts:
-            print(f"Ay {entry['month']} için Aylık Müşteri Sayısı: {entry['count']}")
-
-        for entry in weekly_counts:
-            print(f"Hafta {entry['week']} için Haftalık Müşteri Sayısı: {entry['count']}")
-        for entry in yearly_counts:
-            print(f"Yıl {entry['year']} için Yıllık Müşteri Sayısı: {entry['count']}")
-
         # View'e aylık, haftalık ve yıllık müşteri sayıları verisini gönder
-        context = {'monthly_counts': monthly_counts, 'weekly_counts': weekly_counts, 'yearly_counts': yearly_counts,"weeks":weeks,'daily_counts': daily_counts}
+        context = {
+            'monthly_counts': monthly_counts,
+            'weekly_counts': weekly_counts,
+            'yearly_counts': yearly_counts,
+            'weeks': weeks,
+            'daily_counts': daily_counts
+        }
 
-        # View'e aylık ve haftalık müşteri sayıları verisini gönder
-        context = {'monthly_counts': monthly_counts, 'weekly_counts': weekly_counts, 'yearly_counts': yearly_counts,"weeks":weeks,'daily_counts': daily_counts}
-
-        print("chart_view fonksiyonu başarıyla tamamlandı")  # Fonksiyonun tamamlandığını kontrol et
+        print("chart_view fonksiyonu başarıyla tamamlandı")
         return render(request, 'randevu/chart.html', context)
 
     except Exception as e:
-        print(f"Hata: {e}")  # Hata mesajını terminalde gör
-        return render(request, 'randevu/chart.html')  # Hata olması durumunda hata sayfasına yönlendir
-    
+        print(f"Hata: {e}")
+        return render(request, 'randevu/chart.html')
 
 
+@login_required
 def randevu_view(request):
-    today = date.today()
-    customers = Customer.objects.all()
-    todayCount = Customer.objects.filter(joining_date=today).count()
+    # Eğer kullanıcı admin ise veya oturum açmışsa
+    if request.user.is_staff or request.user.is_authenticated:
+        user_id = request.user.id 
 
-    # Template'e gönderilecek verileri hazırla
-    context = {
-        'customers': customers,
-        'todayCount': todayCount,
-    }
+        today = date.today()
+        customers = Customer.objects.filter(user_id=user_id )
+        todayCount = customers.filter(joining_date=today).count()
 
-    if request.method == 'POST':
-        user_id = request.user.id
-        customer_name = request.POST.get('customer_name')
-        konu = request.POST.get('konu')
-        start_time_str = request.POST.get('start_time')
-        end_time_str = request.POST.get('end_time')
-        joining_date = request.POST.get('joining_date')
-        status = request.POST.get('status')
+        # Template'e gönderilecek verileri hazırla
+        context = {
+            'customers': customers,
+            'todayCount': todayCount,
+        }
 
-        # datetime nesnelerini oluştur
-        start_time = datetime.strptime(start_time_str, '%H:%M')
-        end_time = datetime.strptime(end_time_str, '%H:%M')
+        if request.method == 'POST':
+            customer_name = request.POST.get('customer_name')
+            konu = request.POST.get('konu')
+            start_time_str = request.POST.get('start_time')
+            end_time_str = request.POST.get('end_time')
+            joining_date = request.POST.get('joining_date')
+            status = request.POST.get('status')
 
-        # Start ve end time'lar arasında müşteri kontrolü
-        end_time_limit = start_time + timedelta(minutes=60)
-        existing_customers = Customer.objects.filter(
-            start_time__gte=start_time,
-            start_time__lte=end_time_limit,
-            joining_date=joining_date
-        )
-        if existing_customers.exists():
-            messages.error(request, "Bu saat aralığında aynı tarihe başka bir randevunuz var,en erken 1 saat sonrasına yeni randevu ekleyebilirsiniz.")
+            # datetime nesnelerini oluştur
+            start_time = datetime.strptime(start_time_str, '%H:%M')
+            end_time = datetime.strptime(end_time_str, '%H:%M')
 
-        else:
-            # Create a new Customer object
-            customer = Customer.objects.create(
-                user_id=user_id,
-                customer_name=customer_name,
-                konu=konu,
-                start_time=start_time,
-                end_time=end_time,
+            # Start ve end time'lar arasında müşteri kontrolü
+            end_time_limit = start_time + timedelta(minutes=60)
+            
+            # Eğer kullanıcı admin değilse, admin_add_name'i kullanıcının ID'si olarak belirle
+            admin_add_name = request.user.id if not request.user.is_staff else request.POST.get('admin_add_name')
+
+            existing_customers = customers.filter(
+                start_time__gte=start_time,
+                start_time__lte=end_time_limit,
                 joining_date=joining_date,
-                status=status
+                admin_add_name=admin_add_name
             )
+            
+            if existing_customers.exists():
+                messages.error(request, "Bu saat aralığında aynı tarihe başka bir randevunuz var, en erken 1 saat sonrasına yeni randevu ekleyebilirsiniz.")
+            else:
+                # Create a new Customer object
+                customer = Customer.objects.create(
+                    user_id=user_id,
+                    customer_name=customer_name,
+                    konu=konu,
+                    start_time=start_time,
+                    end_time=end_time,
+                    joining_date=joining_date,
+                    status=status,
+                    admin_add_name=admin_add_name
+                )
 
-            # Save the object to the database
-            customer.save()
+                # Save the object to the database
+                customer.save()
 
-            messages.success(request, "Randevu başarıyla oluşturuldu.")
+                messages.success(request, "Randevu başarıyla oluşturuldu.")
 
-    return render(request, 'randevu/randevu.html', context)
-
+        return render(request, 'randevu/randevu.html', context)
+    else:
+        return redirect('login')  # Kullanıcı oturum açmamışsa, login sayfasına yönlendir
 def delete_customer(request, customer_id):
     print(request)
     try:

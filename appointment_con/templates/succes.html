@@ -32,8 +32,9 @@
 
                                         <div class="external-event fc-event bg-success-subtle text-success"
                                             data-class="bg-success-subtle">
-                                            Talep eden {{ customers_today.0.customer_name }} - {{
-                                            customers_today.0.joining_date }} - {{ customers_today.0.start_time }}
+                                            {{ customers_today.0.customer_name }} - {{ customers_today.0.joining_date }}
+                                            - {{ customers_today.0.start_time }}
+                                          
                                         </div>
 
                                         <div class="external-event fc-event bg-info-subtle text-info"
@@ -128,11 +129,11 @@
                                
                                 </div>
                                 <div class="modal-body p-4">
-                                    <form method="post" action="{% url 'rektör_datatable' %}">
+                                    <form method="post" action="{% url 'randevu' %}">
                                         {% csrf_token %}
             
               
-            
+                                        <input type="hidden" name="admin_add_name" value="{{ request.user.get_full_name }}">
                                         <div class="row mb-3">
                                             <div class="col-lg-3">
                                                 <label for="nameInput" class="form-label">İsim Soyisim</label>
