@@ -83,7 +83,9 @@
 
     <!-- chartjs init -->
     <script src="{% static 'js/pages/chartjs.init.js'%}"></script>
-
+    <script>
+        var monthly_labels = {{ month_names|safe }};
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Yıllık müşteri sayıları verisi
@@ -117,9 +119,10 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            var monthly_labels = {{ month_names|safe }};
             // Aylık müşteri sayıları verisi
             var monthlyData = {
-                labels: [{% for entry in monthly_counts %}"{{ entry.month }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+                labels: monthly_labels,
                 datasets: [{
                     label: 'Aylık Randevu Sayısı',
                     data: [{% for entry in monthly_counts %}{{ entry.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
@@ -131,6 +134,8 @@
     
             // Canvas elementini seç
             var monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            
+    
     
             // Bar grafik oluştur
             var monthlyChart = new Chart(monthlyCtx, {
@@ -147,6 +152,7 @@
     
             // Yıllık müşteri sayıları verisi
             var yearlyData = {
+                
                 labels: [{% for entry in yearly_counts %}"{{ entry.year }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
                 datasets: [{
                     label: 'Yıllık Müşteri Sayısı',

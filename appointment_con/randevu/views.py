@@ -147,6 +147,13 @@ def chart_view(request):
             .values('month') \
             .annotate(count=Count('*')) \
             .order_by('month')
+        
+        month_names = [
+    'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
+    'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
+]
+       
+
 
         weeks = [f'Hafta {i}' for i in range(1, 53)]
 
@@ -176,7 +183,8 @@ def chart_view(request):
             'weekly_counts': weekly_counts,
             'yearly_counts': yearly_counts,
             'weeks': weeks,
-            'daily_counts': daily_counts
+            'daily_counts': daily_counts,
+            'month_names': month_names,
         }
 
         print("chart_view fonksiyonu başarıyla tamamlandı")
@@ -202,6 +210,8 @@ def randevu_view(request):
         context = {
             'customers': customers,
             'todayCount': todayCount,
+            
+            
         }
 
         if request.method == 'POST':
