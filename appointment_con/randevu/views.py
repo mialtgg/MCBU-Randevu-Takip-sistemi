@@ -18,14 +18,29 @@ from django.views.generic import ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Customer
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models import Q
 
 
 
 def rapor_view(request):
     if request.user.is_authenticated:
      user_id = request.user.id
+     username= request.user.username
     today = date.today()
-    customers = Customer.objects.filter(user_id=user_id)
+
+    if(username == "mustakılban"):
+        customers = Customer.objects.filter(Q(user_id=user_id) | Q(admin_add_name="user1"))
+    elif(username == "pelinkosan"):
+        customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user3"))
+    elif(username == "aysunokumus"):
+        customers = Customer.objects.filter(Q(user_id=user_id) &  Q(admin_add_name="user4"))
+    elif(username == "nurdagulerturk"):
+        customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user2"))
+    else:
+        customers = Customer.objects.all()
+
+
+
     todayCount = customers.filter(joining_date=date.today()).count()
     # Template'e gönderilecek verileri hazırla
     context = {
@@ -57,24 +72,41 @@ def is_admin(user):
 @user_passes_test(lambda u: u.is_staff, login_url='/login/')
 def rektördatatable_view(request):
     customers = Customer.objects.all()
-    for user in customers:
-
-        print(f"User ID: {user.id}")
     if request.method == 'POST':
-        user_id=request.user.id
-        customer_name = request.POST.get('customer_name')
-        konu = request.POST.get('konu')
-        start_time = request.POST.get('start_time')
-        end_time = request.POST.get('end_time')
-        joining_date = request.POST.get('joining_date')
-        status = request.POST.get('status')
-        admin_add_name =request.POST.get('admin_add_name')
-        
+        form=CustomerForm(request.POST)
+        if form.is_valid():
+            user_id=request.user.id
+            customer_name = form.cleaned_data['customer_name']
+            konu = form.cleaned_data['konu']
+            start_time = form.cleaned_data['start_time']
+            end_time = form.cleaned_data['end_time']
+            joining_date = form.cleaned_data['joining_date']
+            status = form.cleaned_data['status']
+            admin_add_name = form.cleaned_data['admin_add_name']
 
-      
-    return render(request, 'rektördatatable.html', {'customers': customers})
+            # Create a new Customer object
+            customer = Customer.objects.create(
+                user_id=user_id,
+                customer_name=customer_name,
+                konu=konu,
+                start_time=start_time,
+                end_time=end_time,
+                joining_date=joining_date,
+                status=status,
+                admin_add_name=admin_add_name
+            )
 
-
+            # Save the object to the database
+            customer.save()
+            return render(request, 'rektördatatable.html', {'customers': customers})
+        else:
+            form=CustomerForm()
+            return render(request, 'rektördatatable.html', {'customers': customers,'form':form})
+    else:
+        form=CustomerForm()
+        return render(request, 'rektördatatable.html', {'customers': customers,'form':form})
+    
+    
 
 
 @login_required
@@ -160,6 +192,7 @@ def randevu_view(request):
     # Eğer kullanıcı admin ise veya oturum açmışsa
     if request.user.is_staff or request.user.is_authenticated:
         user_id = request.user.id 
+        username= request.user.username
 
         today = date.today()
         customers = Customer.objects.filter(user_id=user_id )
@@ -178,6 +211,15 @@ def randevu_view(request):
             end_time_str = request.POST.get('end_time')
             joining_date = request.POST.get('joining_date')
             status = request.POST.get('status')
+            if(username == "mustakılban"):
+                admin_add_name="user1"
+            elif(username =="pelinkosan"):
+                admin_add_name="user3"
+            elif(username =="nurdagulerturk"):
+                admin_add_name="user2"
+            elif(username =="aysunokumus"):
+                admin_add_name="user4"
+
 
             # datetime nesnelerini oluştur
             start_time = datetime.strptime(start_time_str, '%H:%M')
@@ -186,8 +228,7 @@ def randevu_view(request):
             # Start ve end time'lar arasında müşteri kontrolü
             end_time_limit = start_time + timedelta(minutes=60)
             
-            # Eğer kullanıcı admin değilse, admin_add_name'i kullanıcının ID'si olarak belirle
-            admin_add_name = request.user.id if not request.user.is_staff else request.POST.get('admin_add_name')
+            
 
             existing_customers = customers.filter(
                 start_time__gte=start_time,

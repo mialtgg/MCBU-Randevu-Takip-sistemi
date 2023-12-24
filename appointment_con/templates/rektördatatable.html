@@ -88,8 +88,11 @@
                                                 <td>{{ customer.start_time }}</td>
                                                 <td>{{ customer.end_time }}</td>
                                                 <td>{{ customer.joining_date }}</td>
-                                                <td>{{ customer.status }}</td>
-                            
+                                                {% if customer.status == "Active" %}
+                                                    <td>Aktif</td>
+                                                {% else %}
+                                                    <td>İptal</td>
+                                                {% endif %}
                                       
                                             </tr>
                                             {% endfor %}
@@ -124,15 +127,17 @@
                         <form method="post" action="{% url 'rektör_datatable' %}">
                             {% csrf_token %}
                             <div class="row mb-3">
+                                <input type="hidden" name="user" value="{{ request.user.id }}">
                                 <div class="col-lg-3">
                                     <label for="nameInput" class="form-label">Randevu Oluşturulacak İsim</label>
                                 </div>
                                 <div class="col-lg-9">
                                     <select class="form-control" data-trigger name="admin_add_name" required>
     
-                                        <option value="M.Müştak İLBAN">M.Müştak İLBAN</option>
-                                        <option value="Nurdagül ERTÜRK">Nurdagül ERTÜRK</option>
-                                        <option value="Pelin KOŞAN">Pelin KOŞAN</option>
+                                        <option value="user1">M.Müştak İLBAN</option>
+                                        <option value="user2">Nurdagül ERTÜRK</option>
+                                        <option value="user3">Pelin KOŞAN</option>
+                                        <option value="user4">Aysun OKUMUŞ</option>
                                     </select>
                                 </div>
                             </div>
@@ -186,8 +191,8 @@
                                 <div class="col-lg-9">
                                     <select class="form-control" data-trigger name="status" required>
 
-                                        <option value="Aktif">Aktif</option>
-                                        <option value="İptal Edildi">İptal Edildi</option>
+                                        <option value="Active">Aktif</option>
+                                        <option value="Block">İptal Edildi</option>
                                     </select>
                                 </div>
                             </div>
