@@ -131,6 +131,16 @@
                                 <div class="modal-body p-4">
                                     <form method="post" action="{% url 'randevu' %}">
                                         {% csrf_token %}
+                                        {% if messages %}
+                                        <div id="errorAlert" class="alert alert-primary"col-lg-9 role="alert">
+                                            <ul class="list-unstyled mb-0">
+                                                {% for message in messages %}
+                                                    <li>{{ message }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                           
+                                        </div>
+                                    {% endif %}
             
               
                                         <input type="hidden" name="admin_add_name" value="{{ request.user.get_full_name }}">

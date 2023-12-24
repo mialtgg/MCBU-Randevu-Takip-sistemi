@@ -55,14 +55,15 @@
                         <form method="post" action="{% url 'randevu' %}">
                             {% csrf_token %}
                             {% if messages %}
-                            
-                            <ul   class="messages">
-                                {% for message in messages %}
-                                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                            <div id="errorAlert" class="alert alert-primary"col-lg-9 role="alert">
+                                <ul class="list-unstyled mb-0">
+                                    {% for message in messages %}
+                                        <li>{{ message }}</li>
                                     {% endfor %}
-                            </ul>
-
-                            {% endif %}
+                                </ul>
+                               
+                            </div>
+                        {% endif %}
                             
 
 
@@ -242,18 +243,9 @@
 <script src="{% static 'libs/sweetalert2/dist/sweetalert2.min.js' %}"></script>
 
 <script>
-    // Sayfa yüklendiğinde çalışacak JavaScript
-    document.addEventListener("DOMContentLoaded", function () {
-      // Mesajları seç
-      var messages = document.querySelectorAll('.messages .alert');
-  
-      // Her bir mesaj için
-      messages.forEach(function (message) {
-        // Mesajın kendi süresi kadar bekletip sonra gizle
-        setTimeout(function () {
-          message.style.display = 'none';
-        }, 3000); 
-      });
-    });
-  </script>
+    // 4 saniye sonra alert'i kapat
+    setTimeout(function() {
+        $('#errorAlert').alert('close');
+    }, 4000);
+</script>
 {% endblock extra_js %}

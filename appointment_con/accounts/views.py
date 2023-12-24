@@ -25,9 +25,9 @@ def user_login(request):
                 login(request, user)
                 return redirect('succes')
             else:
-                messages.error(request, 'Geçersizz Şifre ya da Kullanıcı adı')
+                messages.error(request, 'Geçersiz Şifre ya da Kullanıcı adı')
         else:
-            messages.error(request, 'Form is not valid')
+            messages.error(request, 'Böyle Bir kullanıcı Yok')
     else:
         print('5')
         form = LoginForm()

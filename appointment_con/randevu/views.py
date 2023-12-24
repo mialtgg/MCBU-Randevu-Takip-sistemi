@@ -78,14 +78,28 @@ def rektördatatable_view(request):
             user_id=request.user.id
             customer_name = form.cleaned_data['customer_name']
             konu = form.cleaned_data['konu']
-            start_time = form.cleaned_data['start_time']
-            end_time = form.cleaned_data['end_time']
+            start_time_str= form.cleaned_data['start_time']
+            end_time_str= form.cleaned_data['end_time']
             joining_date = form.cleaned_data['joining_date']
             status = form.cleaned_data['status']
             admin_add_name = form.cleaned_data['admin_add_name']
 
+                        # datetime nesnelerini oluştur
+            start_time = datetime.strptime(start_time_str, '%H:%M')
+            end_time = datetime.strptime(end_time_str, '%H:%M')
+
+            existing_customers = customers.filter(
+                start_time__gte=start_time,
+                start_time__lte=end_time,
+                joining_date=joining_date,
+                admin_add_name=admin_add_name
+                
+            )
+            if existing_customers.exists():
+                messages.error(request, "Bu saat aralığında aynı tarihe başka bir randevunuz var, ekleme yapılmadı")
+            else:
             # Create a new Customer object
-            customer = Customer.objects.create(
+             customer = Customer.objects.create(
                 user_id=user_id,
                 customer_name=customer_name,
                 konu=konu,
@@ -98,6 +112,7 @@ def rektördatatable_view(request):
 
             # Save the object to the database
             customer.save()
+            messages.success(request, "Randevu başarıyla oluşturuldu.")
             return render(request, 'rektördatatable.html', {'customers': customers})
         else:
             form=CustomerForm()
@@ -152,9 +167,6 @@ def chart_view(request):
     'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
     'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
 ]
-       
-
-
         weeks = [f'Hafta {i}' for i in range(1, 53)]
 
         # Haftalık müşteri sayısını getir
@@ -184,7 +196,7 @@ def chart_view(request):
             'yearly_counts': yearly_counts,
             'weeks': weeks,
             'daily_counts': daily_counts,
-            'month_names': month_names,
+            'month_names' :month_names
         }
 
         print("chart_view fonksiyonu başarıyla tamamlandı")
@@ -210,8 +222,6 @@ def randevu_view(request):
         context = {
             'customers': customers,
             'todayCount': todayCount,
-            
-            
         }
 
         if request.method == 'POST':
@@ -227,28 +237,24 @@ def randevu_view(request):
                 admin_add_name="user3"
             elif(username =="nurdagulerturk"):
                 admin_add_name="user2"
-            elif(username =="aysunokumus"):
+            elif(username  =="aysunokumus"):
                 admin_add_name="user4"
 
 
             # datetime nesnelerini oluştur
             start_time = datetime.strptime(start_time_str, '%H:%M')
             end_time = datetime.strptime(end_time_str, '%H:%M')
-
-            # Start ve end time'lar arasında müşteri kontrolü
-            end_time_limit = start_time + timedelta(minutes=60)
-            
             
 
             existing_customers = customers.filter(
                 start_time__gte=start_time,
-                start_time__lte=end_time_limit,
+                start_time__lte=end_time,
                 joining_date=joining_date,
-                admin_add_name=admin_add_name
+                
             )
             
             if existing_customers.exists():
-                messages.error(request, "Bu saat aralığında aynı tarihe başka bir randevunuz var, en erken 1 saat sonrasına yeni randevu ekleyebilirsiniz.")
+                messages.error(request, "Bu saat aralığında aynı tarihe başka bir randevunuz var, ekleme yapılmadı")
             else:
                 # Create a new Customer object
                 customer = Customer.objects.create(

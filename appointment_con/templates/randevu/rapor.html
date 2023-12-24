@@ -90,6 +90,16 @@
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#showModal">Ekle</button>
                                             </div>
+                                            {% if messages %}
+                                            <div id="errorAlert" class="alert alert-primary"col-lg-9 role="alert">
+                                                <ul class="list-unstyled mb-0">
+                                                    {% for message in messages %}
+                                                        <li>{{ message }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                               
+                                            </div>
+                                        {% endif %}
 
                                         </div>
                                     </div>

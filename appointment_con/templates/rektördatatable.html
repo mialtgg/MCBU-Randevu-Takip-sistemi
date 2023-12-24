@@ -59,6 +59,7 @@
                                 </div>
 
                                 <div class="table-responsive table-card mt-3 mb-1">
+                                    <p>{{ error_message }}</p>
 
                                     <table class="table align-middle table-nowrap" id="customerTable">
                                         <thead class="table-light">
@@ -82,7 +83,16 @@
 
                                             <tr>
                                                 <td>{{ customer.user.get_full_name }}</td>
-                                                <td>{{customer.admin_add_name}}</td>
+                                                
+                                                {% if customer.admin_add_name == "user1" %}
+                                                <td>Müştak İLBAN</td>
+                                            {% elif customer.admin_add_name == "user2" %}
+                                                <td>Pelin KOŞAN</td>
+                                            {% elif customer.admin_add_name == "user3" %}
+                                                <td>Nurdagül ERTÜRK</td>
+                                            {% else %}
+                                                <td>Aysun KOŞAN</td>
+                                            {% endif %}
                                                 <td>{{ customer.customer_name }}</td>
                                                 <td>{{ customer.konu }}</td>
                                                 <td>{{ customer.start_time }}</td>
