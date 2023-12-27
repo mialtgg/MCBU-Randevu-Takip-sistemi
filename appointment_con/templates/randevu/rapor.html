@@ -13,6 +13,8 @@
     #customerTable {
         border-collapse: collapse;
         width: 100%;
+        margin-left: 3px;
+        padding-right: 30px;
     }
 
     #customerTable th,
@@ -22,17 +24,16 @@
         padding: 8px;
         text-align: left;
     }
+    #customerTable_wrapper {
+        padding-left: 30px;
+    }
 </style>
 <style>
     .main-content {
         margin-top: 0 !important;
     }
 </style>
-<style>
-    body {
-        overflow: hidden;
-    }
-</style>
+
 <style>
     /* CSS ile label'e boşluk ekleme */
     label {
@@ -40,6 +41,12 @@
         margin-left: 10px; /* Soldan boşluk (örneğin 10 piksel) */
     }
 </style>
+<style>
+    .edit-m button {
+      font-size: 12px; /* İstediğiniz font boyutu */
+      padding: 10px 10px; /* İstediğiniz iç ve dış boşluk miktarları */
+    }
+  </style>
 <div class="main-content d-flex justify-content-center " style="margin-top: 0%;">
     <div class="col-xl-3 col-md-6 mt-4" style="margin-top: 0%;">
 
@@ -85,7 +92,8 @@
                                 <div class="row g-4 mb-3">
                                     <div class="col-sm-auto">
                                         <div>
-                                            <div class="edit">
+                                            
+                                            <div class="edit-m">
                                                 <button class="btn btn-primary btn-success edit-item-btn"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#showModal">Ekle</button>
@@ -122,6 +130,7 @@
                                                 <th class="" data-sort="start_time">başlangıç saati </th>
                                                 <th class="" data-sort="end_time">bitiş saati</th>
                                                 <th class="" data-sort="status">durum</th>
+                                                
 
                                                 <th class="" data-sort="action">Düzenle</th>
 

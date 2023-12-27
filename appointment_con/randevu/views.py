@@ -29,13 +29,15 @@ def rapor_view(request):
     today = date.today()
 
     if(username == "mustakılban"):
-        customers = Customer.objects.filter(Q(user_id=user_id) | Q(admin_add_name="user1"))
+        customers = Customer.objects.filter(Q(user_id=user_id) & Q(admin_add_name="user1"))
     elif(username == "pelinkosan"):
         customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user3"))
     elif(username == "aysunokumus"):
         customers = Customer.objects.filter(Q(user_id=user_id) &  Q(admin_add_name="user4"))
     elif(username == "nurdagulerturk"):
         customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user2"))
+    elif(username == "baharkocer"):
+        customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user5"))
     else:
         customers = Customer.objects.all()
 
@@ -72,57 +74,52 @@ def is_admin(user):
 @user_passes_test(lambda u: u.is_staff, login_url='/login/')
 def rektördatatable_view(request):
     customers = Customer.objects.all()
+
     if request.method == 'POST':
-        form=CustomerForm(request.POST)
+        form = CustomerForm(request.POST)
+
         if form.is_valid():
-            user_id=request.user.id
+            user_id = request.user.id
             customer_name = form.cleaned_data['customer_name']
             konu = form.cleaned_data['konu']
-            start_time_str= form.cleaned_data['start_time']
-            end_time_str= form.cleaned_data['end_time']
+            start_time = form.cleaned_data['start_time']
+            end_time = form.cleaned_data['end_time']
             joining_date = form.cleaned_data['joining_date']
             status = form.cleaned_data['status']
             admin_add_name = form.cleaned_data['admin_add_name']
 
-                        # datetime nesnelerini oluştur
-            start_time = datetime.strptime(start_time_str, '%H:%M')
-            end_time = datetime.strptime(end_time_str, '%H:%M')
-
             existing_customers = customers.filter(
                 start_time__gte=start_time,
-                start_time__lte=end_time,
+                end_time__lte=end_time,
                 joining_date=joining_date,
-                admin_add_name=admin_add_name
+                admin_add_name__in=["user1", "user2", "user3", "user4","user5"]
                 
             )
+
             if existing_customers.exists():
                 messages.error(request, "Bu saat aralığında aynı tarihe başka bir randevunuz var, ekleme yapılmadı")
             else:
-            # Create a new Customer object
-             customer = Customer.objects.create(
-                user_id=user_id,
-                customer_name=customer_name,
-                konu=konu,
-                start_time=start_time,
-                end_time=end_time,
-                joining_date=joining_date,
-                status=status,
-                admin_add_name=admin_add_name
-            )
+                customer = Customer.objects.create(
+                    user_id=user_id,
+                    customer_name=customer_name,
+                    konu=konu,
+                    start_time=start_time,
+                    end_time=end_time,
+                    joining_date=joining_date,
+                    status=status,
+                    admin_add_name=admin_add_name
+                )
 
-            # Save the object to the database
-            customer.save()
-            messages.success(request, "Randevu başarıyla oluşturuldu.")
-            return render(request, 'rektördatatable.html', {'customers': customers})
+                customer.save()
+                messages.success(request, "Randevu başarıyla oluşturuldu.")
+                
+            return render(request, 'rektördatatable.html', {'customers': customers, 'form': form})
         else:
-            form=CustomerForm()
-            return render(request, 'rektördatatable.html', {'customers': customers,'form':form})
+            messages.error(request, "Form geçersiz, lütfen tüm gerekli alanları doldurun.")
+            return render(request, 'rektördatatable.html', {'customers': customers, 'form': form})
     else:
-        form=CustomerForm()
-        return render(request, 'rektördatatable.html', {'customers': customers,'form':form})
-    
-    
-
+        form = CustomerForm()
+        return render(request, 'rektördatatable.html', {'customers': customers, 'form': form})
 
 @login_required
 def succes_view(request):

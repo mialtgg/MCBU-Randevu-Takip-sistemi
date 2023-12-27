@@ -226,6 +226,7 @@
 {% endblock content %}
 {% block extra_js %}
 <!-- calendar min js -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/locale/tr.js"></script>
 
 <script>
 
@@ -235,7 +236,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var calendar = new FullCalendar.Calendar(calendarEl, {
         // Diğer takvim ayarları...
         locale: 'tr', // Türkçe dil ayarı
-        today: 'Bugün', // today ifadesini 'Bugün' olarak değiştirme
+        buttonText: {
+            today: 'Bugün'
+        },
 
         // Tarih üzerine tıklama olayını tanımlama
         dateClick: function (info) {
@@ -301,8 +304,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 </script>
 
-<script src="{% static 'libs/fullcalendar/index.global.min.js' %}"></script>
-<script src="{% static 'js/pages/calendar.init.js'%}"></script>
+
+
 <!-- jQuery -->
 <script src="{% static 'libs/jquery/jquery.min.js' %}"></script>
 

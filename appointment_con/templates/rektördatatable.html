@@ -38,9 +38,20 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title mb-0">Randevu Ekle</h4>
+                         
                         </div><!-- end card header -->
 
                         <div class="card-body">
+                            {% if messages %}
+                                                     <div id="errorAlert" class="alert alert-primary"col-lg-9 role="alert">
+                                <ul class="list-unstyled mb-0">
+                                    {% for message in messages %}
+                                        <li>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                               
+                            </div>
+                            {% endif %}
                             <div id="customerList">
                                 <div class="row g-4 mb-3">
                                     <div class="col-sm-auto">
@@ -74,7 +85,7 @@
                                                 <th class="" data-sort="joining_date">tarih</th>
                                                 <th class="" data-sort="status">durum</th>
 
-                                                
+
 
                                             </tr>
                                         </thead>
@@ -83,27 +94,29 @@
 
                                             <tr>
                                                 <td>{{ customer.user.get_full_name }}</td>
-                                                
+
                                                 {% if customer.admin_add_name == "user1" %}
                                                 <td>Müştak İLBAN</td>
-                                            {% elif customer.admin_add_name == "user2" %}
+                                                {% elif customer.admin_add_name == "user2" %}
                                                 <td>Pelin KOŞAN</td>
-                                            {% elif customer.admin_add_name == "user3" %}
+                                                {% elif customer.admin_add_name == "user3" %}
+                                                <td>Bahar Koçer</td>
+                                                {% elif customer.admin_add_name == "user5" %}
                                                 <td>Nurdagül ERTÜRK</td>
-                                            {% else %}
+                                                {% else %}
                                                 <td>Aysun KOŞAN</td>
-                                            {% endif %}
+                                                {% endif %}
                                                 <td>{{ customer.customer_name }}</td>
                                                 <td>{{ customer.konu }}</td>
                                                 <td>{{ customer.start_time }}</td>
                                                 <td>{{ customer.end_time }}</td>
                                                 <td>{{ customer.joining_date }}</td>
                                                 {% if customer.status == "Active" %}
-                                                    <td>Aktif</td>
+                                                <td>Aktif</td>
                                                 {% else %}
-                                                    <td>İptal</td>
+                                                <td>İptal</td>
                                                 {% endif %}
-                                      
+
                                             </tr>
                                             {% endfor %}
                                         </tbody>
@@ -136,18 +149,21 @@
                         </div>
                         <form method="post" action="{% url 'rektör_datatable' %}">
                             {% csrf_token %}
+
                             <div class="row mb-3">
                                 <input type="hidden" name="user" value="{{ request.user.id }}">
                                 <div class="col-lg-3">
-                                    <label for="nameInput" style="margin-left: 10px ;" class="form-label">Randevu Oluşturulacak İsim</label>
+                                    <label for="nameInput" style="margin-left: 10px ;" class="form-label">Randevu
+                                        Oluşturulacak İsim</label>
                                 </div>
                                 <div class="col-lg-8">
                                     <select class="form-control" data-trigger name="admin_add_name" required>
-    
+
                                         <option value="user1">M.Müştak İLBAN</option>
                                         <option value="user2">Nurdagül ERTÜRK</option>
                                         <option value="user3">Pelin KOŞAN</option>
                                         <option value="user4">Aysun OKUMUŞ</option>
+                                        <option value="user4">Bahar Koçer</option>
                                     </select>
                                 </div>
                             </div>
@@ -155,11 +171,12 @@
 
                             <div class="row mb-3">
                                 <div class="col-lg-3">
-                                    <label for="nameInput" class="form-label" style="margin-left: 10px;margin-top: 10px;">İsim Soyisim</label>
+                                    <label for="nameInput" class="form-label"
+                                        style="margin-left: 10px;margin-top: 10px;">İsim Soyisim</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input style="margin-bottom: 10px;" type="text" class="form-control" required name="customer_name" placeholder="Randevuyu talep eden kişi"
-                                        >
+                                    <input style="margin-bottom: 10px;" type="text" class="form-control" required
+                                        name="customer_name" placeholder="Randevuyu talep eden kişi">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -167,12 +184,13 @@
                                     <label for="topInput" class="form-label" style="margin-left: 10px;">Konusu</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control" required name="konu" placeholder="Talep Konusu">
+                                    <input type="text" class="form-control" required name="konu"
+                                        placeholder="Talep Konusu">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-lg-3">
-                                    <label for="dateInput" class="form-label"style="margin-left: 10px;">Tarih</label>
+                                    <label for="dateInput" class="form-label" style="margin-left: 10px;">Tarih</label>
                                 </div>
                                 <div class="col-lg-8">
                                     <input type="date" required name="joining_date" class="form-control">
@@ -180,7 +198,8 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-lg-3">
-                                    <label for="timeInput"  class="form-label" style="margin-left: 10px;"> Başlangıç Saati</label>
+                                    <label for="timeInput" class="form-label" style="margin-left: 10px;"> Başlangıç
+                                        Saati</label>
                                 </div>
                                 <div class="col-lg-8">
                                     <input type="time" class="form-control" required name="start_time">
@@ -188,7 +207,8 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-lg-3">
-                                    <label for="timeInput" class="form-label" style="margin-left: 10px;">Bitiş Saati</label>
+                                    <label for="timeInput" class="form-label" style="margin-left: 10px;">Bitiş
+                                        Saati</label>
                                 </div>
                                 <div class="col-lg-8">
                                     <input type="time" required class="form-control" name="end_time">
@@ -196,7 +216,8 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-lg-3">
-                                    <label for="status-field"  class="form-label" style="margin-left: 10px;">Durum</label>
+                                    <label for="status-field" class="form-label"
+                                        style="margin-left: 10px;">Durum</label>
                                 </div>
                                 <div class="col-lg-8">
                                     <select class="form-control" data-trigger name="status" required>
@@ -226,8 +247,8 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                                 id="btn-close"></button>
                         </div>
-                       
-              -
+
+                        -
                     </div>
                 </div>
             </div>
@@ -270,7 +291,12 @@
 
 
 
-<!-- listjs init -->
+<script>
+    // 4 saniye sonra alert'i kapat
+    setTimeout(function() {
+        $('#errorAlert').alert('close');
+    }, 4000);
+</script>
 
 <!-- Sweet Alerts js -->
 <script src="{% static 'libs/sweetalert2/sweetalert2.min.js' %}"></script>
