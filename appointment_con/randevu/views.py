@@ -228,12 +228,15 @@ def randevu_view(request):
             end_time_str = request.POST.get('end_time')
             joining_date = request.POST.get('joining_date')
             status = request.POST.get('status')
+            admin_add_name=request.POST.get('admin_add_name')
             if(username == "mustakılban"):
                 admin_add_name="user1"
             elif(username =="pelinkosan"):
                 admin_add_name="user3"
             elif(username =="nurdagulerturk"):
                 admin_add_name="user2"
+            elif(username =="baharkocer"):
+                admin_add_name="user5"
             elif(username  =="aysunokumus"):
                 admin_add_name="user4"
 
