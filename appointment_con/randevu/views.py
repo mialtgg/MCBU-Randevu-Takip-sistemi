@@ -145,7 +145,9 @@ def chart_view(request):
     daily_counts = Customer.objects.filter(
         user_id=user_id,
         joining_date__month=current_month,
-        joining_date__year=current_year
+        joining_date__year=current_year,
+        deleted=False
+        
     ).annotate(day=ExtractDay('joining_date')) \
         .values('day') \
         .annotate(count=Count('*')) \
@@ -154,7 +156,9 @@ def chart_view(request):
     try:
         # Aylık müşteri sayısını getir
         monthly_counts = Customer.objects.filter(
-            user_id=user_id
+            user_id=user_id,
+            deleted=False
+            
         ).annotate(month=ExtractMonth('joining_date')) \
             .values('month') \
             .annotate(count=Count('*')) \
@@ -169,7 +173,8 @@ def chart_view(request):
         # Haftalık müşteri sayısını getir
         weekly_counts = Customer.objects.filter(
             user_id=user_id,
-            joining_date__month=date.today().month
+            joining_date__month=date.today().month,
+            deleted=False
         ).annotate(
             week=ExtractWeek('joining_date')
         ).values(
@@ -180,7 +185,8 @@ def chart_view(request):
 
         # Yıllık müşteri sayısını getir
         yearly_counts = Customer.objects.filter(
-            user_id=user_id
+            user_id=user_id,
+            deleted=False
         ).annotate(year=ExtractYear('joining_date')) \
             .values('year') \
             .annotate(count=Count('*')) \
@@ -276,6 +282,7 @@ def randevu_view(request):
         return render(request, 'randevu/randevu.html', context)
     else:
         return redirect('login')  # Kullanıcı oturum açmamışsa, login sayfasına yönlendir
+    
 def delete_customer(request, customer_id):
     print(request)
     try:

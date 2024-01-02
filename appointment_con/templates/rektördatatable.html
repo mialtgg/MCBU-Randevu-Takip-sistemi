@@ -96,15 +96,17 @@
                                                 <td>{{ customer.user.get_full_name }}</td>
 
                                                 {% if customer.admin_add_name == "user1" %}
-                                                <td>Müştak İLBAN</td>
+                                                <td>Prof. Dr. Rana KİBAR -A </td>
                                                 {% elif customer.admin_add_name == "user2" %}
-                                                <td>Pelin KOŞAN</td>
+                                                <td>Prof. Dr. Ahmet ÇETİN </td>
                                                 {% elif customer.admin_add_name == "user3" %}
-                                                <td>Bahar Koçer</td>
+                                                <td>Prof. Dr. Kadir AY </td>
+                                                {% elif customer.admin_add_name == "user4" %}
+                                                <td>Prof. Dr. Rana KİBAR </td>
                                                 {% elif customer.admin_add_name == "user5" %}
-                                                <td>Nurdagül ERTÜRK</td>
+                                                <td>Prof. Dr. Oktay ÜÇER</td>
                                                 {% else %}
-                                                <td>Aysun OKUMUŞ</td>
+                                                <td>Prof. Dr.Rana KİBAR -M</td>
                                                 {% endif %}
                                                 <td>{{ customer.customer_name }}</td>
                                                 <td>{{ customer.konu }}</td>
@@ -161,9 +163,9 @@
 
                                         <option value="user1">Prof. Dr. Rana KİBAR -M</option>
                                         <option value="user2">Prof. Dr. Ahmet ÇETİN</option>
-                                        <option value="user3">Prof. Dr.Kadir Ay </option>
-                                        <option value="user4">Prof. Dr. Rana KİBAR -A</option>
-                                        <option value="user4">Bahar Koçer</option>
+                                        <option value="user3">Prof. Dr. Kadir Ay </option>
+                                        <option value="user4">Prof. Dr. Rana KİBAR -A </option>
+                                        <option value="user4">>Prof. Dr. Oktay ÜÇER</option>
                                     </select>
                                 </div>
                             </div>

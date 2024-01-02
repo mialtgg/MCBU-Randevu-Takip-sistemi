@@ -88,43 +88,19 @@ WSGI_APPLICATION = "appointment.wsgi.application"
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'mssql',
-#         'NAME': 'test7',
-#         'HOST': 'MINE\MSSQLSERVER02',
-#         'PORT': '',
-#         'OPTIONS': {
-#             'driver': 'ODBC Driver 17 for SQL Server',
-#         },
-#     }
-# }
+DATABASES = {
+    'default': {
+      'ENGINE': 'mssql',
+        'NAME': 'test7',
+        'HOST': 'MINE\MSSQLSERVER02',
+        'PORT': '',
+       'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
+    }
+ }
 
-DATABASES={
 
-'default':{
-
-'ENGINE':'mssql',
-
-'NAME':'okm',
-
-'HOST':'okm.cbu.edu.tr',
-
-'PORT':'',
-
-'USER':'okm',
-
-'PASSWORD':'Ok*32!m',
-
-'OPTIONS':{
-
-'driver':'ODBC Driver 17 for SQL Server',
-
-},
-
-}
-
-}
 
 
 
