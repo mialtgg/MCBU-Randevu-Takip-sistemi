@@ -96,20 +96,19 @@
                                                 <td>{{ customer.user.get_full_name }}</td>
 
                                                 {% if customer.admin_add_name == "user1" %}
-                                                <td>Prof. Dr. Rana KİBAR -A </td>
+                                                <td>Prof. Dr. Rana KİBAR -M </td>
                                                 {% elif customer.admin_add_name == "user2" %}
                                                 <td>Prof. Dr. Ahmet ÇETİN </td>
                                                 {% elif customer.admin_add_name == "user3" %}
                                                 <td>Prof. Dr. Kadir AY </td>
-                                                {% elif customer.admin_add_name == "user4" %}
-                                                <td>Prof. Dr. Rana KİBAR </td>
+                                                
                                                 {% elif customer.admin_add_name == "user5" %}
                                                 <td>Prof. Dr. Oktay ÜÇER</td>
                                                 {% else %}
-                                                <td>Prof. Dr.Rana KİBAR -M</td>
+                                                <td>Prof. Dr.Rana KİBAR -A</td>
                                                 {% endif %}
                                                 <td>{{ customer.customer_name }}</td>
-                                                <td>{{ customer.konu }}</td>
+                                                <td>{{ user.id }}</td>
                                                 <td>{{ customer.start_time }}</td>
                                                 <td>{{ customer.end_time }}</td>
                                                 <td>{{ customer.joining_date }}</td>
