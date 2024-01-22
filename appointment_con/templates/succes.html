@@ -19,6 +19,7 @@
                         <div class="col-xl-3">
                             <div class="card card-h-100">
                                 <div class="card-body">
+                                    
                                     <button class="btn btn-primary w-100"><i data-feather="calendar"></i> Yaklaşan
                                         Randevular</button>
 
@@ -31,7 +32,7 @@
                                         <br>
 
                                         <div class="external-event fc-event bg-success-subtle text-success"
-                                            data-class="bg-success-subtle">
+                                            >
                                             {{ customers_today.0.customer_name }} - {{ customers_today.0.joining_date }}
                                             - {{ customers_today.0.start_time }}
                                           
@@ -46,7 +47,7 @@
                                         <div class="external-event fc-event bg-warning-subtle text-warning"
                                             data-class="bg-warning-subtle">
                                             {{ customers_today.2.customer_name }} - {{ customers_today.2.joining_date }}
-                                            - {{ customers_today.3.start_time }}
+                                            - {{ customers_today.2.start_time }}
 
 
                                         </div>
@@ -129,6 +130,7 @@
                                
                                 </div>
                                 <div class="modal-body p-4">
+                                    
                                     <form method="post" action="{% url 'randevu' %}">
                                         {% csrf_token %}
                                         {% if messages %}

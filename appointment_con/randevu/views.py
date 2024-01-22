@@ -27,6 +27,7 @@ def rapor_view(request):
      user_id = request.user.id
      username= request.user.username
     today = date.today()
+    
 
     if(username == "mustakılban"):
         customers = Customer.objects.filter(Q(user_id=user_id) & Q(admin_add_name="user1"))
@@ -121,14 +122,33 @@ def rektördatatable_view(request):
         form = CustomerForm()
         return render(request, 'rektördatatable.html', {'customers': customers, 'form': form})
 
+
 @login_required
 def succes_view(request):
-    user_id = request.user.id
-    today = date.today()
-    customers_today = Customer.objects.filter(user_id=user_id, joining_date__gte=today).values('customer_name', 'joining_date', 'start_time')[:10]
+    if request.user.is_authenticated:
+     user_id = request.user.id
+     username= request.user.username
+    today = date.today() 
 
-    context = {'customers_today': customers_today}
-    print(customers_today)
+    if(username == "mustakılban"):
+        customers = Customer.objects.filter(Q(user_id=user_id) & Q(admin_add_name="user1"))
+    elif(username == "pelinkosan"):
+        customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user3"))
+    elif(username == "aysunokumus"):
+        customers = Customer.objects.filter(Q(user_id=user_id) &  Q(admin_add_name="user4"))
+    elif(username == "nurdagulerturk"):
+        customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user2"))
+    elif(username == "baharkocer"):
+        customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user5"))
+    else:
+        customers = Customer.objects.all()
+
+    customers_today = customers.filter(joining_date__gte=today)[:10]
+  
+
+    context = {'customers_today':customers_today}
+    
+
     return render(request, 'succes.html', context)
 
 
@@ -137,16 +157,40 @@ def succes_view(request):
 @login_required
 def chart_view(request):
     user_id = request.user.id
-
+    username= request.user.username
     today = datetime.today()
+    admin_add_name = None
+    
+
+    if username == "mustakılban":
+        admin_add_name = "user1"
+    elif username == "pelinkosan":
+        admin_add_name = "user3"
+    elif username == "aysunokumus":
+        admin_add_name = "user4"
+    elif username == "nurdagulerturk":
+        admin_add_name = "user2"
+    elif username == "baharkocer":
+        admin_add_name = "user5"
+
+    customers = Customer.objects.filter(user_id=user_id, admin_add_name=admin_add_name, deleted=False)
+
+
+   
+    
+
+
     current_month = today.month
     current_year = today.year
+    
+
 
     daily_counts = Customer.objects.filter(
-        user_id=user_id,
+        user_id=user_id ,
+        admin_add_name=admin_add_name,
         joining_date__month=current_month,
         joining_date__year=current_year,
-        deleted=False
+       
         
     ).annotate(day=ExtractDay('joining_date')) \
         .values('day') \
@@ -157,6 +201,7 @@ def chart_view(request):
         # Aylık müşteri sayısını getir
         monthly_counts = Customer.objects.filter(
             user_id=user_id,
+            admin_add_name=admin_add_name,
             deleted=False
             
         ).annotate(month=ExtractMonth('joining_date')) \
@@ -173,6 +218,7 @@ def chart_view(request):
         # Haftalık müşteri sayısını getir
         weekly_counts = Customer.objects.filter(
             user_id=user_id,
+            admin_add_name=admin_add_name,
             joining_date__month=date.today().month,
             deleted=False
         ).annotate(
@@ -186,6 +232,7 @@ def chart_view(request):
         # Yıllık müşteri sayısını getir
         yearly_counts = Customer.objects.filter(
             user_id=user_id,
+            admin_add_name=admin_add_name,
             deleted=False
         ).annotate(year=ExtractYear('joining_date')) \
             .values('year') \
@@ -199,14 +246,19 @@ def chart_view(request):
             'yearly_counts': yearly_counts,
             'weeks': weeks,
             'daily_counts': daily_counts,
-            'month_names' :month_names
+            'month_names' :month_names,
+            'customers': customers,
+            
+
         }
 
-        print("chart_view fonksiyonu başarıyla tamamlandı")
+        print("şurdayım")
+        print(daily_counts)
         return render(request, 'randevu/chart.html', context)
 
     except Exception as e:
         print(f"Hata: {e}")
+        
         return render(request, 'randevu/chart.html')
 
 
@@ -218,7 +270,16 @@ def randevu_view(request):
         username= request.user.username
 
         today = date.today()
-        customers = Customer.objects.filter(user_id=user_id )
+        if(username=="mustakılban"):
+             customers = Customer.objects.filter(Q(user_id=user_id) & Q(admin_add_name="user1"))
+        elif(username == "pelinkosan"):
+             customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user3"))
+        elif(username == "aysunokumus"):
+            customers = Customer.objects.filter(Q(user_id=user_id) &  Q(admin_add_name="user4"))
+        elif(username == "nurdagulerturk"):
+            customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user2"))
+        elif(username == "baharkocer"):
+            customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user5"))
         todayCount = customers.filter(joining_date=today).count()
 
         # Template'e gönderilecek verileri hazırla

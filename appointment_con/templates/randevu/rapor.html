@@ -146,6 +146,7 @@
                                                 <td name="joining_date">{{ customer.joining_date }}</td>
                                                 <td name="start_time">{{ customer.start_time }}</td>
                                                 <td name="end_time">{{ customer.end_time }}</td>
+                                                
 
                                                 {% if customer.status == "Active" %}
                                                 <td>Aktif</td>
@@ -167,8 +168,12 @@
                                                         </div>
                                                     </div>
                                                 </td>
+                                               
+
                                             </tr>
+
                                             {% endfor %}
+                                            
                                           
                                         </tbody>
                                     </table>
@@ -415,6 +420,7 @@
                                         <option value="Block">İptal Edildi</option>
                                     </select>
                                 </div>
+                                
                             </div>
                            
 

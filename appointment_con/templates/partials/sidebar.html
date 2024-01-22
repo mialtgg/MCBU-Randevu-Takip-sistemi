@@ -3,7 +3,31 @@
         <!-- ========== App Menu ========== -->
         <div class="app-menu navbar-menu">
             <!-- LOGO -->
-            <div class="navbar-brand-box">
+            <style>
+                      .d-flex.align-items-center {
+           
+        }
+                #page-header-user-dropdown .menu-link span {
+                    color: white; /* Buton içindeki metni beyaz yap */
+                }
+       
+                
+            </style>
+            <div class="">
+                
+                <button  class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="d-flex align-items-center ">
+                        <img class="rounded-circle header-profile-user"  src="{% static 'images/mcbü/logo.ico'%}" alt="Header Avatar">
+                        <a class="nav-link menu-link">
+                            <li style="list-style: none;" class="menu-title"><span data-key="t-menu">MCBÜ RANDEVU SİSTEMİ</span></li>
+                           
+                           
+                        </a>
+                    </span>
+                </button>
+                
+                <!-- Light Logo-->
+            
                 <!-- Dark Logo-->
               
                 <!-- Light Logo-->
@@ -21,16 +45,26 @@
                     <div id="two-column-menu">
                     </div>
                     <ul class="navbar-nav" id="navbar-nav">
-                        <li class="menu-title"><span data-key="t-menu">MCBU</span></li>
+                        
 
 
-
-
+                        
+                        {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link menu-link">
+                                <i class="
+                                bx bx-user-check">  <span style="font-size: xx-small;" data-key="t-widgets"></i>{{ user.first_name|title }} {{ user.last_name|title }} </span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <hr style="color: #fff;margin-top: 0px; border-style: solid ;width: 180px; margin-left: 15px;" >
+                
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{% url 'succes' %}">
                                 <i class="ri-honour-line"></i> <span data-key="t-widgets">Ana sayfa</span>
                             </a>
                         </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{% url 'randevu' %}" >
                                 <i class=" bx bx-highlight"></i> <span data-key="t-widgets">Randevu Ekle</span>
@@ -58,10 +92,11 @@
                                 <i class=" bx bx-log-out-circle"></i> <span data-key="t-widgets">Çıkış Yap</span>
                             </a>
                         </li>
+                       
 
 
 
-
+                
 
                     </ul>
                 </div>

@@ -108,7 +108,8 @@
                                                 <td>Prof. Dr.Rana KİBAR -A</td>
                                                 {% endif %}
                                                 <td>{{ customer.customer_name }}</td>
-                                                <td>{{ user.id }}</td>
+                                                
+                                                <td>{{ customer.konu }}</td>
                                                 <td>{{ customer.start_time }}</td>
                                                 <td>{{ customer.end_time }}</td>
                                                 <td>{{ customer.joining_date }}</td>
@@ -117,6 +118,7 @@
                                                 {% else %}
                                                 <td>İptal</td>
                                                 {% endif %}
+                                           
 
                                             </tr>
                                             {% endfor %}
@@ -164,7 +166,7 @@
                                         <option value="user2">Prof. Dr. Ahmet ÇETİN</option>
                                         <option value="user3">Prof. Dr. Kadir Ay </option>
                                         <option value="user4">Prof. Dr. Rana KİBAR -A </option>
-                                        <option value="user4">>Prof. Dr. Oktay ÜÇER</option>
+                                        <option value="user5">>Prof. Dr. Oktay ÜÇER</option>
                                     </select>
                                 </div>
                             </div>
@@ -282,6 +284,7 @@
         language: {
             url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/tr.json',
         },
+        
 
 
     });
