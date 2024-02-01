@@ -17,21 +17,19 @@
                 
                 <button  class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="d-flex align-items-center ">
-                        <img class="rounded-circle header-profile-user"  src="{% static 'images/mcbü/logo.ico'%}" alt="Header Avatar">
-                        <a class="nav-link menu-link">
-                            <li style="list-style: none;" class="menu-title"><span data-key="t-menu">MCBÜ RANDEVU SİSTEMİ</span></li>
-                           
-                           
+                      
+                        <a  class="logo logo-light">
+                            
+                            <span class="logo-lg">
+                                <img src="{% static 'images/özelkalemsidebar2.png'%}"alt="" height="80px" >
+                            </span>
                         </a>
                     </span>
                 </button>
                 
-                <!-- Light Logo-->
-            
-                <!-- Dark Logo-->
+              
               
                 <!-- Light Logo-->
-               
                     
                     
                 <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
@@ -72,7 +70,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{% url 'rapor' %}" >
-                                <i class=" bx bx-file"></i> <span data-key="t-widgets">Tüm Randevular</span>
+                                <i class=" bx bx-file"></i> <span data-key="t-widgets">Randevularım</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -83,7 +81,7 @@
                         {% if user.is_authenticated and user.is_staff %}
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{% url 'rektör_datatable'%}" >
-                                <i class=" b bx bx-lock-open-alt"></i> <span data-key="t-widgets">Admin</span>
+                                <i class=" b bx bx-lock-open-alt"></i> <span data-key="t-widgets">Tüm Randevular</span>
                             </a>
                         </li>
                         {% endif %}

@@ -396,5 +396,10 @@ def edit_customer(request, customer_id):
         form = CustomerForm(instance=customer)
         return redirect(rapor_view)
 
-    # Müşteri objesini ve formu şablonla birlikte render et
+def delated_page_view(request):
+
+    return render(request , 'delated_page.html') 
+
+def edited_page_view(request):
+    return render(request ,'edited_page.html')
     
