@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import date, timedelta, timezone
 from django.contrib import messages
 from django.forms import ValidationError
-
+import csv
 from .models import Customer
 from django.http import HttpResponseServerError, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -19,6 +19,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Customer
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
+from django.http import HttpResponse
+from excel_response import ExcelResponse
+from django.shortcuts import render
+from openpyxl import Workbook
+from django.http import HttpResponse
 
 
 
@@ -402,4 +407,60 @@ def delated_page_view(request):
 
 def edited_page_view(request):
     return render(request ,'edited_page.html')
-    
+
+
+def export_to_excel(request):
+    # DataTable'dan verileri al
+    # Örnek olarak bir model kullanalım:
+    queryset = Customer.objects.all()
+
+    # İlgilendiğiniz alanları seçin
+    selected_fields = ['customer_name', 'konu', 'start_time', 'end_time', 'joining_date', 'status', 'admin_add_name']
+
+    # Seçilen alanlara sahip yeni bir queryset oluşturun
+    filtered_queryset = queryset.values(*selected_fields)
+
+    # Excel dosyasını oluştur
+    workbook = Workbook()
+    worksheet = workbook.active
+
+    # Başlık satırını ekle
+    title_row = ['Talep Eden Kişi', 'Konu', 'Başlama Zamanı', 'Bitiş Zamanı', 'Randevu Tarihi', 'Durumu', 'Randevuyu Oluşturan Kişi']
+    worksheet.append(title_row)
+
+      # Verileri ekleyin
+    for customer in queryset:
+        row = {}
+        for field in selected_fields:
+            if field == 'status':
+                # Burada status'a özel bir dönüşüm yapın
+                status_display = {
+                    'Active': 'Aktif',
+                    'Block': 'İptal Edildi',
+                    # Diğer durumlar için gerektiği gibi ekleyin
+                }.get(customer.status, customer.status)
+                print(status_display)
+                row[field] = status_display
+            elif field == 'admin_add_name':
+                # admin_add_name için özel dönüşüm
+                admin_add_name_display = {
+                    'user1': 'M.Müştak İLBAN',
+                    'user2': 'Nurdagül ERTÜRK',
+                    'user3': 'Pelin KOŞAN',
+                    'user4': 'Aysun OKUMUŞ',
+                    'user5': 'Bahar Koçer',
+                }.get(customer.admin_add_name, customer.admin_add_name)
+
+                row[field] = admin_add_name_display
+            else:
+                row[field] = str(getattr(customer, field))
+        worksheet.append([row[field] for field in selected_fields])
+
+        
+
+    # HttpResponse kullanarak dosyayı kullanıcıya geri döndürün
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="exported_data.xlsx"'
+    workbook.save(response)
+
+    return response

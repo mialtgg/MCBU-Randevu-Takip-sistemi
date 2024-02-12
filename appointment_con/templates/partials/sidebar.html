@@ -55,6 +55,7 @@
                             </a>
                         </li>
                     {% endif %}
+                    
                     <hr style="color: #fff;margin-top: 0px; border-style: solid ;width: 180px; margin-left: 15px;" >
                 
                         <li class="nav-item">
@@ -85,6 +86,13 @@
                             </a>
                         </li>
                         {% endif %}
+                        {% if user.username == 'baumadmin' %}
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" >
+                                <i class=" bx bx-street-view"></i> <span data-key="t-widgets">Log Kayıtları</span>
+                            </a>
+                        </li>
+                    {% endif %}
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{% url 'logout' %}" >
                                 <i class=" bx bx-log-out-circle"></i> <span data-key="t-widgets">Çıkış Yap</span>

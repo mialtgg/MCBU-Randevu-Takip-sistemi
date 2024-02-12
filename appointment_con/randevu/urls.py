@@ -11,7 +11,8 @@ urlpatterns = [
     path('admindatatable/', rektördatatable_view, name='rektör_datatable'),
     path('edit_customer/<int:customer_id>/', edit_customer, name='edit_customer'),
     path('delated_page/',delated_page_view,name='delated_page'),
-    path('edited_page/',edited_page_view,name='edited_page')
+    path('edited_page/',edited_page_view,name='edited_page'),
+    path('export-to-excel/', export_to_excel, name='export_to_excel'),
 ]
 
     
