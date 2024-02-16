@@ -41,12 +41,15 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "randevu",
     'rest_framework',
+    'login_history',
+    'history_login'
    
     
     
 ]
 
 MIDDLEWARE = [
+    
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -54,7 +57,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-]
+    'history_login.middleware.LoginHistoryMiddleware',
+    ]
 
 ROOT_URLCONF = "appointment.urls"
 
@@ -90,15 +94,15 @@ WSGI_APPLICATION = "appointment.wsgi.application"
 
 DATABASES = {
     'default': {
-      'ENGINE': 'mssql',
-        'NAME': 'appointment',
+        'ENGINE': 'mssql',
+        'NAME': 'baumrandevu',
         'HOST': 'MINE\MSSQLSERVER02',
         'PORT': '',
-       'OPTIONS': {
+        'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
     }
- }
+}
 
 
 

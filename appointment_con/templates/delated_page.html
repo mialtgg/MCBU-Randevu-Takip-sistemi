@@ -37,52 +37,30 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title mb-0">Randevu Ekle</h4>
+                            <h5 class="card-title mb-0">Randevu Ekle</h5>
                          
                         </div><!-- end card header -->
 
                         <div class="card-body">
-                            {% if messages %}
-                                                     <div id="errorAlert" class="alert alert-primary"col-lg-9 role="alert">
-                                <ul class="list-unstyled mb-0">
-                                    {% for message in messages %}
-                                        <li>{{ message }}</li>
-                                    {% endfor %}
-                                </ul>
-                               
-                            </div>
-                            {% endif %}
                             <div id="customerList">
-                                <div class="row g-4 mb-3">
-                                    <div class="col-sm-auto">
-                                        <div>
-                                            <h5>düzenlenenler</h5>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-sm">
-                                        <div class="d-flex justify-content-sm-end">
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="table-responsive table-card mt-3 mb-1">
-                                    <p>{{ error_message }}</p>
+                        
 
                                     <table class="table align-middle table-nowrap" id="customerTable">
                                         <thead class="table-light">
                                             <tr>
 
                                                 <th class="" data-sort="customer_name">Randevuyu Oluşturan Kişi</th>
+                                              
                                                 <th class="" data-sort="customer_name">Randevu Oluşturulacak Kişi</th>
                                                 <th class="" data-sort="konu">Randevu Talep eden</th>
-                                                <th class="" data-sort="action">Konusu</th>
+                                                
                                                 <th class="" data-sort="joining_date">Tarih</th>
                                                 <th class="" data-sort="start_time">Başlangıç saati </th>
                                                 <th class="" data-sort="end_time">Bitiş saati</th>  
                                                 <th class="" data-sort="status">Durum</th>
-                                                <th class="" data-sort="status">Oluşturulma Zamanı</th>
+                                                <th class="" data-sort="created_at">Oluşturulma Zamanı</th>
+                                                <th class="" data-sort="silinme_zamanı">Silinme zamanı</th>
+                                                
 
 
 
@@ -92,7 +70,8 @@
                                             {% for customer in customers %}
 
                                             <tr>
-                                                <td>{{ customer.user.get_full_name }}</td>
+                                                <td>{{ customer.user.get_full_name }} </td>
+                                                
 
                                                 {% if customer.admin_add_name == "user1" %}
                                                 <td>Prof. Dr. Rana KİBAR -M </td>
@@ -108,7 +87,7 @@
                                                 {% endif %}
                                                 <td>{{ customer.customer_name }}</td>
                                                 
-                                                <td>{{ customer.konu }}</td>
+                                                
                                                 <td>{{ customer.joining_date }}</td>
                                                 <td>{{ customer.start_time }}</td>
                                                 <td>{{ customer.end_time }}</td>
@@ -117,7 +96,8 @@
                                                 {% else %}
                                                 <td>İptal</td>
                                                 {% endif %}
-                                                <td>güncelleme gelecek</td>
+                                                <td>{{customer.created_at}}</td>
+                                                <td>{{customer.deleted_time}}</td>
                                            
 
                                             </tr>
@@ -126,16 +106,7 @@
                                         </tbody>
                                     </table>
                              
-                                    <div class="col-sm-auto">
-                                        <div>
-                                            <a href="randevu/edited_page.html" style="margin-left: 15px;" class="btn btn-primary add-btn">
-                                                <i class="bx bx-edit-alt"></i> Düzenlenenler
-                                            </a>
-                                            <a href="randevu/delated_page.html" style="margin-left: 5px;" class="btn btn-danger add-btn">
-                                                <i class="bx bx-no-entry"></i> Son Silinenler
-                                            </a>
-                                        </div>
-                                    </div>
+                                  
                                      
                                     
 

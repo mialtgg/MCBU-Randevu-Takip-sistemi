@@ -119,7 +119,7 @@
                                                 {% else %}
                                                 <td>İptal</td>
                                                 {% endif %}
-                                                <td>güncelleme gelecek</td>
+                                                <td>{{customer.created_at}}</td>
                                            
 
                                             </tr>
@@ -130,10 +130,11 @@
                              
                                     <div class="col-sm-auto">
                                         <div>
-                                            <a href="randevu/edited_page.html" style="margin-left: 15px;" class="btn btn-primary add-btn">
+                                            <a href="{% url 'edited_page' %}"  style="margin-left: 15px;" class="btn btn-primary add-btn">
                                                 <i class="bx bx-edit-alt"></i> Düzenlenenler
                                             </a>
-                                            <a href="randevu/delated_page.html" style="margin-left: 5px;" class="btn btn-danger add-btn">
+                                         
+                                            <a href="{% url 'delated_page' %}"  style="margin-left: 5px;" class="btn btn-danger add-btn">
                                                 <i class="bx bx-no-entry"></i> Son Silinenler
                                             </a>
                                         </div>

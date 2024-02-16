@@ -1,9 +1,8 @@
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
-from datetime import date, timedelta, timezone
+from datetime import date, timezone
 from django.contrib import messages
-from django.forms import ValidationError
-import csv
+from django.utils import timezone
 from .models import Customer
 from django.http import HttpResponseServerError, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -25,8 +24,6 @@ from django.shortcuts import render
 from openpyxl import Workbook
 from django.http import HttpResponse
 
-
-
 def rapor_view(request):
     if request.user.is_authenticated:
      user_id = request.user.id
@@ -47,6 +44,12 @@ def rapor_view(request):
     else:
         customers = Customer.objects.all()
 
+    
+
+    
+    customers = customers.filter(deleted=False)
+    
+
 
 
     todayCount = customers.filter(joining_date=date.today()).count()
@@ -61,71 +64,65 @@ def rapor_view(request):
 
     # Template'i render et ve HTTP response'u döndür
     return render(request, 'randevu/rapor.html',context)
-
-
-
-
-
-class CustomerListView(ListView):
-    model = Customer
-    template_name = 'customer_list.html'
-    context_object_name = 'customers'
-    def get_queryset(self):
-        return Customer.objects.select_related('user')
-    
-
 def is_admin(user):
     return user.is_authenticated and user.is_staff
     
 @user_passes_test(lambda u: u.is_staff, login_url='/login/')
+
 def rektördatatable_view(request):
-    customers = Customer.objects.all()
+    try:
+        customers = Customer.objects.filter(deleted=False)
 
-    if request.method == 'POST':
-        form = CustomerForm(request.POST)
+        if request.method == 'POST':
+            form = CustomerForm(request.POST)
 
-        if form.is_valid():
-            user_id = request.user.id
-            customer_name = form.cleaned_data['customer_name']
-            konu = form.cleaned_data['konu']
-            start_time = form.cleaned_data['start_time']
-            end_time = form.cleaned_data['end_time']
-            joining_date = form.cleaned_data['joining_date']
-            status = form.cleaned_data['status']
-            admin_add_name = form.cleaned_data['admin_add_name']
+            if form.is_valid():
+                user_id = request.user.id
+                customer_name = form.cleaned_data['customer_name']
+                konu = form.cleaned_data['konu']
+                start_time = form.cleaned_data['start_time']
+                end_time = form.cleaned_data['end_time']
+                joining_date = form.cleaned_data['joining_date']
+                status = form.cleaned_data['status']
+                admin_add_name = form.cleaned_data['admin_add_name']
 
-            existing_customers = customers.filter(
-                start_time__gte=start_time,
-                end_time__lte=end_time,
-                joining_date=joining_date,
-                admin_add_name__in=["user1", "user2", "user3", "user4","user5"]
-                
-            )
-
-            if existing_customers.exists():
-                messages.error(request, "Bu saat aralığında aynı tarihe başka bir randevunuz var, ekleme yapılmadı")
-            else:
-                customer = Customer.objects.create(
-                    user_id=user_id,
-                    customer_name=customer_name,
-                    konu=konu,
-                    start_time=start_time,
-                    end_time=end_time,
+                # Aynı saat aralığı ve tarih için müşteri kontrolü
+                existing_customers = customers.filter(
+                    start_time__gte=start_time,
+                    end_time__lte=end_time,
                     joining_date=joining_date,
-                    status=status,
-                    admin_add_name=admin_add_name
+                    admin_add_name__in=["user1", "user2", "user3", "user4", "user5"]
                 )
 
-                customer.save()
-                messages.success(request, "Randevu başarıyla oluşturuldu.")
-                
-            return render(request, 'rektördatatable.html', {'customers': customers, 'form': form})
+                if existing_customers.exists():
+                    messages.error(request, "Bu saat aralığında aynı tarihe başka bir randevunuz var, ekleme yapılmadı")
+                else:
+                    customer = Customer.objects.create(
+                        user_id=user_id,
+                        customer_name=customer_name,
+                        konu=konu,
+                        start_time=start_time,
+                        end_time=end_time,
+                        joining_date=joining_date,
+                        status=status,
+                        admin_add_name=admin_add_name
+                    )
+
+                    customer.save()
+                    messages.success(request, "Randevu başarıyla oluşturuldu")
+
+                # Burada filtreleme yaparak sadece silinmemiş müşterileri alabilirsiniz
+                customers = Customer.objects.filter(deleted=False)
+
+                return render(request, 'rektördatatable.html', {'customers': customers, 'form': form})
+            else:
+                messages.error(request, "Form geçersiz, lütfen tüm gerekli alanları doldurun")
+                return render(request, 'rektördatatable.html', {'customers': customers, 'form': form})
         else:
-            messages.error(request, "Form geçersiz, lütfen tüm gerekli alanları doldurun.")
+            form = CustomerForm()
             return render(request, 'rektördatatable.html', {'customers': customers, 'form': form})
-    else:
-        form = CustomerForm()
-        return render(request, 'rektördatatable.html', {'customers': customers, 'form': form})
+    except Exception as e:
+        return HttpResponseServerError(f"Bir hata oluştu: {e}")
 
 
 @login_required
@@ -146,9 +143,11 @@ def succes_view(request):
     elif(username == "baharkocer"):
         customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user5"))
     else:
-        customers = Customer.objects.all()
+        
+        customers=Customer.objects.filter(deleted=False)
 
-    customers_today = customers.filter(joining_date__gte=today)[:10]
+    customers_today = customers.filter(joining_date__gte=today,deleted=False)[:10]
+    
   
 
     context = {'customers_today':customers_today}
@@ -195,6 +194,7 @@ def chart_view(request):
         admin_add_name=admin_add_name,
         joining_date__month=current_month,
         joining_date__year=current_year,
+        deleted=False,
        
         
     ).annotate(day=ExtractDay('joining_date')) \
@@ -257,8 +257,7 @@ def chart_view(request):
 
         }
 
-        print("şurdayım")
-        print(daily_counts)
+  
         return render(request, 'randevu/chart.html', context)
 
     except Exception as e:
@@ -353,74 +352,68 @@ def delete_customer(request, customer_id):
     print(request)
     try:
         customer = get_object_or_404(Customer, id=customer_id)
-        print(customer)
-        customer.delete()
-        print("hola")
+
+        # Müşteriyi silmek yerine 'deleted' alanını True olarak işaretle
+        customer.deleted = True
+        customer.deleted_time = timezone.now()
+        customer.save()
+
         return redirect(rapor_view)
     except Customer.DoesNotExist as e:
-        print("1")
-        print(f"Customer not found: {e}")
-        return HttpResponseServerError("Customer not found.")
+        return HttpResponseServerError("Müşteri bulunamadı.")
     except Exception as e:
-        print("23")
-        # Diğer olası hata durumları için özel işlemler ekleyebilirsiniz.
-        print(f"An error occurred: {e}")
-        return HttpResponseServerError(f"An error occurred: {e}")
+        return HttpResponseServerError(f"Bir hata oluştu: {e}")
 
 def edit_customer(request, customer_id):
-    # URL'den gelen customer_id parametresi ile müşteri objesini al
     customer = get_object_or_404(Customer, id=customer_id)
-   
-    print("1")
 
     if request.method == 'POST':
-        print("2")
-        # Eğer HTTP isteği bir POST isteği ise, formdan gelen verileri al
         customer_name = request.POST.get('customer_name')
         konu = request.POST.get('konu')
         start_time = request.POST.get('start_time')
         end_time = request.POST.get('end_time')
         joining_date = request.POST.get('joining_date')
         status = request.POST.get('status')
-
-        # Varolan müşteri objesini güncelle
         customer.customer_name = customer_name
         customer.konu = konu
         customer.start_time = start_time
         customer.end_time = end_time
         customer.joining_date = joining_date
         customer.status = status
-
-        # Güncellenmiş müşteriyi veritabanına kaydet
-        customer.save()
+        customer.save()  
         return redirect(rapor_view)
 
     else:
-        print("3")
-        # Eğer istek bir POST isteği değilse, formu müşteri verileriyle doldur
         form = CustomerForm(instance=customer)
         return redirect(rapor_view)
 
 def delated_page_view(request):
-
-    return render(request , 'delated_page.html') 
+    customers=Customer.objects.filter(deleted=True)
+    context = {'customer': customers}
+   
+    context = {
+        'customers': customers
+    }
+ 
+    return render(request , 'delated_page.html',context)
 
 def edited_page_view(request):
-    return render(request ,'edited_page.html')
+    customers= Customer.objects.filter()
 
+    context = {
+        'customers': customers
+    }
+    
+
+    return render(request, 'edited_page.html', context)
 
 def export_to_excel(request):
-    # DataTable'dan verileri al
-    # Örnek olarak bir model kullanalım:
-    queryset = Customer.objects.all()
+     # Sadece silinmemiş randevuları al
+    queryset = Customer.objects.filter(deleted=False)
 
-    # İlgilendiğiniz alanları seçin
     selected_fields = ['customer_name', 'konu', 'start_time', 'end_time', 'joining_date', 'status', 'admin_add_name']
-
-    # Seçilen alanlara sahip yeni bir queryset oluşturun
     filtered_queryset = queryset.values(*selected_fields)
 
-    # Excel dosyasını oluştur
     workbook = Workbook()
     worksheet = workbook.active
 
@@ -460,7 +453,8 @@ def export_to_excel(request):
 
     # HttpResponse kullanarak dosyayı kullanıcıya geri döndürün
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename="exported_data.xlsx"'
+    response['Content-Disposition'] = 'attachment; filename="radevularım.xlsx"'
     workbook.save(response)
 
     return response
+

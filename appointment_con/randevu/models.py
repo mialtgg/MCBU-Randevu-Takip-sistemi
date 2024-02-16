@@ -1,6 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User,Group
 
+from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+
 class Customer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     customer_name = models.CharField(max_length=255)
@@ -14,6 +19,8 @@ class Customer(models.Model):
     deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
     created_time = models.TimeField(auto_now_add=True)
+    deleted_time = models.DateTimeField(null=True, blank=True)
+    
     
     def get_admin_name_display(self):
         return dict(self._meta.get_field('admin_add_name').flatchoices).get(self.admin_add_name, '')
@@ -23,4 +30,24 @@ class Customer(models.Model):
         return self.customer_name
 
 
-    
+    # randevu/models.py
+
+
+class UserLoginLogoutLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    action = models.CharField(max_length=10, choices=[('login', 'Giriş'), ('logout', 'Çıkış')])
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.action} - {self.timestamp}"
+
+class UserChangeLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+    action = models.CharField(max_length=32)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.action} - {self.timestamp}"
