@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg">
+<head>
+    <meta charset="utf-8" />
+    <title>BAUM | Özel Kalem Randevu Sistemi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico'%}">
+
+    <!-- Layout config Js -->
+    <script src="{% static 'js/layout.js'%}"></script>
+    <!-- Bootstrap Css -->
+    <link href="{% static 'css/bootstrap.min.css'%}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="{% static 'css/icons.min.css'%}" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="{% static 'css/app.min.css'%}" id="app-style" rel="stylesheet" type="text/css" />
+    <!-- custom Css-->
+    <link href="{% static 'css/custom.min.css'%}" id="app-style" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="auth-page-wrapper">
+        <!-- auth page bg -->
+        <div   id="auth-particles">
+            <div class="bg-overlay"></div>
+            
+           
+            <div class="auth-page-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="text-center mt-sm-5 pt-4 mb-4">
+                                <div class="mb-sm-5 pb-sm-4 pb-5">
+                                    <img src="{% static 'images/comingsoon.png'%}" alt="" height="120" class="move-animation">
+                                </div>
+                                <div class="mb-5">
+                                    <h1 class="display-2 coming-soon-text">Yapım Aşamasında</h1>
+                                </div>
+                                <a href="{% url 'succes' %}"><button type="submit" class="btn btn-success">Anasayfaya Dön</button></a>
+
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+    
+                </div>
+                <!-- end container -->
+            </div>
+           
+        </div>
+
+        <!-- auth page content -->
+
+        <!-- end auth page content -->
+
+        <!-- footer -->
+        
+        <!-- end Footer -->
+    </div>
+    <!-- end auth-page-wrapper -->
+
+    <!-- JAVASCRIPT -->
+    <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js'%}"></script>
+    <script src="{% static 'libs/simplebar/dist/simplebar.min.js'%}"></script>
+    <script src="{% static 'libs/node-waves/dist/waves.min.js'%}"></script>
+    <script src="{% static 'libs/feather-icons/dist/feather.min.js'%}"></script>
+    <script src="{% static 'js/pages/plugins/lord-icon-2.1.0.js'%}"></script>
+    <script src="{% static 'js/plugins.js'%}"></script>
+    <!-- particles js -->
+    <script src="{% static 'libs/particles.js/particles.js'%}"></script>
+    <!-- particles app js -->
+    <script src="{% static 'js/pages/particles.app.js'%}"></script>
+    <!-- Countdown js -->
+    <script src="{% static 'js/pages/coming-soon.init.js'%}"></script>
+</body>
+</html>

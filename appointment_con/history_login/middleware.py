@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from .models import LoginHistory
 from django.contrib.auth import logout
 from django.utils import timezone
@@ -22,13 +23,17 @@ class LoginHistoryMiddleware:
                 )
                 login_history.save()
                 request.session['login_history_tracked'] = True
-
+                print("123123")
             # Kullanıcı çıkış yapmışsa
-            if request.path == '/logout/':
-                login_history = LoginHistory.objects.filter(user=request.user, logout_time__isnull=True).order_by('-login_time').first()
-                if login_history:
-                    login_history.logout_time = timezone.now()
-                    login_history.save()
-                    request.session['login_history_tracked'] = False
+                
+                if request.path == 'logout/':
+                    login_history = LoginHistory.objects.filter(user=request.user, logout_time__isnull=True).order_by('-login_time').first()
+                    print("456")
+                    if login_history:
+                        login_history.logout_time = timezone.now()
+                        login_history.save()
+                        print("789")
+                        request.session['login_history_tracked'] = False
+                     
 
         return response

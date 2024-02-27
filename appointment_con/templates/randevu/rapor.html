@@ -90,7 +90,7 @@
                         <div class="card-body">
                             <div id="customerList">
                                 <div class="row g-4 mb-3">
-                                    <div class="col-sm-auto">
+                                    
                                         <div>
                                             
                                             <div class="edit-m">
@@ -102,19 +102,10 @@
                                                     
                                                         data-bs-target="#showModal">Excel'e Aktar</button></a>
                                             </div>
-                                            {% if messages %}
-                                            <div id="errorAlert" class="alert alert-primary"col-lg-9 role="alert">
-                                                <ul class="list-unstyled mb-0">
-                                                    {% for message in messages %}
-                                                        <li>{{ message }}</li>
-                                                    {% endfor %}
-                                                </ul>
-                                               
-                                            </div>
-                                        {% endif %}
+                                        
 
                                         </div>
-                                    </div>
+                                  
                                     <div class="col-sm">
                                         <div class="d-flex justify-content-sm-end">
 
@@ -128,12 +119,14 @@
                                         <thead class="table-light">
                                             <tr>
 
-                                                <th class="" data-sort="customer_name">Talep Eden Kişi</th>
+                                                <th class="" data-sort="customer_name">Randevu Talep Eden Kişi</th>
                                                 <th class="" data-sort="konu">Konu</th>
-                                                <th class="" data-sort="joining_date">Tarih</th>
-                                                <th class="" data-sort="start_time">Başlangıç saati </th>
-                                                <th class="" data-sort="end_time">Bitiş saati</th>
+                                                <th class="" data-sort="joining_date">Tarihi</th>
+                                                <th class="" data-sort="start_time">Birimi-Kurumu </th>
+                                                <th class="" data-sort="end_time">İletişim Bilgileri</th>
+                                                <th class="" data-sort="status">Randevu Tipi</th>
                                                 <th class="" data-sort="status">Durum</th>
+                                                <th class="" data-sort="status">Durum  Açıklaması</th>
                                                 
 
                                                 <th class="" data-sort="action">Düzenle</th>
@@ -145,11 +138,14 @@
 
                                             <tr>
 
-                                                <td name="customer_name">{{ customer.customer_name }}</td>
-                                                <td name="konu">{{ customer.konu }}</td>
+                                                <td name="customer_name">{{ customer.customer_name}}</td>
+                                                <td name="konu">{{ customer.description }}</td>
                                                 <td name="joining_date">{{ customer.joining_date }}</td>
-                                                <td name="start_time">{{ customer.start_time }}</td>
-                                                <td name="end_time">{{ customer.end_time }}</td>
+                                                <td name="institution_name">{{ customer.institution_name }}</td>
+                                                <td name="contact">{{ customer.contact }}</td>
+                                                <td name="type">{{ customer.type }}</td>
+                                                
+                                               
                                                 
 
                                                 {% if customer.status == "Active" %}
@@ -157,7 +153,9 @@
                                             {% else %}
                                                 <td>İptal</td>
                                             {% endif %}
+                                            <td name="status_description">{{ status_description }}</td>
                                                 <td>
+                                                    
                                                     <div class="d-flex gap-2">
                                                         <div class="edit">
                                                             <button class="btn btn-sm btn-success edit-item-btn"
@@ -172,6 +170,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
+                                                
                                                
 
                                             </tr>
@@ -239,17 +238,35 @@
                                     <label for="timeInput" class="form-label">Başlangıç Zamanı</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input type="time" class="form-control"  required  name="start_time">
+                                    <input type="time" class="form-control" name="start_time">
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label">Bitiş Zamanı</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="time" class="form-control" name="end_time">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-lg-3">
-                                    <label for="timeInput" class="form-label" >Bitiş Zamanı</label>
+                                    <label for="text" class="form-label" >Birim-Kurum</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input type="time" class="form-control" required name="end_time">
+                                    <input type="text" class="form-control ">
                                 </div>
                             </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="text" class="form-label" >İletişim</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            
 
                             <div class="row mb-3">
                                 <div class="col-lg-3">
@@ -263,6 +280,15 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="text" class="form-label" >Durum Açıklaması</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control" >
+                                </div>
+                            </div>
+                            
                            
 
 

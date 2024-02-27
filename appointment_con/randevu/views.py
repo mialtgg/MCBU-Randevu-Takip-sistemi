@@ -79,7 +79,7 @@ def rektördatatable_view(request):
             if form.is_valid():
                 user_id = request.user.id
                 customer_name = form.cleaned_data['customer_name']
-                konu = form.cleaned_data['konu']
+                description = form.cleaned_data['description']
                 start_time = form.cleaned_data['start_time']
                 end_time = form.cleaned_data['end_time']
                 joining_date = form.cleaned_data['joining_date']
@@ -100,7 +100,7 @@ def rektördatatable_view(request):
                     customer = Customer.objects.create(
                         user_id=user_id,
                         customer_name=customer_name,
-                        konu=konu,
+                        description=description,
                         start_time=start_time,
                         end_time=end_time,
                         joining_date=joining_date,
@@ -294,7 +294,7 @@ def randevu_view(request):
 
         if request.method == 'POST':
             customer_name = request.POST.get('customer_name')
-            konu = request.POST.get('konu')
+            description = request.POST.get('description')
             start_time_str = request.POST.get('start_time')
             end_time_str = request.POST.get('end_time')
             joining_date = request.POST.get('joining_date')
@@ -331,7 +331,7 @@ def randevu_view(request):
                 customer = Customer.objects.create(
                     user_id=user_id,
                     customer_name=customer_name,
-                    konu=konu,
+                    description=description,
                     start_time=start_time,
                     end_time=end_time,
                     joining_date=joining_date,
@@ -369,13 +369,13 @@ def edit_customer(request, customer_id):
 
     if request.method == 'POST':
         customer_name = request.POST.get('customer_name')
-        konu = request.POST.get('konu')
+        description = request.POST.get('description')
         start_time = request.POST.get('start_time')
         end_time = request.POST.get('end_time')
         joining_date = request.POST.get('joining_date')
         status = request.POST.get('status')
         customer.customer_name = customer_name
-        customer.konu = konu
+        customer.description = description
         customer.start_time = start_time
         customer.end_time = end_time
         customer.joining_date = joining_date
@@ -411,7 +411,7 @@ def export_to_excel(request):
      # Sadece silinmemiş randevuları al
     queryset = Customer.objects.filter(deleted=False)
 
-    selected_fields = ['customer_name', 'konu', 'start_time', 'end_time', 'joining_date', 'status', 'admin_add_name']
+    selected_fields = ['customer_name', 'description', 'start_time', 'end_time', 'joining_date', 'status', 'admin_add_name']
     filtered_queryset = queryset.values(*selected_fields)
 
     workbook = Workbook()
@@ -457,4 +457,13 @@ def export_to_excel(request):
     workbook.save(response)
 
     return response
+
+def phone_appointment_view(request):
+   
+
+    return render(request, 'phone_appointments.html')
+def schedule_appointment_view(request):
+   
+
+    return render(request, 'schedule_appointment.html')
 

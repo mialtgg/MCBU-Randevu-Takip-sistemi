@@ -51,7 +51,7 @@ def user_register(request):
     
 def logout_view(request):
     logout(request)
-    return redirect('login')  # Çıkış işlemi tamamlandıktan sonra yönlendirilecek sayfanın adını değiştirin
+    return redirect('login') 
 
 
 

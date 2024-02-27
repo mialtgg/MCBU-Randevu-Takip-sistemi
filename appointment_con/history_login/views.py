@@ -5,5 +5,5 @@ from .models import LoginHistory
 
 @login_required
 def log_list(request):
-    user_history = LoginHistory.objects.filter(user=request.user).order_by('-login_time')
-    return render(request, 'log_list.html', {'user_history': user_history})
+    all_user_history = LoginHistory.objects.all().order_by('-login_time')
+    return render(request, 'log_list.html', {'all_user_history': all_user_history})
