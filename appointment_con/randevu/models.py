@@ -20,10 +20,11 @@ class Customer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  
     created_time = models.TimeField(auto_now_add=True)
     deleted_time = models.DateTimeField(null=True, blank=True)
-    institution_name =models.CharField(max_length=200)
+    institution_name = models.CharField(max_length=200)
     contact= models.TextField()
     status_description = models.TextField()
     type = models.CharField(max_length=20, choices=[('Face_to_face', 'Yüz Yüze'), ('Phone', 'Telefon')])
+    appointment_type= models.CharField(max_length=20, choices=[('İnside', 'İç Randevu'), ('Outside', 'Dış Randevu')])
     
     
 
@@ -32,6 +33,7 @@ class Customer(models.Model):
     
 
 class Event(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_id')
     event_name = models.TextField()
     participations = models.TextField()
     start_date = models.DateField()

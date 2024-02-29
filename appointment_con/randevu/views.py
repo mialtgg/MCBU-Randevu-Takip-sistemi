@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.utils import timezone
 from .models import Customer
 from django.http import HttpResponseServerError, JsonResponse
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from .forms import CustomerForm
@@ -15,7 +16,7 @@ from .models import Customer
 from datetime import datetime
 from django.views.generic import ListView
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Customer
+from .models import Customer ,Event
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from django.http import HttpResponse
@@ -85,6 +86,11 @@ def rektördatatable_view(request):
                 joining_date = form.cleaned_data['joining_date']
                 status = form.cleaned_data['status']
                 admin_add_name = form.cleaned_data['admin_add_name']
+                appointment_type = request.POST.get('appointment_type')
+                type = request.POST.get('type')
+                status_description = request.POST.get('status_description')
+                contact = request.POST.get('contact')
+                institution_name = request.POST.get('institution_name')
 
                 # Aynı saat aralığı ve tarih için müşteri kontrolü
                 existing_customers = customers.filter(
@@ -105,7 +111,15 @@ def rektördatatable_view(request):
                         end_time=end_time,
                         joining_date=joining_date,
                         status=status,
-                        admin_add_name=admin_add_name
+                        admin_add_name=admin_add_name,
+                        appointment_type=appointment_type,
+                        type = type,
+                        status_description = status_description,
+                        contact = contact,
+                        institution_name = institution_name
+
+
+
                     )
 
                     customer.save()
@@ -132,25 +146,25 @@ def succes_view(request):
      username= request.user.username
     today = date.today() 
 
-    if(username == "mustakılban"):
-        customers = Customer.objects.filter(Q(user_id=user_id) & Q(admin_add_name="user1"))
-    elif(username == "pelinkosan"):
-        customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user3"))
-    elif(username == "aysunokumus"):
-        customers = Customer.objects.filter(Q(user_id=user_id) &  Q(admin_add_name="user4"))
-    elif(username == "nurdagulerturk"):
-        customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user2"))
-    elif(username == "baharkocer"):
-        customers = Customer.objects.filter(Q(user_id=user_id) |  Q(admin_add_name="user5"))
-    else:
-        
-        customers=Customer.objects.filter(deleted=False)
+ 
+    customers=Customer.objects.filter(deleted=False)
+    events = Event.objects.all()
+  
+
+    
 
     customers_today = customers.filter(joining_date__gte=today,deleted=False)[:10]
+    events_today = Event.objects.filter(start_date__gte=today).order_by('start_date')[:10] 
+    phone_appointment = Event.objects.filter(type='Phone')
+    face_to_face_appointment = Event.objects.filter(event_type='Face_to_face')
+
     
   
 
-    context = {'customers_today':customers_today}
+    context = {'customers_today':customers_today,
+               'events_today':events_today,
+              'phone_appointment': phone_appointment,
+              'face_to_face_appointment' :face_to_face_appointment}
     
 
     return render(request, 'succes.html', context)
@@ -299,6 +313,11 @@ def randevu_view(request):
             end_time_str = request.POST.get('end_time')
             joining_date = request.POST.get('joining_date')
             status = request.POST.get('status')
+            appointment_type = request.POST.get('appointment_type')
+            type = request.POST.get('type')
+            status_description = request.POST.get('status_description')
+            contact = request.POST.get('contact')
+            institution_name = request.POST.get('institution_name')
             admin_add_name=request.POST.get('admin_add_name')
             if(username == "mustakılban"):
                 admin_add_name="user1"
@@ -310,6 +329,7 @@ def randevu_view(request):
                 admin_add_name="user5"
             elif(username  =="aysunokumus"):
                 admin_add_name="user4"
+                print(description)
 
 
             # datetime nesnelerini oluştur
@@ -336,20 +356,29 @@ def randevu_view(request):
                     end_time=end_time,
                     joining_date=joining_date,
                     status=status,
-                    admin_add_name=admin_add_name
+                    admin_add_name=admin_add_name,
+                    appointment_type=appointment_type,
+                    type = type,
+                    status_description = status_description,
+                    contact = contact,
+                    institution_name = institution_name
+
+                    
                 )
 
                 # Save the object to the database
                 customer.save()
+                print(customer)
 
                 messages.success(request, "Randevu başarıyla oluşturuldu.")
 
         return render(request, 'randevu/randevu.html', context)
+       
     else:
         return redirect('login')  # Kullanıcı oturum açmamışsa, login sayfasına yönlendir
     
 def delete_customer(request, customer_id):
-    print(request)
+   
     try:
         customer = get_object_or_404(Customer, id=customer_id)
 
@@ -374,12 +403,24 @@ def edit_customer(request, customer_id):
         end_time = request.POST.get('end_time')
         joining_date = request.POST.get('joining_date')
         status = request.POST.get('status')
+        institution_name = request.POST.get('institution_name')
+        type= request.POST.get('type')
+        status_description = request.POST.get('status_description')
+        appointment_type = request.POST.get('appointment_type')
+        contact = request.POST.get('contact')
+
+
         customer.customer_name = customer_name
         customer.description = description
         customer.start_time = start_time
         customer.end_time = end_time
         customer.joining_date = joining_date
         customer.status = status
+        customer.institution_name= institution_name
+        customer.contact = contact
+        customer.status_description = status_description
+        customer.type = type
+        customer.appointment_type = appointment_type
         customer.save()  
         return redirect(rapor_view)
 
@@ -462,8 +503,47 @@ def phone_appointment_view(request):
    
 
     return render(request, 'phone_appointments.html')
-def schedule_appointment_view(request):
-   
 
-    return render(request, 'schedule_appointment.html')
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Event
+
+@login_required
+def schedule_appointment_view(request):
+    if request.method == 'POST':
+        event_name = request.POST.get('event_name')
+        participations = request.POST.get('participations')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+
+        # Check if the event already exists
+        existing_event = Event.objects.filter(
+            event_name=event_name,
+            start_date=start_date,
+            end_date=end_date,
+            user=request.user
+        ).first()
+
+        if existing_event:
+            # Event already exists, handle it (for example, show an error message)
+            messages.error(request, 'This event already exists.')
+        else:
+            # Create a new event
+            new_event = Event.objects.create(
+                event_name=event_name,
+                participations=participations,
+                start_date=start_date,
+                end_date=end_date,
+                user=request.user
+            )
+            messages.success(request, 'Event created successfully.')
+
+    events = Event.objects.filter(user=request.user)
+    context = {'events': events}
+    return render(request, 'schedule_appointment.html', context)
+
+
+def is_admin(user):
+    return user.is_authenticated and user.is_staff
+   
 

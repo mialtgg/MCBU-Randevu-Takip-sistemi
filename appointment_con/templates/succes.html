@@ -20,20 +20,12 @@
             <div class="col-xxl-5">
                 <div class="card card-height-100">
                     <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">Yakşan Toplantılar(Yapım Aşamasında)</h4>
-                        <div class="flex-shrink-0">
-                            <div class="dropdown card-header-dropdown">
-                                <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <span class="text-muted fs-18"><i class="mdi mdi-dots-vertical"></i></span>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a class="dropdown-item" href="#">Edit</a>
-                                    <a class="dropdown-item" href="#">Remove</a>
-                                </div>
-                            </div>
-                        </div>
+                        <h4 class="card-title mb-0 flex-grow-1"><i class="bx bx-calendar"></i>   Yaklaşan Toplantılar</h4>
+                  
                     </div><!-- end card header -->
+                    {% for event in events_today %}
+                    
+              
                     <div class="card-body pt-0">
                         <ul class="list-group list-group-flush border-dashed">
                             <li class="list-group-item ps-0">
@@ -41,45 +33,23 @@
                                     <div class="col-auto">
                                         <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
                                             <div class="text-center">
-                                                <h5 class="mb-0">25</h5>
-                                                <div class="text-muted">Salı</div>
+                                                <h5 class="mb-0">{{event.start_date|date:"d"|default:"" }}</h5>
+                                                <div class="text-muted"><div class="text">{{ event.start_date|date:"l"|default:""|slice:":4" }}</div>
+                                            </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <h5 class="text-muted mt-0 mb-1 fs-13">12:00- 15:00 </h5>
-                                        <a href="#" class="text-reset fs-14 mb-0">Yapım Aşamasında</a>
+                                        <h5 class="text-muted mt-0 mb-1 fs-13">{{event.start_date}}</h5>
+                                        <a href="#" class="text-reset fs-14 mb-0">{{event.event_name}}</a>
                                     </div>
                                     <div class="col-sm-auto">
                                         <div class="avatar-group">
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);" class="d-inline-block"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                    data-bs-original-title="">
-                                                    <img src="{% static 'images/users/avatar-1.jpg'%}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                </a>
-                                            </div>
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);" class="d-inline-block"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                    data-bs-original-title="">
-                                                    <img src="{% static 'images/users/avatar-2.jpg'%}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                </a>
-                                            </div>
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);" class="d-inline-block"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                    data-bs-original-title="">
-                                                    <img src="{% static 'images/users/avatar-3.jpg'%}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                </a>
-                                            </div>
+                                  
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);">
                                                     <div class="avatar-xxs">
-                                                        <span class="avatar-title rounded-circle bg-info text-white">
+                                                        <span class="avatar-title rounded-circle bg-primary text-white">
                                                             <i class=" bx bx-alarm"></i>
                                                         </span>
                                                     </div>
@@ -95,41 +65,18 @@
                                     <div class="col-auto">
                                         <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
                                             <div class="text-center">
-                                                <h5 class="mb-0">25</h5>
-                                                <div class="text-muted">Salı</div>
+                                                <h5 class="mb-0">{{event.start_date|date:"d"|default:"" }}</h5>
+                                                <div class="text-muted">{{ event.start_date|date:"l"|default:""|slice:":4" }}</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <h5 class="text-muted mt-0 mb-1 fs-13">12:00- 15:00 </h5>
-                                        <a href="#" class="text-reset fs-14 mb-0">Yapım Aşamasında</a>
+                                        <h5 class="text-muted mt-0 mb-1 fs-13">>{{event.start_date}}</h5>
+                                        <a href="#" class="text-reset fs-14 mb-0">{{event.event_name}}</a>
                                     </div>
                                     <div class="col-sm-auto">
                                         <div class="avatar-group">
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);" class="d-inline-block"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                    data-bs-original-title="">
-                                                    <img src="{% static 'images/users/avatar-1.jpg'%}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                </a>
-                                            </div>
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);" class="d-inline-block"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                    data-bs-original-title="">
-                                                    <img src="{% static 'images/users/avatar-2.jpg'%}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                </a>
-                                            </div>
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);" class="d-inline-block"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                    data-bs-original-title="">
-                                                    <img src="{% static 'images/users/avatar-3.jpg'%}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                </a>
-                                            </div>
+                                           
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);">
                                                     <div class="avatar-xxs">
@@ -144,120 +91,12 @@
                                 </div>
                                 <!-- end row -->
                             </li><!-- end -->
-                            <li class="list-group-item ps-0">
-                                <div class="row align-items-center g-3">
-                                    <div class="col-auto">
-                                        <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
-                                            <div class="text-center">
-                                                <h5 class="mb-0">25</h5>
-                                                <div class="text-muted">Salı</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="text-muted mt-0 mb-1 fs-13">12:00- 15:00 </h5>
-                                        <a href="#" class="text-reset fs-14 mb-0">Yapım Aşamasında</a>
-                                    </div>
-                                    <div class="col-sm-auto">
-                                        <div class="avatar-group">
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);" class="d-inline-block"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                    data-bs-original-title="">
-                                                    <img src="{% static 'images/users/avatar-1.jpg'%}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                </a>
-                                            </div>
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);" class="d-inline-block"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                    data-bs-original-title="">
-                                                    <img src="{% static 'images/users/avatar-2.jpg'%}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                </a>
-                                            </div>
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);" class="d-inline-block"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                    data-bs-original-title="">
-                                                    <img src="{% static 'images/users/avatar-3.jpg'%}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                </a>
-                                            </div>
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);">
-                                                    <div class="avatar-xxs">
-                                                        <span class="avatar-title rounded-circle bg-success text-white">
-                                                            <i class=" bx bx-alarm"></i>
-                                                        </span>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end row -->
-                            </li><!-- end -->
-                            <li class="list-group-item ps-0">
-                                <div class="row align-items-center g-3">
-                                    <div class="col-auto">
-                                        <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
-                                            <div class="text-center">
-                                                <h5 class="mb-0">25</h5>
-                                                <div class="text-muted">Salı</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="text-muted mt-0 mb-1 fs-13">12:00- 15:00 </h5>
-                                        <a href="#" class="text-reset fs-14 mb-0">Yapım Aşamasında</a>
-                                    </div>
-                                    <div class="col-sm-auto">
-                                        <div class="avatar-group">
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);" class="d-inline-block"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                    data-bs-original-title="">
-                                                    <img src="{% static 'images/users/avatar-1.jpg'%}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                </a>
-                                            </div>
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);" class="d-inline-block"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                    data-bs-original-title="">
-                                                    <img src="{% static 'images/users/avatar-2.jpg'%}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                </a>
-                                            </div>
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);" class="d-inline-block"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                    data-bs-original-title="">
-                                                    <img src="{% static 'images/users/avatar-3.jpg'%}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                </a>
-                                            </div>
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);">
-                                                    <div class="avatar-xxs">
-                                                        <span class="avatar-title rounded-circle bg-overlay text-white">
-                                                            <i class=" bx bx-alarm"></i>
-                                                        </span>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end row -->
-                            </li><!-- end -->
+                         
 
                         </ul><!-- end -->
-                        <div class="align-items-center mt-2 row text-center text-sm-start">
-
-                        </div>
+                        
                     </div><!-- end card body -->
+                    {% endfor %}
                 </div><!-- end card -->
             </div> <!-- end col-->
             <div class="col-xxl-7">

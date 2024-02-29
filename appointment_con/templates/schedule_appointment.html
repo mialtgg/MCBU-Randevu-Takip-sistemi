@@ -1,80 +1,484 @@
+{% extends "partials/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg">
-<head>
-    <meta charset="utf-8" />
-    <title>BAUM | Özel Kalem Randevu Sistemi</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="{% static 'images/favicon.ico'%}">
+{% block title %}Listjs{% endblock title %}
+{% block extra_css %}
+<!-- Sweet Alert css-->
+<link href="{% static 'libs/sweetalert2/dist/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock extra_css %}
+{% block content %}
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<style>
+    #event_table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-left: 3px;
+        padding-right: 30px;
+    }
 
-    <!-- Layout config Js -->
-    <script src="{% static 'js/layout.js'%}"></script>
-    <!-- Bootstrap Css -->
-    <link href="{% static 'css/bootstrap.min.css'%}" id="bootstrap-style" rel="stylesheet" type="text/css" />
-    <!-- Icons Css -->
-    <link href="{% static 'css/icons.min.css'%}" rel="stylesheet" type="text/css" />
-    <!-- App Css-->
-    <link href="{% static 'css/app.min.css'%}" id="app-style" rel="stylesheet" type="text/css" />
-    <!-- custom Css-->
-    <link href="{% static 'css/custom.min.css'%}" id="app-style" rel="stylesheet" type="text/css" />
-</head>
-<body>
-    <div class="auth-page-wrapper">
-        <!-- auth page bg -->
-        <div   id="auth-particles">
-            <div class="bg-overlay"></div>
-            
-           
-            <div class="auth-page-content">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="text-center mt-sm-5 pt-4 mb-4">
-                                <div class="mb-sm-5 pb-sm-4 pb-5">
-                                    <img src="{% static 'images/comingsoon.png'%}" alt="" height="120" class="move-animation">
-                                </div>
-                                <div class="mb-5">
-                                    <h1 class="display-2 coming-soon-text">Yapım Aşamasında</h1>
-                                </div>
-                                <a href="{% url 'succes' %}"><button type="submit" class="btn btn-success">Anasayfaya Dön</button></a>
+    #event_table th,
+    #event_table td {
+        border: 1px solid #dddddd;
+        /* İstenen kenarlık rengini belirtin */
+        padding: 8px;
+        text-align: left;
+    }
+    #event_table_wrapper {
+        padding-left: 30px;
+    }
+</style>
 
+
+<style>
+    /* CSS ile label'e boşluk ekleme */
+    label {
+        margin-top: 10px; /* Üstten boşluk (örneğin 10 piksel) */
+        margin-left: 10px; /* Soldan boşluk (örneğin 10 piksel) */
+    }
+</style>
+<style>
+    .edit-m button {
+      font-size: 12px; /* İstediğiniz font boyutu */
+      padding: 10px 10px; /* İstediğiniz iç ve dış boşluk miktarları */
+    }
+  </style>
+
+<div class="main-content">
+
+
+    <div class="page-content">
+        <div class="container-fluid">
+
+            {% block pagetitle %}
+
+            {% endblock pagetitle %}
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header data-bs-toggle">
+                            <h4 class="card-title mb-0">Toplantı  Oluştur</h4>
+                        </div><!-- end card header -->
+
+                        <div class="card-body">
+                            <div id="customerList">
+                                <div class="row g-4 mb-3">
+                                    
+                                        <div>
+                                            
+                                            <div class="edit-m">
+                                                <button class="btn btn-primary btn-success edit-item-btn"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#showModal">Toplantı Ekle</button>
+                                                   
+                                                    <a href="{% url 'export_to_excel' %}"> <button class="btn btn btn-info edit-item-btn"
+                                                    
+                                                        data-bs-target="#showModal">Excel'e Aktar</button></a>
+                                            </div>
+                                        
+
+                                        </div>
+                                  
+                                    <div class="col-sm">
+                                        <div class="d-flex justify-content-sm-end">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive table-card mt-3 mb-1">
+
+                                    <table class="table align-middle table-nowrap" id="event_table">
+                                        <thead class="table-light">
+                                            <tr>
+
+                                                <th class="" data-sort="customer_name">Toplantı Adı</th>
+                                                <th class="" data-sort="konu">Katılımcılar</th>
+                                                <th class="" data-sort="joining_date">Başlangıç Tarihi</th>
+                                                <th class="" data-sort="start_time">Bitiş Tarihi </th>
+                                                
+                                                
+                                                
+
+                                                <th class="" data-sort="action">Düzenle</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody class="list form-check-all">
+                                            {% for event in events %}
+
+                                            <tr>
+
+                                                <td name="event_name">{{ event.event_name}}</td>
+                                                <td name="participations">{{ event.participations }}</td>
+                                                <td name="start_date">{{ event.start_date }}</td>
+                                                <td name="end_date">{{ event.end_date }}</td>
+                                                <td>
+                                                    
+                                                    <div class="d-flex gap-2">
+                                                        <div class="edit">
+                                                            <button class="btn btn-sm btn-success edit-item-btn"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#showModal{{customer.id}}">Düzenle</button>
+                                                        </div>
+                                                        <div class="remove">
+                                                            <button    class="btn btn-sm btn-danger remove-item-btn"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#deleteRecordModal{{customer.id}}"><i
+                                                                    class="ri-delete-bin-2-line"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                
+                                               
+                                                
+
+                       
                                 
+                                                
+                                               
+
+                                            </tr>
+
+                                            {% endfor %}
+                                            
+                                          
+                                        </tbody>
+                                    </table>
+
+
+
+                                </div>
+
+                     
+                            </div>
+                        </div><!-- end card -->
+                    </div>
+                    <!-- end col -->
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+            
+            
+            <div class="modal fade" id="showModal{{customer3.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header p-3 bg-info-subtle">
+                            <h5 class="modal-title" id="exampleModalLabel"> Toplantı Ekle</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                id="close-modal"></button>
+                        </div>
+
+                        <form method="post"   action="{% url 'schedule_appointments' %}" >
+                            {% csrf_token %}
+
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="nameInput" class="form-label">Toplantı Adı</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input style="margin-top: 10px;" type="text" class="form-control" required name="event_name"
+                                        placeholder="Toplantı Adı">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="topInput" class="form-label">Katılımcılar</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control" required name="participations" placeholder="Katılımcılar">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="dateInput" class="form-label">Başlangıç Tarihi</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="date" name="start_date" required class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="date" class="form-label">Bitiş Tarihi</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="date" class="form-control" name="end_date">
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            
+                            
+
+                           
+                            
+                            
+                           
+
+
+
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success">Ekle</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+
+                        {%for customer2 in customers%}
+            <div class="modal fade" id="showModal{{customer2.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-light p-3">
+                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                id="close-modal"></button>
+                        </div>
+                        <form method="post" action="{% url 'edit_customer' customer2.id %}">
+                            {% csrf_token %}
+
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="nameInput" class="form-label">Talep Eden Kişi</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control"  name="customer_name" value="{{customer2.customer_name }}"
+                                        placeholder="Enter your name">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="topInput" class="form-label">Konusu</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control" name="konu" value="{{ customer2.konu }}"placeholder="Talep Konusu">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="dateInput" class="form-label">Tarih</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="date" name="joining_date" value="{{ customer2.joining_date|date:'Y-m-d' }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label">Başlangıç Zamanı</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="time" class="form-control"  value="{{ customer2.start_time|time:'H:i' }}"  name="start_time">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label" >Bitiş Zamanı</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="time" class="form-control" value="{{ customer2.end_time|time:'H:i' }}" name="end_time">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="status-field" class="form-label" value="{{ customer2.status}}">Durum</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <select class="form-control" data-trigger name="status" required>
+
+                                        <option value="Active">Aktif</option>
+                                        <option value="Block">İptal Edildi</option>
+                                    </select>
+                                </div>
+                            </div>
+                           
+
+
+
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success">Kaydet</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+
+
+
+            {%for customer2 in customers%}
+            <div class="modal fade" id="showModal{{customer2.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-light p-3">
+                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                id="close-modal"></button>
+                        </div>
+                        <form method="post" action="{% url 'edit_customer' customer2.id %}">
+                            {% csrf_token %}
+
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="nameInput" class="form-label">Talep Eden Kişi</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control"  name="customer_name" value="{{customer2.customer_name }}"
+                                        placeholder="Enter your name">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="topInput" class="form-label">Konusu</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control" name="konu" value="{{ customer2.konu }}"placeholder="Talep Konusu">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="dateInput" class="form-label">Tarih</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="date" name="joining_date" value="{{ customer2.joining_date|date:'Y-m-d' }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label">Başlangıç Zamanı</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="time" class="form-control"  value="{{ customer2.start_time|time:'H:i' }}"  name="start_time">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label" >Bitiş Zamanı</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="time" class="form-control" value="{{ customer2.end_time|time:'H:i' }}" name="end_time">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="status-field" class="form-label" value="{{ customer2.status}}">Durum</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <select class="form-control" data-trigger name="status" required>
+
+                                        <option value="Active">Aktif</option>
+                                        <option value="Block">İptal Edildi</option>
+                                    </select>
+                                </div>
+                                
+                            </div>
+                           
+
+
+
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success">Kaydet</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+
+            <!-- Modal -->
+            {%for customer1 in customers%}
+                <div class="modal fade zoomIn" id="deleteRecordModal{{customer1.id}}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                    id="btn-close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mt-2 text-center">
+                                    <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                                        colors="primary:#f7b84b,secondary:#f06548"
+                                        style="width:100px;height:100px"></lord-icon>
+                                    <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+                                        <h4>Randevuyu silmek İstediğinize emin misiniz? </h4>
+                                    
+
+                                        <p class="text-muted mx-4 mb-0"></p>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+                                    <button type="button" class="btn w-sm btn-primary"
+                                        data-bs-dismiss="modal">Kapat</button>
+                                       
+                                            {{ item.name }}  {{ item.description }}
+                                            <form action="{% url 'delete_customer' customer1.id %}" method="post">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn w-sm btn-danger"
+                                        data-bs-dismiss="modal">Evet, Sil</button>
+                                            </form>
+                                  
+                                    </td>
+                                </div>
+
+
                             </div>
                         </div>
                     </div>
-                    <!-- end row -->
-    
                 </div>
-                <!-- end container -->
-            </div>
-           
+                <!--end modal -->
+            {%endfor%}
+
         </div>
-
-        <!-- auth page content -->
-
-        <!-- end auth page content -->
-
-        <!-- footer -->
-        
-        <!-- end Footer -->
+        <!-- container-fluid -->
     </div>
-    <!-- end auth-page-wrapper -->
+    <!-- End Page-content -->
 
-    <!-- JAVASCRIPT -->
-    <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js'%}"></script>
-    <script src="{% static 'libs/simplebar/dist/simplebar.min.js'%}"></script>
-    <script src="{% static 'libs/node-waves/dist/waves.min.js'%}"></script>
-    <script src="{% static 'libs/feather-icons/dist/feather.min.js'%}"></script>
-    <script src="{% static 'js/pages/plugins/lord-icon-2.1.0.js'%}"></script>
-    <script src="{% static 'js/plugins.js'%}"></script>
-    <!-- particles js -->
-    <script src="{% static 'libs/particles.js/particles.js'%}"></script>
-    <!-- particles app js -->
-    <script src="{% static 'js/pages/particles.app.js'%}"></script>
-    <!-- Countdown js -->
-    <script src="{% static 'js/pages/coming-soon.init.js'%}"></script>
-</body>
-</html>
+    {% block footer %}
+    {% include "partials/footer.html" %}
+    {% endblock footer %}
+</div>
+<!-- end main content-->
+{% endblock content %}
+{% block extra_js %}
+<!-- prismjs plugin -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+<!-- DataTables JS -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+<!-- DataTables script -->
+<script>
+    var table = new DataTable('#event_table', {
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/tr.json',
+        },
+
+
+    });
+</script>
+
+<script src="{% static 'libs/prismjs/prism.js'%}"></script>
+
+<script>
+    $(document).ready( function () {
+        $('#event_table').DataTable();
+    } );
+</script>
+
+
+<!-- listjs init -->
+
+<!-- Sweet Alerts js -->
+<script src="{% static 'libs/sweetalert2/sweetalert2.min.js' %}"></script>
+{% endblock extra_js %}

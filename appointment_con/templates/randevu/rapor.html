@@ -13,8 +13,9 @@
     #customerTable {
         border-collapse: collapse;
         width: 100%;
-        margin-left: 3px;
+        margin-left: 0px;
         padding-right: 30px;
+        margin-right: 10px;
     }
 
     #customerTable th,
@@ -125,6 +126,7 @@
                                                 <th class="" data-sort="start_time">Birimi-Kurumu </th>
                                                 <th class="" data-sort="end_time">İletişim Bilgileri</th>
                                                 <th class="" data-sort="status">Randevu Tipi</th>
+                                                <th class="" data-sort="status">Randevu Türü</th>
                                                 <th class="" data-sort="status">Durum</th>
                                                 <th class="" data-sort="status">Durum  Açıklaması</th>
                                                 
@@ -139,11 +141,12 @@
                                             <tr>
 
                                                 <td name="customer_name">{{ customer.customer_name}}</td>
-                                                <td name="konu">{{ customer.description }}</td>
+                                                <td name="konu">{{ customer.description}}</td>
                                                 <td name="joining_date">{{ customer.joining_date }}</td>
                                                 <td name="institution_name">{{ customer.institution_name }}</td>
                                                 <td name="contact">{{ customer.contact }}</td>
                                                 <td name="type">{{ customer.type }}</td>
+                                                <td name="type">{{ customer.appointment_type }}</td>
                                                 
                                                
                                                 
@@ -153,7 +156,7 @@
                                             {% else %}
                                                 <td>İptal</td>
                                             {% endif %}
-                                            <td name="status_description">{{ status_description }}</td>
+                                            <td name="status_description">{{ customer.status_description }}</td>
                                                 <td>
                                                     
                                                     <div class="d-flex gap-2">
@@ -214,7 +217,7 @@
                                 </div>
                                 <div class="col-lg-8">
                                     <input style="margin-top: 10px;" type="text" class="form-control" required name="customer_name"
-                                        placeholder="Talep eden kişinin adı soyadı">
+                                        placeholder="Talep eden kişinin adı soyadı ">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -222,7 +225,7 @@
                                     <label for="topInput" class="form-label">Konusu</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control" required name="konu" placeholder="Talep Konusu">
+                                    <input type="text" class="form-control"  name="description" placeholder="Talep Konusu">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -255,7 +258,7 @@
                                     <label for="text" class="form-label" >Birim-Kurum</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control ">
+                                    <input type="text" class="form-control " name="institution_name">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -263,17 +266,42 @@
                                     <label for="text" class="form-label" >İletişim</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" name="contact">
                                 </div>
                             </div>
-                            
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="status-field" class="form-label">Randevu Türü</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <select  class="form-select form-select mb-3" aria-label=".form-select-sm example" data-trigger name="appointment_type" required>
+                                        <option value="Iç Randevu">Iç Randevu</option>
+                                        <option value="Iptal Edildi">Dış Randevu</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="status-field" class="form-label" >Randevu Tipi</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <select class="form-select form-select mb-3" aria-label=".form-select-sm example" name="type">
+                                        
+                                        <option  selected="Telefon">Telefon</option>
+                                        <option value="Yüz yüze">Yüz yüze</option>
+                                    </select>
+
+                                   
+                                
+                                </div>
+                            </div>
 
                             <div class="row mb-3">
                                 <div class="col-lg-3">
                                     <label for="status-field" class="form-label" >Durum</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <select class="form-control" data-trigger name="status" required>
+                                    <select  class="form-select form-select mb-3" aria-label=".form-select-sm example" data-trigger name="status" required>
 
                                         <option value="Aktif">Aktif</option>
                                         <option value="İptal Edildi">İptal Edildi</option>
@@ -285,7 +313,7 @@
                                     <label for="text" class="form-label" >Durum Açıklaması</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control" >
+                                    <input type="text" class="form-control" name="status_description" >
                                 </div>
                             </div>
                             
@@ -307,8 +335,8 @@
             <div class="modal fade" id="showModal{{customer2.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
-                        <div class="modal-header bg-light p-3">
-                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                        <div class="modal-header p-3 bg-info-subtle">
+                            <h5 class="modal-title" id="exampleModalLabel">Düzenle</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                                 id="close-modal"></button>
                         </div>
@@ -329,7 +357,7 @@
                                     <label for="topInput" class="form-label">Konusu</label>
                                 </div>
                                 <div class="col-lg-9">
-                                    <input type="text" class="form-control" name="konu" value="{{ customer2.konu }}"placeholder="Talep Konusu">
+                                    <input type="text" class="form-control" name="description" value="{{ customer2.description }}"placeholder="Talep Konusu">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -340,22 +368,8 @@
                                     <input type="date" name="joining_date" value="{{ customer2.joining_date|date:'Y-m-d' }}" class="form-control">
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-lg-3">
-                                    <label for="timeInput" class="form-label">Başlangıç Zamanı</label>
-                                </div>
-                                <div class="col-lg-9">
-                                    <input type="time" class="form-control"  value="{{ customer2.start_time|time:'H:i' }}"  name="start_time">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-lg-3">
-                                    <label for="timeInput" class="form-label" >Bitiş Zamanı</label>
-                                </div>
-                                <div class="col-lg-9">
-                                    <input type="time" class="form-control" value="{{ customer2.end_time|time:'H:i' }}" name="end_time">
-                                </div>
-                            </div>
+                           
+                           
 
                             <div class="row mb-3">
                                 <div class="col-lg-3">
@@ -369,7 +383,55 @@
                                     </select>
                                 </div>
                             </div>
-                           
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="status-field" class="form-label" value="{{ customer2.institution_name}}">Birimi-Kurumu</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" name="institution_name" value="{{ customer2.institution_name}}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="status-field" class="form-label" >İletişim Bilgileri</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" name="contact" value="{{customer2.contact}}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="status-field" class="form-label" value="{{ customer2.type}}">Durum</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <select class="form-control" data-trigger name="type" required>
+
+                                        <option value="Telefon">Telefon</option>
+                                        <option value="Yüz yüze">Yüzü Yüze</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="status-field" class="form-label" value="{{ customer2.appointment_type}}">Durum</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <select class="form-control" data-trigger name="appointment_type" required>
+
+                                        <option value="İç">İç Randevu</option>
+                                        <option value="Diş">Dış Randevu</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="status-field" class="form-label">Durum Açıklaması</label>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" name="status_description" value="{{ customer2.status_description}}" class="form-control">
+                                </div>
+                            </div>
+                            
 
 
 
