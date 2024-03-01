@@ -4,6 +4,7 @@ from datetime import date, timezone
 from django.contrib import messages
 from django.utils import timezone
 from .models import Customer
+from django.db.models.functions import TruncMonth
 from django.http import HttpResponseServerError, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
@@ -24,6 +25,7 @@ from excel_response import ExcelResponse
 from django.shortcuts import render
 from openpyxl import Workbook
 from django.http import HttpResponse
+from .forms import EventForm
 
 def rapor_view(request):
     if request.user.is_authenticated:
@@ -154,9 +156,9 @@ def succes_view(request):
     
 
     customers_today = customers.filter(joining_date__gte=today,deleted=False)[:10]
-    events_today = Event.objects.filter(start_date__gte=today).order_by('start_date')[:10] 
-    phone_appointment = Event.objects.filter(type='Phone')
-    face_to_face_appointment = Event.objects.filter(event_type='Face_to_face')
+    events_today = Event.objects.filter(start_date =today).order_by('start_date')[:10] 
+    phone_appointment = Event.objects.all()
+    face_to_face_appointment = Event.objects.all()
 
     
   
@@ -176,8 +178,8 @@ def succes_view(request):
 def chart_view(request):
     user_id = request.user.id
     username= request.user.username
-    today = datetime.today()
     admin_add_name = None
+    today = timezone.now() 
     
 
     if username == "mustakılban":
@@ -194,27 +196,25 @@ def chart_view(request):
     customers = Customer.objects.filter(user_id=user_id, admin_add_name=admin_add_name, deleted=False)
 
 
-   
-    
-
-
     current_month = today.month
     current_year = today.year
-    
-
 
     daily_counts = Customer.objects.filter(
-        user_id=user_id ,
+        user_id=user_id,
         admin_add_name=admin_add_name,
         joining_date__month=current_month,
         joining_date__year=current_year,
         deleted=False,
-       
-        
+        joining_date__day=1  # Ayın ilk gününe göre filtrele
     ).annotate(day=ExtractDay('joining_date')) \
         .values('day') \
         .annotate(count=Count('*')) \
         .order_by('day')
+    
+
+
+    
+
 
     try:
         # Aylık müşteri sayısını getir
@@ -223,14 +223,14 @@ def chart_view(request):
             admin_add_name=admin_add_name,
             deleted=False
             
-        ).annotate(month=ExtractMonth('joining_date')) \
+        ).annotate(month=TruncMonth('joining_date')) \
             .values('month') \
             .annotate(count=Count('*')) \
             .order_by('month')
         
         month_names = [
     'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
-    'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
+    'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım'
 ]
         weeks = [f'Hafta {i}' for i in range(1, 53)]
 
@@ -270,6 +270,7 @@ def chart_view(request):
             
 
         }
+        print(monthly_counts)
 
   
         return render(request, 'randevu/chart.html', context)
@@ -452,14 +453,14 @@ def export_to_excel(request):
      # Sadece silinmemiş randevuları al
     queryset = Customer.objects.filter(deleted=False)
 
-    selected_fields = ['customer_name', 'description', 'start_time', 'end_time', 'joining_date', 'status', 'admin_add_name']
+    selected_fields = ['customer_name', 'description', 'institution_name', 'contact', 'joining_date', 'status', 'status_description','type','appointment_type']
     filtered_queryset = queryset.values(*selected_fields)
 
     workbook = Workbook()
     worksheet = workbook.active
 
     # Başlık satırını ekle
-    title_row = ['Talep Eden Kişi', 'Konu', 'Başlama Zamanı', 'Bitiş Zamanı', 'Randevu Tarihi', 'Durumu', 'Randevuyu Oluşturan Kişi']
+    title_row = ['Talep Eden Kişi', 'Konu', 'Birimi-Kurumu', 'İletişim', 'Randevu Tarihi', 'Durumu', 'Durum Açıklaması','Tipi','Türü']
     worksheet.append(title_row)
 
       # Verileri ekleyin
@@ -522,7 +523,7 @@ def schedule_appointment_view(request):
             start_date=start_date,
             end_date=end_date,
             user=request.user
-        ).first()
+        )
 
         if existing_event:
             # Event already exists, handle it (for example, show an error message)
@@ -538,12 +539,41 @@ def schedule_appointment_view(request):
             )
             messages.success(request, 'Event created successfully.')
 
-    events = Event.objects.filter(user=request.user)
+    events = Event.objects.filter(user=request.user,deleted=False)
+    
     context = {'events': events}
     return render(request, 'schedule_appointment.html', context)
+
+def edit_events(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+
+    if request.method == 'POST':
+        form = EventForm(request.POST, instance=event)
+        if form.is_valid():
+            form.save()
+            return redirect(schedule_appointment_view)
+    else:
+        form = EventForm(instance=event)
+
+    return render(request, 'your_template.html', {'form': form, 'event': event})
+
+def delete_event(request, event_id):
+    try:
+        event = get_object_or_404(Event, id=event_id)
+
+        # Etkinliği silmek yerine 'deleted' alanını True olarak işaretle
+        event.deleted = True
+        event.deleted_time = timezone.now()
+        event.save()
+
+        return redirect(schedule_appointment_view)
+    except Event.DoesNotExist as e:
+        return HttpResponseServerError("Etkinlik bulunamadı.")
+    except Exception as e:
+        return HttpResponseServerError(f"Bir hata oluştu: {type(e).__name__} - {str(e)}")
+
 
 
 def is_admin(user):
     return user.is_authenticated and user.is_staff
    
-

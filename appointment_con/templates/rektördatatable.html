@@ -77,13 +77,15 @@
                                             <tr>
 
                                                 <th class="" data-sort="customer_name">Randevuyu Oluşturan Kişi</th>
-                                                <th class="" data-sort="customer_name">Randevu Oluşturulacak Kişi</th>
+                                                
                                                 <th class="" data-sort="konu">Randevu Talep eden</th>
                                                 <th class="" data-sort="action">Konusu</th>
+                                                <th class="" data-sort="action">Birimi-Kurumu</th>
+                                                <th class="" data-sort="action">İletişim Bilgileri</th>
                                                 <th class="" data-sort="joining_date">Tarih</th>
-                                                <th class="" data-sort="start_time">Başlangıç saati </th>
-                                                <th class="" data-sort="end_time">Bitiş saati</th>  
+                                              
                                                 <th class="" data-sort="status">Durum</th>
+                                                <th class="" data-sort="status">Durum Açıklaması</th>
                                                 <th class="" data-sort="status">Oluşturulma Zamanı</th>
 
 
@@ -96,34 +98,27 @@
                                             <tr>
                                                 <td>{{ customer.user.get_full_name }}</td>
 
-                                                {% if customer.admin_add_name == "user1" %}
-                                                <td>Prof. Dr. Rana KİBAR -M </td>
-                                                {% elif customer.admin_add_name == "user2" %}
-                                                <td>Prof. Dr. Ahmet ÇETİN </td>
-                                                {% elif customer.admin_add_name == "user3" %}
-                                                <td>Prof. Dr. Kadir AY </td>
-                                                
-                                                {% elif customer.admin_add_name == "user5" %}
-                                                <td>Prof. Dr. Oktay ÜÇER</td>
-                                                {% else %}
-                                                <td>Prof. Dr.Rana KİBAR -A</td>
-                                                {% endif %}
+                                               
                                                 <td>{{ customer.customer_name }}</td>
                                                 
-                                                <td>{{ customer.konu }}</td>
+                                                <td>{{ customer.description }}</td>
+                                                <td>{{ customer.institution_name }}</td>
+                                                <td>{{ customer.contact }}</td>
                                                 <td>{{ customer.joining_date }}</td>
-                                                <td>{{ customer.start_time }}</td>
-                                                <td>{{ customer.end_time }}</td>
+                                               
                                                 {% if customer.status == "Active" %}
                                                 <td>Aktif</td>
                                                 {% else %}
                                                 <td>İptal</td>
                                                 {% endif %}
+                                                <td>{{ customer.status_description}}</td>
                                                 <td>{{customer.created_at}}</td>
+                                                
                                            
 
                                             </tr>
                                             {% endfor %}
+                                            
                                          
                                         </tbody>
                                     </table>
@@ -167,92 +162,122 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                                 id="close-modal"></button>
                         </div>
-                        <form method="post" action="{% url 'rektör_datatable' %}">
+                        <form method="post"   action="{% url 'randevu'%}" >
                             {% csrf_token %}
 
                             <div class="row mb-3">
-                                <input type="hidden" name="user" value="{{ request.user.id }}">
                                 <div class="col-lg-3">
-                                    <label for="nameInput" style="margin-left: 10px ;" class="form-label">Randevu
-                                        Oluşturulacak İsim</label>
+                                    <label for="nameInput" class="form-label">Talep Eden Kişi</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <select class="form-control" data-trigger name="admin_add_name" required>
-
-                                        <option value="user1">Prof. Dr. Rana KİBAR -M</option>
-                                        <option value="user2">Prof. Dr. Ahmet ÇETİN</option>
-                                        <option value="user3">Prof. Dr. Kadir Ay </option>
-                                        <option value="user4">Prof. Dr. Rana KİBAR -A </option>
-                                        <option value="user5">>Prof. Dr. Oktay ÜÇER</option>
+                                    <input style="margin-top: 10px;" type="text" class="form-control" required name="customer_name"
+                                        placeholder="Talep eden kişinin adı soyadı ">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="topInput" class="form-label">Konusu</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control"  name="description" placeholder="Talep Konusu">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="dateInput" class="form-label">Tarih</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="date" name="joining_date" required class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label">Başlangıç Zamanı</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="time" class="form-control" name="start_time">
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label">Bitiş Zamanı</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="time" class="form-control" name="end_time">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="text" class="form-label" >Birim-Kurum</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control " name="institution_name">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="text" class="form-label" >İletişim</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control" name="contact">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="status-field" class="form-label">Randevu Türü</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <select  class="form-select form-select mb-3" aria-label=".form-select-sm example" data-trigger name="appointment_type" required>
+                                        <option value="Iç Randevu">Iç Randevu</option>
+                                        <option value="Iptal Edildi">Dış Randevu</option>
                                     </select>
                                 </div>
                             </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="status-field" class="form-label" >Randevu Tipi</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <select class="form-select form-select mb-3" aria-label=".form-select-sm example" name="type">
+                                        
+                                        <option  selected="Telefon">Telefon</option>
+                                        <option value="Yüz yüze">Yüz yüze</option>
+                                    </select>
 
+                                   
+                                
+                                </div>
+                            </div>
 
                             <div class="row mb-3">
                                 <div class="col-lg-3">
-                                    <label for="nameInput" class="form-label"
-                                        style="margin-left: 10px;margin-top: 10px;">İsim Soyisim</label>
+                                    <label for="status-field" class="form-label" >Durum</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input style="margin-bottom: 10px;" type="text" class="form-control" required
-                                        name="customer_name" placeholder="Randevuyu talep eden kişi">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-lg-3">
-                                    <label for="topInput" class="form-label" style="margin-left: 10px;">Konusu</label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <input type="text" class="form-control" required name="konu"
-                                        placeholder="Talep Konusu">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-lg-3">
-                                    <label for="dateInput" class="form-label" style="margin-left: 10px;">Tarih</label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <input type="date" required name="joining_date" class="form-control">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-lg-3">
-                                    <label for="timeInput" class="form-label" style="margin-left: 10px;"> Başlangıç
-                                        Saati</label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <input type="time" class="form-control" required name="start_time">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-lg-3">
-                                    <label for="timeInput" class="form-label" style="margin-left: 10px;">Bitiş
-                                        Saati</label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <input type="time" required class="form-control" name="end_time">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-lg-3">
-                                    <label for="status-field" class="form-label"
-                                        style="margin-left: 10px;">Durum</label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <select class="form-control" data-trigger name="status" required>
+                                    <select  class="form-select form-select mb-3" aria-label=".form-select-sm example" data-trigger name="status" required>
 
-                                        <option value="Active">Aktif</option>
-                                        <option value="Block">İptal Edildi</option>
+                                        <option value="Aktif">Aktif</option>
+                                        <option value="İptal Edildi">İptal Edildi</option>
                                     </select>
                                 </div>
                             </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="text" class="form-label" >Durum Açıklaması</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control" name="status_description" >
+                                </div>
+                            </div>
+                            
+                           
 
 
 
 
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary">Kaydet</button>
+                                <button type="submit" class="btn btn-success">Ekle</button>
                             </div>
                         </form>
                     </div>

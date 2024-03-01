@@ -128,14 +128,17 @@
                 labels: monthly_labels,
                 datasets: [{
                     label: 'Aylık Randevu Sayısı',
+                    
                     data: [{% for entry in monthly_counts %}{{ entry.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
                     backgroundColor: 'rgba(192, 75, 192, 0.2)', // Bar renkleri
                     borderColor: 'rgba(192, 75, 192, 1)', // Çerçeve rengi
                     borderWidth: 1
                 }]
+                
             };
     
             // Canvas elementini seç
+            
             var monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
             
     

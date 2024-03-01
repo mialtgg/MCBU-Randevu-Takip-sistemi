@@ -38,6 +38,8 @@ class Event(models.Model):
     participations = models.TextField()
     start_date = models.DateField()
     end_date = models.DateField()
+    deleted = models.BooleanField(default=False)
+    
 
     def __str__(self):
         return f"{self.event_name} "

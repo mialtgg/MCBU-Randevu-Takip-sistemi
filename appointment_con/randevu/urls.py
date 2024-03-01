@@ -15,6 +15,8 @@ urlpatterns = [
     path('export-to-excel/', export_to_excel, name='export_to_excel'),
     path('phone_appointment/',phone_appointment_view,name='phone_appointment'),
     path('schedule_appointment/',schedule_appointment_view,name='schedule_appointments'),
+    path('edit_events/<int:event_id>/', edit_events, name='edit_events'),
+    path('delete_event/<int:event_id>/', delete_event, name='delete_event'),
     
 ]
 

@@ -51,12 +51,14 @@
 
                                                 <th class="" data-sort="customer_name">Randevuyu Oluşturan Kişi</th>
                                               
-                                                <th class="" data-sort="customer_name">Randevu Oluşturulacak Kişi</th>
+                                               
                                                 <th class="" data-sort="konu">Randevu Talep eden</th>
                                                 
                                                 <th class="" data-sort="joining_date">Tarih</th>
-                                                <th class="" data-sort="start_time">Başlangıç saati </th>
-                                                <th class="" data-sort="end_time">Bitiş saati</th>  
+                                                <th class="" data-sort="joining_date">Birim-Kurum</th>
+                                                <th class="" data-sort="joining_date">Tipi</th>
+                                                <th class="" data-sort="joining_date">Türü</th>
+                                                
                                                 <th class="" data-sort="status">Durum</th>
                                                 <th class="" data-sort="created_at">Oluşturulma Zamanı</th>
                                                 <th class="" data-sort="silinme_zamanı">Silinme zamanı</th>
@@ -73,24 +75,14 @@
                                                 <td>{{ customer.user.get_full_name }} </td>
                                                 
 
-                                                {% if customer.admin_add_name == "user1" %}
-                                                <td>Prof. Dr. Rana KİBAR -M </td>
-                                                {% elif customer.admin_add_name == "user2" %}
-                                                <td>Prof. Dr. Ahmet ÇETİN </td>
-                                                {% elif customer.admin_add_name == "user3" %}
-                                                <td>Prof. Dr. Kadir AY </td>
                                                 
-                                                {% elif customer.admin_add_name == "user5" %}
-                                                <td>Prof. Dr. Oktay ÜÇER</td>
-                                                {% else %}
-                                                <td>Prof. Dr.Rana KİBAR -A</td>
-                                                {% endif %}
                                                 <td>{{ customer.customer_name }}</td>
                                                 
                                                 
                                                 <td>{{ customer.joining_date }}</td>
-                                                <td>{{ customer.start_time }}</td>
-                                                <td>{{ customer.end_time }}</td>
+                                                <td>{{ customer.institution_name }}</td>
+                                                <td>{{ customer.type }}</td>
+                                                <td>{{ customer.appointment_type }}</td>
                                                 {% if customer.status == "Active" %}
                                                 <td>Aktif</td>
                                                 {% else %}
