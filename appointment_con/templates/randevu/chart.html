@@ -33,6 +33,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title mb-0">Yıllık Randevu Sayısı</h4>
+                                
                             </div>
                             <div class="card-body">
                                 <!-- Yıllık Müşteri Sayısı İçin Canvas -->
@@ -122,14 +123,21 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+
+            
+            
+            var month_data= {{monthly_counts_json|safe}} ;
+            var month_name = month_data.map(item => item.month);
+            var count_randevu = month_data.map(item => item.count);
+
             var monthly_labels = {{ month_names|safe }};
             // Aylık müşteri sayıları verisi
             var monthlyData = {
-                labels: monthly_labels,
+                labels: month_name,
                 datasets: [{
                     label: 'Aylık Randevu Sayısı',
                     
-                    data: [{% for entry in monthly_counts %}{{ entry.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                    data: count_randevu,
                     backgroundColor: 'rgba(192, 75, 192, 0.2)', // Bar renkleri
                     borderColor: 'rgba(192, 75, 192, 1)', // Çerçeve rengi
                     borderWidth: 1

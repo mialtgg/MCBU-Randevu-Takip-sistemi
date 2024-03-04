@@ -1,3 +1,4 @@
+import json
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from datetime import date, timezone
@@ -26,6 +27,7 @@ from django.shortcuts import render
 from openpyxl import Workbook
 from django.http import HttpResponse
 from .forms import EventForm
+from django.core.serializers.json import DjangoJSONEncoder
 
 def rapor_view(request):
     if request.user.is_authenticated:
@@ -172,7 +174,8 @@ def succes_view(request):
     return render(request, 'succes.html', context)
 
 
-
+def get_month_name(date_obj):
+    return date_obj.strftime('%B')
 
 @login_required
 def chart_view(request):
@@ -259,20 +262,29 @@ def chart_view(request):
             .order_by('year')
 
         # View'e aylık, haftalık ve yıllık müşteri sayıları verisini gönder
-        context = {
-            'monthly_counts': monthly_counts,
-            'weekly_counts': weekly_counts,
-            'yearly_counts': yearly_counts,
-            'weeks': weeks,
-            'daily_counts': daily_counts,
-            'month_names' :month_names,
-            'customers': customers,
-            
-
-        }
+        
+        for entered_data in monthly_counts:
+            entered_data['month']=get_month_name(entered_data['month'])
         print(monthly_counts)
+       
+        monthly_counts_list = list(monthly_counts)
 
-  
+        # JSON'a dönüştür
+        monthly_counts_json = json.dumps(monthly_counts_list, cls=DjangoJSONEncoder)
+
+        
+        context = {
+            'monthly_counts_json':monthly_counts_json,
+                    'monthly_counts': monthly_counts,
+                    'weekly_counts': weekly_counts,
+                    'yearly_counts': yearly_counts,
+                    'weeks': weeks,
+                    'daily_counts': daily_counts,
+                    'month_names' :month_names,
+                    'customers': customers,
+                    
+
+                }
         return render(request, 'randevu/chart.html', context)
 
     except Exception as e:
