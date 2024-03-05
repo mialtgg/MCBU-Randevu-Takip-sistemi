@@ -1,4 +1,5 @@
 import json
+import calendar
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from datetime import date, timezone
@@ -64,6 +65,7 @@ def rapor_view(request):
         'todayCount':todayCount,
         'today' :today,
     }
+    print(todayCount)
     
     
 
@@ -157,15 +159,18 @@ def succes_view(request):
 
     
 
-    customers_today = customers.filter(joining_date__gte=today,deleted=False)[:10]
+    customers_today = customers.filter(joining_date__gte=today,deleted=False)
     events_today = Event.objects.filter(start_date =today).order_by('start_date')[:10] 
     phone_appointment = Event.objects.all()
     face_to_face_appointment = Event.objects.all()
+    todayCount = customers.filter(joining_date=date.today()).count()
+    face_to_face_count = customers.filter(joining_date=date.today()).count()
 
     
   
 
     context = {'customers_today':customers_today,
+               'todayCount':todayCount,
                'events_today':events_today,
               'phone_appointment': phone_appointment,
               'face_to_face_appointment' :face_to_face_appointment}
@@ -234,15 +239,25 @@ def chart_view(request):
         month_names = [
     'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
     'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım'
+    
 ]
-        weeks = [f'Hafta {i}' for i in range(1, 53)]
+        def get_turkish_week_name(week_number):
+    # Türkçe hafta isimleri için kendi tanımlamalarınızı yapın
+            turkish_week_names = {
+        1: '1. Hafta',
+        2: '2. Hafta',
+        3: '3. Hafta',
+        4: '4. Hafta',
 
-        # Haftalık müşteri sayısını getir
+    }
+
+            return turkish_week_names.get(week_number, f'{week_number}. Hafta')
+        
         weekly_counts = Customer.objects.filter(
-            user_id=user_id,
-            admin_add_name=admin_add_name,
-            joining_date__month=date.today().month,
-            deleted=False
+        user_id=user_id,
+        admin_add_name=admin_add_name,
+        joining_date__month=date.today().month,
+        deleted=False
         ).annotate(
             week=ExtractWeek('joining_date')
         ).values(
@@ -250,6 +265,23 @@ def chart_view(request):
         ).annotate(
             count=Count('*')
         ).order_by('week')
+        
+        print(weekly_counts)
+        week_numbers = [week['week'] for week in weekly_counts]
+        all_weeks = list(range(min(week_numbers), max(week_numbers) + 1))
+        formatted_weekly_counts = [{'week': week, 'count': 0} for week in all_weeks]
+        for data in weekly_counts:
+            week_index = all_weeks.index(data['week'])
+            formatted_weekly_counts[week_index]['count'] = data['count']
+
+
+      
+        for entered_data in weekly_counts:
+            entered_data['week'] = get_turkish_week_name(entered_data['week'])
+        weekly_counts_list = list(formatted_weekly_counts)
+        
+        weekly_counts_json = json.dumps(weekly_counts_list, cls=DjangoJSONEncoder)
+        print(weekly_counts_json)
 
         # Yıllık müşteri sayısını getir
         yearly_counts = Customer.objects.filter(
@@ -260,8 +292,34 @@ def chart_view(request):
             .values('year') \
             .annotate(count=Count('*')) \
             .order_by('year')
+     
 
-        # View'e aylık, haftalık ve yıllık müşteri sayıları verisini gönder
+        # JSON'a dönüştür
+
+
+
+        def get_month_name(date_obj):
+            month_number = date_obj.month
+            # İlk olarak İngilizce ismi al
+            english_month_name = calendar.month_name[month_number]
+            
+            # İngilizce ismi Türkçe isme çevir
+            turkish_month_names = {
+                'January': 'Ocak',
+                'February': 'Şubat',
+                'March': 'Mart',
+                'April': 'Nisan',
+                'May': 'Mayıs',
+                'June': 'Haziran',
+                'July': 'Temmuz',
+                'August': 'Ağustos',
+                'September': 'Eylül',
+                'October': 'Ekim',
+                'November': 'Kasım',
+                'December': 'Aralık'
+            }
+
+            return turkish_month_names.get(english_month_name, english_month_name)
         
         for entered_data in monthly_counts:
             entered_data['month']=get_month_name(entered_data['month'])
@@ -271,14 +329,16 @@ def chart_view(request):
 
         # JSON'a dönüştür
         monthly_counts_json = json.dumps(monthly_counts_list, cls=DjangoJSONEncoder)
+        print(monthly_counts_json)
 
         
         context = {
             'monthly_counts_json':monthly_counts_json,
+            'weekly_counts_json':weekly_counts_json,
                     'monthly_counts': monthly_counts,
                     'weekly_counts': weekly_counts,
                     'yearly_counts': yearly_counts,
-                    'weeks': weeks,
+                    'weeks': [f'Hafta {i}' for i in range(1, 53)],
                     'daily_counts': daily_counts,
                     'month_names' :month_names,
                     'customers': customers,

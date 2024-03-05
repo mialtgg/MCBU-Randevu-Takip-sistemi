@@ -196,14 +196,17 @@
     </script>
 <script>
     // Haftalık Müşteri Sayıları için Veriler
+    var week_data= {{weekly_counts_json|safe}} ;
+    var week_name = week_data.map(item => item.week);
+    var count_randevu = week_data.map(item => item.count);
     var weeklyData = {
-        labels: ['1. Hafta', '2. Hafta', '3. Hafta', '4. Hafta'],
+        labels: week_name,
         datasets: [{
             label: 'Haftalık Randevu Sayısı',
             backgroundColor: 'rgba(0, 123, 255, 0.2)',  // Mavi tonu
             borderColor: 'rgba(0, 123, 255, 1)',  // Mavi tonu
             borderWidth: 1,
-            data: [{% for entry in weekly_counts %}{{ entry.count }},{% endfor %}]
+            data: count_randevu,
         }]
     };
 
