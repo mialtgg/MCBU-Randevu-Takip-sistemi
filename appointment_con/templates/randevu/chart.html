@@ -227,17 +227,20 @@
     });
 </script>
 <script>
-    // Günlük Müşteri Sayıları için Veriler
-    var dailyData = {
-        labels: [{% for entry in daily_counts %}"{{ entry.day }}",{% endfor %}],
-        datasets: [{
-            label: 'Günük Randevu Sayısı',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',  // Kırmızı tonu
-            borderColor: 'rgba(255, 99, 132, 1)',  // Kırmızı tonu
-            borderWidth: 1,
-            data: [{% for entry in daily_counts %}{{ entry.count }},{% endfor %}]
-        }]
-    };
+  // Günlük Müşteri Sayıları için Veriler
+var daily_data = {{daily_counts_json|safe}};
+var day_name = daily_data.map(item => item.day);
+var count_randevu = daily_data.map(item => item.count);
+var dailyData = {
+    labels: day_name,
+    datasets: [{
+        label: 'Günlük Randevu Sayısı',
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',  // Kırmızı tonu
+        borderColor: 'rgba(255, 99, 132, 1)',  // Kırmızı tonu
+        borderWidth: 1,
+        data: count_randevu
+    }]
+};
 
     // Günlük Grafiği için Seçenekler
     var dailyOptions = {

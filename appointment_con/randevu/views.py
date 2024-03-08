@@ -151,20 +151,38 @@ def succes_view(request):
      user_id = request.user.id
      username= request.user.username
     today = date.today() 
+    now = timezone.now() 
 
  
     customers=Customer.objects.filter(deleted=False)
     events = Event.objects.all()
+    print("heloooo")
+    print(customers)
+
+
+    print('bu 12333')
+    face_to_face_customers = Customer.objects.filter(type='Face_to_face')
+
+    for customer in face_to_face_customers:
+        print(customer.customer_name)
   
 
     
 
-    customers_today = customers.filter(joining_date__gte=today,deleted=False)
-    events_today = Event.objects.filter(start_date =today).order_by('start_date')[:10] 
+    customers_today = customers.filter(joining_date__gte=today,deleted=False).order_by('joining_date')[:10] 
+    events_today = Event.objects.filter(start_date__gte =today).order_by('start_date')[:4] 
     phone_appointment = Event.objects.all()
-    face_to_face_appointment = Event.objects.all()
     todayCount = customers.filter(joining_date=date.today()).count()
-    face_to_face_count = customers.filter(joining_date=date.today()).count()
+    allCount = customers.all().count()
+    current_hour = now.hour
+    current_minute = now.minute
+    current_second = now.second
+
+    saat = f"{current_hour:02d}:{current_minute:02d}:{current_second:02d}"
+
+
+
+    
 
     
   
@@ -173,10 +191,16 @@ def succes_view(request):
                'todayCount':todayCount,
                'events_today':events_today,
               'phone_appointment': phone_appointment,
-              'face_to_face_appointment' :face_to_face_appointment}
+              'allCount':allCount,
+              'today':today,
+              'saat':saat,
+              
+              }
     
 
     return render(request, 'succes.html', context)
+
+
 
 
 def get_month_name(date_obj):
@@ -206,6 +230,18 @@ def chart_view(request):
 
     current_month = today.month
     current_year = today.year
+    def get_turkish_day_name(day_number):
+    # Türkçe gün isimleri için kendi tanımlamalarınızı yapın
+        turkish_day_names = {
+            0: 'Pazartesi',
+            1: 'Salı',
+            2: 'Çarşamba',
+            3: 'Perşembe',
+            4: 'Cuma',
+            5: 'Cumartesi',
+            6: 'Pazar',
+        }
+        return turkish_day_names.get(day_number, f'{day_number}. Gün')
 
     daily_counts = Customer.objects.filter(
         user_id=user_id,
@@ -218,8 +254,20 @@ def chart_view(request):
         .values('day') \
         .annotate(count=Count('*')) \
         .order_by('day')
-    
+    day_numbers = [day['day'] for day in daily_counts]
+        
+    formatted_daily_counts = []
+    for day_data in daily_counts:
+        formatted_daily_counts.append({
+            'day': get_turkish_day_name(day_data['day']),
+            'count': day_data['count']
+        })
 
+    # JSON formatına dönüştürme
+    daily_counts_json = json.dumps(formatted_daily_counts, cls=DjangoJSONEncoder)
+    print("mine")
+    print(daily_counts_json)
+    print("mine")
 
     
 
