@@ -263,6 +263,27 @@
                         <div class="alert alert-warning border-0 rounded-top rounded-0 m-0 d-flex align-items-center"
                             role="alert">
                             <div class="flex-grow-1 text-truncate">
+                                <b> {{ current_datetime }}</b> 
+                            </div>
+                            
+                        </div>
+                        <div class="d-flex p-3">
+                  
+                            <div>
+                                <p class="fs-16 lh-base"><i class="bx bx-calendar"></i>  Toplam görüşme  Sayınız : <span class="fw-semibold">{{toplam_sayı}}</span> 
+                                 </i></p>
+                                
+                            </div>
+                        </div>
+                    </div> <!-- end card-body-->
+                </div>
+            </div> <!-- end col-->
+            <div class="col-xl-4">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="alert alert-warning border-0 rounded-top rounded-0 m-0 d-flex align-items-center"
+                            role="alert">
+                            <div class="flex-grow-1 text-truncate">
                                 Bügünkü Toplantı Sayınız : <b></b> 
                             </div>
                             
@@ -276,7 +297,7 @@
                                 </div>
                             </div>
                             <div>
-                                <p class="fs-16 lh-base">Bügün <span class="fw-semibold">{{todayCount}}</span>  toplantınız var
+                                <p class="fs-16 lh-base">Bugün <span class="fw-semibold">{{todayCount}}</span>  toplantınız var
                                  </i></p>
                                 <div class="mt-3">
                                     <a href="{% url 'schedule_appointments' %}" class="btn btn-secondary">Tüm Toplantılara Git</a>
@@ -310,34 +331,14 @@
                                 <p class="fs-16 lh-base">Bugün  <span class="fw-semibold">{{todayCount}}</span>   Randevunuz var
                                  </i></p>
                                 <div class="mt-3">
-                                    <a href="{% url 'rapor' %}" class="btn btn-secondary"> Bugünkü Yüz Yüze Randevularınız</a>
+                                    <a href="{% url 'rapor' %}" class="btn btn-secondary">Tüm Randevulara Git</a>
                                 </div>
                             </div>
                         </div>
                     </div> <!-- end card-body-->
                 </div>
             </div> <!-- end col-->
-            <div class="col-xl-4">
-                <div class="card">
-                    <div class="card-body p-0">
-                        <div class="alert alert border-0 rounded-top rounded-0 m-0 d-flex align-items-center"
-                            role="alert">
-                            <div class="flex-grow-1 text-truncate">
-                                Tarih :
-                            </div>
-                            
-                        </div>
-                        <div class="d-flex p-3">
-                         
-                            <div>
-                                <p class="fs-16 lh-base"> <span class="fw-semibold">{{today}}<br/>{{saat}} </span>   
-                                 </i></p>
-                                
-                            </div>
-                        </div>
-                    </div> <!-- end card-body-->
-                </div>
-            </div> <!-- end col-->
+
         </div>
 
 

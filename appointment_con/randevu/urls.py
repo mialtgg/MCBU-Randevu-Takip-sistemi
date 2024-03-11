@@ -13,6 +13,7 @@ urlpatterns = [
     path('delated_page/',delated_page_view,name='delated_page'),
     path('edited_page/',edited_page_view,name='edited_page'),
     path('export-to-excel/', export_to_excel, name='export_to_excel'),
+    path('export-to-excel-randevu/', export_to_excel_randevu, name='export_to_excel_randevu'),
     path('phone_appointment/',phone_appointment_view,name='phone_appointment'),
     path('schedule_appointment/',schedule_appointment_view,name='schedule_appointments'),
     path('edit_events/<int:event_id>/', edit_events, name='edit_events'),

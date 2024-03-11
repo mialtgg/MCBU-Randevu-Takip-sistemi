@@ -42,16 +42,7 @@
                         </div><!-- end card header -->
 
                         <div class="card-body">
-                            {% if messages %}
-                                                     <div id="errorAlert" class="alert alert-primary"col-lg-9 role="alert">
-                                <ul class="list-unstyled mb-0">
-                                    {% for message in messages %}
-                                        <li>{{ message }}</li>
-                                    {% endfor %}
-                                </ul>
-                               
-                            </div>
-                            {% endif %}
+                          
                             <div id="customerList">
                                 <div class="row g-4 mb-3">
                                     <div class="col-sm-auto">
@@ -125,11 +116,9 @@
                              
                                     <div class="col-sm-auto">
                                         <div>
-                                            <a href="{% url 'edited_page' %}"  style="margin-left: 15px;" class="btn btn-primary add-btn">
-                                                <i class="bx bx-edit-alt"></i> Düzenlenenler
-                                            </a>
+                                          
                                          
-                                            <a href="{% url 'delated_page' %}"  style="margin-left: 5px;" class="btn btn-danger add-btn">
+                                            <a href="{% url 'delated_page' %}"  style="margin-left: 15px; margin-bottom: 15px;" class="btn btn-danger add-btn">
                                                 <i class="bx bx-no-entry"></i> Son Silinenler
                                             </a>
                                         </div>

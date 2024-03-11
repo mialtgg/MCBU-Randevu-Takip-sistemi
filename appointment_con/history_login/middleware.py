@@ -26,7 +26,7 @@ class LoginHistoryMiddleware:
                 print("123123")
             # Kullanıcı çıkış yapmışsa
                 
-                if request.path == 'logout/':
+                if request.path == '/logout':
                     login_history = LoginHistory.objects.filter(user=request.user, logout_time__isnull=True).order_by('-login_time').first()
                     print("456")
                     if login_history:

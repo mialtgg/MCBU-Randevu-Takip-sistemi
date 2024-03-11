@@ -16,6 +16,7 @@ from django.db.models.functions import ExtractMonth, ExtractWeek, ExtractYear,Ex
 from django.shortcuts import render
 from django.shortcuts import render
 from .models import Customer
+from openpyxl.styles import NamedStyle
 from datetime import datetime
 from django.views.generic import ListView
 from django.shortcuts import render, redirect, get_object_or_404
@@ -177,8 +178,11 @@ def succes_view(request):
     current_hour = now.hour
     current_minute = now.minute
     current_second = now.second
+    today_event_count = events_today.count()
 
     saat = f"{current_hour:02d}:{current_minute:02d}:{current_second:02d}"
+    current_datetime = datetime.now()
+    toplam_sayı = todayCount + today_event_count
 
 
 
@@ -194,6 +198,9 @@ def succes_view(request):
               'allCount':allCount,
               'today':today,
               'saat':saat,
+              'current_datetime':current_datetime,
+              'toplam_sayı':toplam_sayı,
+              'today_event_count' :today_event_count
               
               }
     
@@ -568,6 +575,40 @@ def edited_page_view(request):
     
 
     return render(request, 'edited_page.html', context)
+from openpyxl import Workbook
+from django.http import HttpResponse
+from .models import Event  # Event modelinizi içe aktarın
+
+def export_to_excel_randevu(request):
+    # Sadece silinmemiş randevuları al
+    queryset = Event.objects.filter(deleted=False)
+
+    selected_fields = ['event_name', 'participations', 'start_date', 'end_date']
+    filtered_queryset = queryset.values(*selected_fields)
+    print(selected_fields)
+
+    # Bir Excel çalışma kitabı ve sayfası oluşturun
+    workbook = Workbook()
+    worksheet = workbook.active
+
+    # Excel dosyasının başına başlık satırını ekleyin
+    title_row = ['Randevu İsmi', 'Katılımcılar', 'Başlangıç Zamanı', 'Bitiş Zamanı']
+    worksheet.append(title_row)
+
+    # Verileri ekleyin
+    for item in filtered_queryset:
+            # Tarih formatını belirtin (örneğin: '2024-03-11 12:30:00')
+            date_format = NamedStyle(name='date_format', number_format='yyyy-mm-dd hh:mm:ss')
+            worksheet.append([item['event_name'], item['participations'], item['start_date'].strftime('%d-%m-%Y'), item['end_date'].strftime('%d-%m-%Y')])
+
+    # Oluşturulan Excel dosyasını HttpResponse kullanarak kullanıcıya geri gönderin
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="randevular.xlsx"'
+    
+    # Excel dosyasını HttpResponse'a kaydedin
+    workbook.save(response)
+
+    return response
 
 def export_to_excel(request):
      # Sadece silinmemiş randevuları al
@@ -619,7 +660,6 @@ def export_to_excel(request):
     workbook.save(response)
 
     return response
-
 def phone_appointment_view(request):
    
 
