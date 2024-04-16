@@ -229,6 +229,7 @@
 <script>
   // Günlük Müşteri Sayıları için Veriler
 var daily_data = {{daily_counts_json|safe}};
+console.log(dailyData);
 var day_name = daily_data.map(item => item.day);
 var count_randevu = daily_data.map(item => item.count);
 var dailyData = {
@@ -256,7 +257,10 @@ var dailyData = {
         type: 'bar',
         data: dailyData,
         options: dailyOptions
+        
     });
+
+    console.log(dailyData)
 </script>
     
 {% endblock extra_js %}

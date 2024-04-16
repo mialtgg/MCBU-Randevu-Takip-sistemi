@@ -38,13 +38,16 @@ from .models import Customer
 from .forms import CustomerForm
 
 def rapor_view(request):
-    customers = Customer.objects.filter(deleted=False).order_by("joining_date")
+    customers = Customer.objects.filter(deleted=False)
+    print("1")
     if request.method == 'POST':
+        print("2")
         form = CustomerForm(request.POST)
+        print("Data ")
         if form.is_valid():
-            
+            print("3")
             cleaned_data = form.cleaned_data
-            
+            # Tüm alanlar ve değerlerini döngüyle yazdırın
             for field, value in cleaned_data.items():
                 print(f"{field}: {value}")
             cleaned_data = form.cleaned_data
@@ -55,13 +58,14 @@ def rapor_view(request):
             end_time = cleaned_data['end_time']
             joining_date = cleaned_data['joining_date']
             status = cleaned_data['status']
+            admin_add_name = cleaned_data['admin_add_name']
             appointment_type = request.POST.get('appointment_type')
             type = request.POST.get('type')
             status_description = request.POST.get('status_description')
             contact = request.POST.get('contact')
             institution_name = request.POST.get('institution_name')
 
-            customer = Customer.objects.create(
+            customers = Customer.objects.create(
                 user_id=user_id,
                 customer_name=customer_name,
                 description=description,
@@ -69,19 +73,22 @@ def rapor_view(request):
                 end_time=end_time,
                 joining_date=joining_date,
                 status=status,
-                admin_add_name="MCBU",
+                admin_add_name=admin_add_name,
                 appointment_type=appointment_type,
                 type=type,
                 status_description=status_description,
                 contact=contact,
                 institution_name=institution_name
             )
-            
+
+            customers = Customer.objects.filter(deleted=False)
             return render(request, 'randevu/rapor.html', {'customers': customers, 'form': form})
         else:
             print(form.errors)
     else:
         form = CustomerForm()
+        print("3")
+
     return render(request, 'randevu/rapor.html', {'customers': customers, 'form': form})
 
 def is_admin(user):
@@ -264,9 +271,11 @@ def chart_view(request):
 
     daily_counts = Customer.objects.filter(
         user_id=user_id,
+        admin_add_name=admin_add_name,
         joining_date__month=current_month,
         joining_date__year=current_year,
         deleted=False,
+        joining_date__day=1  # Ayın ilk gününe göre filtrele
     ).annotate(day=ExtractDay('joining_date')) \
         .values('day') \
         .annotate(count=Count('*')) \
@@ -276,10 +285,9 @@ def chart_view(request):
     formatted_daily_counts = []
     for day_data in daily_counts:
         formatted_daily_counts.append({
-            'day': day_data['day'],
+            'day': get_turkish_day_name(day_data['day']),
             'count': day_data['count']
         })
-     
 
     # JSON formatına dönüştürme
     daily_counts_json = json.dumps(formatted_daily_counts, cls=DjangoJSONEncoder)
@@ -294,6 +302,7 @@ def chart_view(request):
         # Aylık müşteri sayısını getir
         monthly_counts = Customer.objects.filter(
             user_id=user_id,
+            admin_add_name=admin_add_name,
             deleted=False
             
         ).annotate(month=TruncMonth('joining_date')) \
@@ -320,6 +329,7 @@ def chart_view(request):
         
         weekly_counts = Customer.objects.filter(
         user_id=user_id,
+        admin_add_name=admin_add_name,
         joining_date__month=date.today().month,
         deleted=False
         ).annotate(
@@ -329,14 +339,28 @@ def chart_view(request):
         ).annotate(
             count=Count('*')
         ).order_by('week')
+        
+        print(weekly_counts)
+        week_numbers = [week['week'] for week in weekly_counts]
+        all_weeks = list(range(min(week_numbers), max(week_numbers) + 1))
+        formatted_weekly_counts = [{'week': week, 'count': 0} for week in all_weeks]
+        for data in weekly_counts:
+            week_index = all_weeks.index(data['week'])
+            formatted_weekly_counts[week_index]['count'] = data['count']
+
+
+      
         for entered_data in weekly_counts:
             entered_data['week'] = get_turkish_week_name(entered_data['week'])
-        weekly_counts_list = list(weekly_counts)
+        weekly_counts_list = list(formatted_weekly_counts)
+        
         weekly_counts_json = json.dumps(weekly_counts_list, cls=DjangoJSONEncoder)
+        print(weekly_counts_json)
 
         # Yıllık müşteri sayısını getir
         yearly_counts = Customer.objects.filter(
             user_id=user_id,
+            admin_add_name=admin_add_name,
             deleted=False
         ).annotate(year=ExtractYear('joining_date')) \
             .values('year') \
@@ -385,7 +409,6 @@ def chart_view(request):
         context = {
             'monthly_counts_json':monthly_counts_json,
             'weekly_counts_json':weekly_counts_json,
-            'daily_counts_json':daily_counts_json,
                     'monthly_counts': monthly_counts,
                     'weekly_counts': weekly_counts,
                     'yearly_counts': yearly_counts,

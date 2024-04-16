@@ -122,15 +122,14 @@
 
                                                 <th class="" data-sort="customer_name">Randevu Talep Eden Kişi</th>
                                                 <th class="" data-sort="konu">Konu</th>
-                                                <th class="" data-sort="joining_date">Tarihi</th>
+                                                <th class="">Tarihi</th>
                                                 <th class="" data-sort="start_time">Birimi-Kurumu </th>
                                                 <th class="" data-sort="end_time">İletişim Bilgileri</th>
                                                 <th class="" data-sort="status">Randevu Tipi</th>
                                                 <th class="" data-sort="status">Randevu Türü</th>
-                                                <th class="" data-sort="status">Durum</th>
                                                 <th class="" data-sort="status">Durum  Açıklaması</th>
+                                                <th class="" data-sort="status">Durum</th>
                                                 
-
                                                 <th class="" data-sort="action">Düzenle</th>
 
                                             </tr>
@@ -145,8 +144,22 @@
                                                 <td name="joining_date">{{ customer.joining_date }}</td>
                                                 <td name="institution_name">{{ customer.institution_name }}</td>
                                                 <td name="contact">{{ customer.contact }}</td>
-                                                <td name="type">{{ customer.type }}</td>
-                                                <td name="type">{{ customer.appointment_type }}</td>
+                                          
+
+                                                <td name="appointment_type">{{ customer.appointment_type }}</td>
+                                                
+                                                {% if customer.type == "Phone" %}
+                                                <td>Telefon</td>
+                                            {% else %}
+                                                <td>Yüzyüze</td>
+                                            {% endif %}
+                                                
+                                                {% if customer.appointment_type == "İnside" %}
+                                                <td>İç Randevu</td>
+                                            {% else %}
+                                                <td>Dış Randevu</td>
+                                            {% endif %}
+                                                
                                                 
                                                
                                                 
@@ -208,7 +221,7 @@
                                 id="close-modal"></button>
                         </div>
 
-                        <form method="post"   action="{% url 'rapor'%}" >
+                        <form method="post"  >
                             {% csrf_token %}
 
                             <div class="row mb-3">
@@ -275,8 +288,8 @@
                                 </div>
                                 <div class="col-lg-8">
                                     <select  class="form-select form-select mb-3" aria-label=".form-select-sm example" data-trigger name="appointment_type" required>
-                                        <option value="Iç Randevu">Iç Randevu</option>
-                                        <option value="Iptal Edildi">Dış Randevu</option>
+                                        <option value="İnside">Iç Randevu</option>
+                                        <option value="Outside">Dış Randevu</option>
                                     </select>
                                 </div>
                             </div>
@@ -287,8 +300,8 @@
                                 <div class="col-lg-8">
                                     <select class="form-select form-select mb-3" aria-label=".form-select-sm example" name="type">
                                         
-                                        <option  selected="Telefon">Telefon</option>
-                                        <option value="Yüz yüze">Yüz yüze</option>
+                                        <option value="Phone">Telefon</option>
+                                        <option value="Face_to_face">Yüz yüze</option>
                                     </select>
 
                                    
@@ -303,8 +316,8 @@
                                 <div class="col-lg-8">
                                     <select  class="form-select form-select mb-3" aria-label=".form-select-sm example" data-trigger name="status" required>
 
-                                        <option value="Aktif">Aktif</option>
-                                        <option value="İptal Edildi">İptal Edildi</option>
+                                        <option value="Active">Aktif</option>
+                                        <option value="Block">İptal Edildi</option>
                                     </select>
                                 </div>
                             </div>
@@ -598,6 +611,8 @@
         language: {
             url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/tr.json',
         },
+        columnDefs : [{"targets":3, "type":"date"}],
+        "ordering" : true,
 
 
     });
