@@ -119,7 +119,7 @@
                                     <table class="table align-middle table-nowrap" id="customerTable">
                                         <thead class="table-light">
                                             <tr>
-
+                                            
                                                 <th class="" data-sort="customer_name">Randevu Talep Eden Kişi</th>
                                                 <th class="" data-sort="konu">Konu</th>
                                                 <th class="">Tarihi</th>
@@ -146,7 +146,6 @@
                                                 <td name="contact">{{ customer.contact }}</td>
                                           
 
-                                                <td name="appointment_type">{{ customer.appointment_type }}</td>
                                                 
                                                 {% if customer.type == "Phone" %}
                                                 <td>Telefon</td>
@@ -154,6 +153,7 @@
                                                 <td>Yüzyüze</td>
                                             {% endif %}
                                                 
+                             
                                                 {% if customer.appointment_type == "İnside" %}
                                                 <td>İç Randevu</td>
                                             {% else %}
@@ -161,15 +161,15 @@
                                             {% endif %}
                                                 
                                                 
-                                               
+                                     
                                                 
-
+                                            <td name="status_description">{{ customer.status_description}}</td>
                                                 {% if customer.status == "Active" %}
                                                 <td>Aktif</td>
                                             {% else %}
                                                 <td>İptal</td>
                                             {% endif %}
-                                            <td name="status_description">{{ customer.status_description }}</td>
+                                           
                                                 <td>
                                                     
                                                     <div class="d-flex gap-2">
