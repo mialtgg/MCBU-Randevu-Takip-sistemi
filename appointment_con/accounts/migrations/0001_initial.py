@@ -15,14 +15,11 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='LoginHistory',
+            name='UserActivity',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('login_time', models.DateTimeField(auto_now_add=True)),
-                ('logout_time', models.DateTimeField(blank=True, null=True)),
-                ('ip_address', models.GenericIPAddressField(blank=True, null=True)),
-                ('browser_type', models.CharField(blank=True, max_length=255, null=True)),
-                ('device_type', models.CharField(blank=True, max_length=50, null=True)),
+                ('timestamp', models.DateTimeField(auto_now_add=True)),
+                ('activity_type', models.CharField(max_length=255)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

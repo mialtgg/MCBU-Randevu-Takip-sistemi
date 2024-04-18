@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-i*0_nlktlk&v*ec=gj0$=eyhlk7v$k0o@^**t7&l61#-c@qc)9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,15 +41,14 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "randevu",
     'rest_framework',
-    'login_history',
-    'history_login'
-   
-    
-    
+
+    'history_login',
+
+
+
 ]
 
 MIDDLEWARE = [
-    
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -57,8 +56,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'history_login.middleware.LoginHistoryMiddleware',
-    ]
+]
 
 ROOT_URLCONF = "appointment.urls"
 
@@ -103,10 +101,6 @@ DATABASES = {
         },
     }
 }
-
-
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -162,4 +156,4 @@ USE_L10N = True
 
 USE_TZ = True
 
-DATE_FORMAT = 'd/m/Y'  # Türkçe tarih formatı
+DATE_FORMAT = 'd/m/Y'  # TÃ¼rkÃ§e tarih formatÄ±
