@@ -156,4 +156,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+<<<<<<< HEAD
 DATE_FORMAT = 'd/m/Y'  # TÃ¼rkÃ§e tarih formatÄ±
+=======
+DATE_FORMAT = 'd/m/Y'  # TÃ¼rkÃ§e tarih formatÄ±
+>>>>>>> c809510ce9e6dbfa7597c8e757652e3e2b4e483c
