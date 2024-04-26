@@ -20,7 +20,7 @@
             <div class="col-xxl-5">
                 <div class="card card-height-100">
                     <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1"><i class="bx bx-calendar"></i>   Yaklaşan Toplantılar</h4>
+                        <h4 class="card-title mb-0 flex-grow-1"><i class="bx bx-calendar"></i> Yaklaşan Toplantılar</h4>
                   
                     </div><!-- end card header -->
                     
@@ -29,6 +29,41 @@
               
                     <div class="card-body pt-0">
                         <ul class="list-group list-group-flush border-dashed">
+                            <li class="list-group-item ps-0">
+                                <div class="row align-items-center g-3">
+                                    <div class="col-auto">
+                                        <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
+                                            <div class="text-center">
+                                                <h5 class="mb-0">
+                                                    
+                                                </h5>
+                                                <div class="text-muted"><div class="text">
+                                                    {{ events_today.0.start_date }} </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="text-muted mt-0 mb-1 fs-13">{{ event_today.0.event_name }}</h5>
+                                        <a href="#" class="text-reset fs-14 mb-0"></a>
+                                    </div>
+                                    <div class="col-sm-auto">
+                                        <div class="avatar-group">
+                                  
+                                            <div class="avatar-group-item">
+                                                <a href="javascript: void(0);">
+                                                    
+                                                       
+                                                            <i class=" bx bx-alarm"></i>
+                                               
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- end row -->
+                            </li><!-- end -->
                             <li class="list-group-item ps-0">
                                 <div class="row align-items-center g-3">
                                     <div class="col-auto">
@@ -52,11 +87,7 @@
                                   
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);">
-                                                    <div class="avatar-xxs">
-                                                        <span class="avatar-title rounded-circle bg-primary text-white">
-                                                            <i class=" bx bx-alarm"></i>
-                                                        </span>
-                                                    </div>
+                                                    <i class=" bx bx-alarm"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -88,47 +119,7 @@
                                   
                                             <div class="avatar-group-item">
                                                 <a href="javascript: void(0);">
-                                                    <div class="avatar-xxs">
-                                                        <span class="avatar-title rounded-circle bg-primary text-white">
-                                                            <i class=" bx bx-alarm"></i>
-                                                        </span>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- end row -->
-                            </li><!-- end -->
-                            <li class="list-group-item ps-0">
-                                <div class="row align-items-center g-3">
-                                    <div class="col-auto">
-                                        <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
-                                            <div class="text-center">
-                                                <h5 class="mb-0">
-                                                    
-                                                </h5>
-                                                <div class="text-muted"><div class="text">
-                                                    {{ events_today.3.start_date }} </div>
-                                            </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="text-muted mt-0 mb-1 fs-13">{{ events_today.3.event_name }}</h5>
-                                        <a href="#" class="text-reset fs-14 mb-0"></a>
-                                    </div>
-                                    <div class="col-sm-auto">
-                                        <div class="avatar-group">
-                                  
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);">
-                                                    <div class="avatar-xxs">
-                                                        <span class="avatar-title rounded-circle bg-primary text-white">
-                                                            <i class=" bx bx-alarm"></i>
-                                                        </span>
-                                                    </div>
+                                                    <i class=" bx bx-alarm"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -168,11 +159,20 @@
                                     <ul class="list-group list-group-flush border-dashed px-3">
                                         <li class="list-group-item ps-0">
                                             <div class="d-flex align-items-start">
-                                                <div class="form-check ps-0 flex-sharink-0">
-                                                    <i class=" bx bx-male-female"></i>
-                                                </div>
+                                               
                                                 <div class="flex-grow-1">
-                                                    <label class="form-check-label mb-0 ps-2" for="task_one">{{ customers_today.1.customer_name }} - {{ customers_today.1.institution_name }}</label>
+                                                    <label class="form-check-label mb-0 ps-2" for="task_one">{{ customers_today.0.customer_name }} - {{ customers_today.0.institution_name }}</label>
+                                                </div>
+                                                <div class="flex-shrink-0 ms-2">
+                                                    <p class="text-muted fs-12 mb-0">{{ customers_today.0.joining_date }}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item ps-0">
+                                            <div class="d-flex align-items-start">
+                                    
+                                                <div class="flex-grow-1">
+                                                    <label class="form-check-label mb-0 ps-2" for="task_two">{{ customers_today.1.customer_name }} - {{ customers_today.1.institution_name }}</label>
                                                 </div>
                                                 <div class="flex-shrink-0 ms-2">
                                                     <p class="text-muted fs-12 mb-0">{{ customers_today.1.joining_date }}</p>
@@ -181,11 +181,9 @@
                                         </li>
                                         <li class="list-group-item ps-0">
                                             <div class="d-flex align-items-start">
-                                                <div class="form-check ps-0 flex-sharink-0">
-                                                    <i class=" bx bx-male-female"></i>
-                                                </div>
+                                                
                                                 <div class="flex-grow-1">
-                                                    <label class="form-check-label mb-0 ps-2" for="task_two">{{ customers_today.2.customer_name }} - {{ customers_today.2.institution_name }}</label>
+                                                    <label class="form-check-label mb-0 ps-2" for="task_three">{{ customers_today.2.customer_name }} - {{ customers_today.2.institution_name }}</label>
                                                 </div>
                                                 <div class="flex-shrink-0 ms-2">
                                                     <p class="text-muted fs-12 mb-0">{{ customers_today.2.joining_date }}</p>
@@ -194,11 +192,9 @@
                                         </li>
                                         <li class="list-group-item ps-0">
                                             <div class="d-flex align-items-start">
-                                                <div class="form-check flex-sharink-0 ps-0">
-                                                    <i class=" bx bx-male-female"></i>
-                                                </div>
+                                               
                                                 <div class="flex-grow-1">
-                                                    <label class="form-check-label mb-0 ps-2" for="task_three">{{ customers_today.3.customer_name }} - {{ customers_today.3.institution_name }}</label>
+                                                    <label class="form-check-label mb-0 ps-2" for="task_four">{{ customers_today.3.customer_name }} - {{ customers_today.3.institution_name }}</label>
                                                 </div>
                                                 <div class="flex-shrink-0 ms-2">
                                                     <p class="text-muted fs-12 mb-0">{{ customers_today.3.joining_date }}</p>
@@ -207,11 +203,9 @@
                                         </li>
                                         <li class="list-group-item ps-0">
                                             <div class="d-flex align-items-start">
-                                                <div class="form-check ps-0 flex-sharink-0">
-                                                    <i class=" bx bx-male-female"></i>
-                                                </div>
+                                                
                                                 <div class="flex-grow-1">
-                                                    <label class="form-check-label mb-0 ps-2" for="task_four">{{ customers_today.4.customer_name }} - {{ customers_today.4.institution_name }}</label>
+                                                    <label class="form-check-label mb-0 ps-2" for="task_five">{{ customers_today.4.customer_name }} - {{ customers_today.4.institution_name }}</label>
                                                 </div>
                                                 <div class="flex-shrink-0 ms-2">
                                                     <p class="text-muted fs-12 mb-0">{{ customers_today.4.joining_date }}</p>
@@ -220,27 +214,12 @@
                                         </li>
                                         <li class="list-group-item ps-0">
                                             <div class="d-flex align-items-start">
-                                                <div class="form-check ps-0 flex-sharink-0">
-                                                    <i class=" bx bx-male-female"></i>
-                                                </div>
+                                              
                                                 <div class="flex-grow-1">
-                                                    <label class="form-check-label mb-0 ps-2" for="task_five">{{ customers_today.5.customer_name }} - {{ customers_today.5.institution_name }}</label>
+                                                    <label class="form-check-label mb-0 ps-2" for="task_six">{{ customers_today.5.customer_name }} - {{ customers_today.5.institution_name }}</label>
                                                 </div>
                                                 <div class="flex-shrink-0 ms-2">
                                                     <p class="text-muted fs-12 mb-0">{{ customers_today.5.joining_date }}</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item ps-0">
-                                            <div class="d-flex align-items-start">
-                                                <div class="form-check ps-0 flex-sharink-0">
-                                                    <i class=" bx bx-male-female"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <label class="form-check-label mb-0 ps-2" for="task_six">{{ customers_today.6.customer_name }} - {{ customers_today.6.institution_name }}</label>
-                                                </div>
-                                                <div class="flex-shrink-0 ms-2">
-                                                    <p class="text-muted fs-12 mb-0">{{ customers_today.6.joining_date }}</p>
                                                 </div>
                                             </div>
                                         </li>
@@ -270,7 +249,8 @@
                         <div class="d-flex p-3">
                   
                             <div>
-                                <p class="fs-16 lh-base"><i class="bx bx-calendar"></i>  Toplam görüşme  Sayınız : <span class="fw-semibold">{{toplam_sayı}}</span> 
+                                <p class="fs-16 lh-base"><i class="bx bx-calendar"></i>  Bugünden sonrası için oluşturduğunuz Toplam görüşme  sayınız :  <span class="fw-semibold">{{toplam_sayı}}</span><br/> Toplantı sayısı : <span class="fw-semibold">{{future_meetings_count}}</span> 
+                                   <b>-</b>  Randevu sayısı : <span class="fw-semibold">{{future_events_count}}</span> 
                                  </i></p>
                                 
                             </div>
@@ -284,7 +264,7 @@
                         <div class="alert alert-warning border-0 rounded-top rounded-0 m-0 d-flex align-items-center"
                             role="alert">
                             <div class="flex-grow-1 text-truncate">
-                                Bügünkü Toplantı Sayınız : <b></b> 
+                                <b> Bügünkü Toplantı Sayınız :</b> 
                             </div>
                             
                         </div>
@@ -297,7 +277,7 @@
                                 </div>
                             </div>
                             <div>
-                                <p class="fs-16 lh-base">Bugün <span class="fw-semibold">{{todayCount}}</span>  toplantınız var
+                                <p class="fs-16 lh-base">Bugün <span class="fw-semibold">{{today_event_count }}</span>  toplantınız var
                                  </i></p>
                                 <div class="mt-3">
                                     <a href="{% url 'schedule_appointments' %}" class="btn btn-secondary">Tüm Toplantılara Git</a>
@@ -315,7 +295,7 @@
                         <div class="alert alert-warning border-0 rounded-top rounded-0 m-0 d-flex align-items-center"
                             role="alert">
                             <div class="flex-grow-1 text-truncate">
-                                Bügünkü Toplantı Sayınız : 
+                               <b> Bügünkü Randevu Sayınız : </b>
                             </div>
                             
                         </div>

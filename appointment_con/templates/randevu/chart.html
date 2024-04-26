@@ -66,7 +66,23 @@
                         </div>
                     </div>
                 </div> 
-              
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">Randevu Durumuna Göre</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="chart-pie" data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]' class="e-charts"></div>
+                            </div>
+                        </div>
+                        <!-- end card -->
+                    </div>
+                
+                    <!-- end col -->
+           
+                    <!-- end col -->
+                </div>
 
             </div>
         </div> <!-- container-fluid -->
@@ -261,6 +277,54 @@ var dailyData = {
     });
 
     console.log(dailyData)
+</script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.2.1/dist/echarts.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var chartPie = echarts.init(document.getElementById('chart-pie'));
+        var statusCounts = {{ status_counts_json|safe }};
+        var data = [];
+        statusCounts.forEach(function (item) {
+            // Durum ismini kontrol ederek istenen değerlerle değiştir
+            var statusName;
+            if (item.status === "Block") {
+                statusName = "İptal";
+            } else if (item.status === "Active") {
+                statusName = "Aktif";
+            } else {
+                statusName = item.status;
+                statusName = "Pasife Çekildi";
+            }
+            data.push({value: item.count, name: statusName + " (" + item.count + ")"});
+        });
+
+        var optionPie = {
+            title: {
+                text: '',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b}: {c} ({d}%)'
+            },
+            series: [
+                {
+                    name: '',
+                    type: 'pie',
+                    radius: '50%',
+                    data: data,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        chartPie.setOption(optionPie);
+    });
 </script>
     
 {% endblock extra_js %}

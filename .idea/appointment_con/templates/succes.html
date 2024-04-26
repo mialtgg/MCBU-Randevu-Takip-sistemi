@@ -1,0 +1,455 @@
+{% extends "partials/base.html" %}
+{% load static %}
+
+
+{% block content %}
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+{% block extra_css %}
+
+{% endblock extra_css %}
+<div class="main-content " style="margin-top:0%>
+
+    <div class=" page-content" style="margin-top:0%;">
+    <br />
+    <br />
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-xxl-5">
+                <div class="card card-height-100">
+                    <div class="card-header align-items-center d-flex">
+                        <h4 class="card-title mb-0 flex-grow-1"><i class="bx bx-calendar"></i>   Yaklaşan Toplantılar</h4>
+                  
+                    </div><!-- end card header -->
+                    
+                  
+                    
+              
+                    <div class="card-body pt-0">
+                        <ul class="list-group list-group-flush border-dashed">
+                            <li class="list-group-item ps-0">
+                                <div class="row align-items-center g-3">
+                                    <div class="col-auto">
+                                        <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
+                                            <div class="text-center">
+                                                <h5 class="mb-0">
+                                                    
+                                                </h5>
+                                                <div class="text-muted"><div class="text">
+                                                    {{ events_today.1.start_date }} </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="text-muted mt-0 mb-1 fs-13">{{ events_today.1.event_name }}</h5>
+                                        <a href="#" class="text-reset fs-14 mb-0"></a>
+                                    </div>
+                                    <div class="col-sm-auto">
+                                        <div class="avatar-group">
+                                  
+                                            <div class="avatar-group-item">
+                                                <a href="javascript: void(0);">
+                                                    <div class="avatar-xxs">
+                                                        <span class="avatar-title rounded-circle bg-primary text-white">
+                                                            <i class=" bx bx-alarm"></i>
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- end row -->
+                            </li><!-- end -->
+                            <li class="list-group-item ps-0">
+                                <div class="row align-items-center g-3">
+                                    <div class="col-auto">
+                                        <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
+                                            <div class="text-center">
+                                                <h5 class="mb-0">
+                                                    
+                                                </h5>
+                                                <div class="text-muted"><div class="text">
+                                                    {{ events_today.2.start_date }} </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="text-muted mt-0 mb-1 fs-13">{{ events_today.2.event_name }}</h5>
+                                        <a href="#" class="text-reset fs-14 mb-0"></a>
+                                    </div>
+                                    <div class="col-sm-auto">
+                                        <div class="avatar-group">
+                                  
+                                            <div class="avatar-group-item">
+                                                <a href="javascript: void(0);">
+                                                    <div class="avatar-xxs">
+                                                        <span class="avatar-title rounded-circle bg-primary text-white">
+                                                            <i class=" bx bx-alarm"></i>
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- end row -->
+                            </li><!-- end -->
+                            <li class="list-group-item ps-0">
+                                <div class="row align-items-center g-3">
+                                    <div class="col-auto">
+                                        <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
+                                            <div class="text-center">
+                                                <h5 class="mb-0">
+                                                    
+                                                </h5>
+                                                <div class="text-muted"><div class="text">
+                                                    {{ events_today.3.start_date }} </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="text-muted mt-0 mb-1 fs-13">{{ events_today.3.event_name }}</h5>
+                                        <a href="#" class="text-reset fs-14 mb-0"></a>
+                                    </div>
+                                    <div class="col-sm-auto">
+                                        <div class="avatar-group">
+                                  
+                                            <div class="avatar-group-item">
+                                                <a href="javascript: void(0);">
+                                                    <div class="avatar-xxs">
+                                                        <span class="avatar-title rounded-circle bg-primary text-white">
+                                                            <i class=" bx bx-alarm"></i>
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- end row -->
+                            </li><!-- end -->
+                            
+                       
+                         
+
+                        </ul><!-- end -->
+                        
+                    </div><!-- end card body -->
+                
+                </div><!-- end card -->
+            </div> <!-- end col-->
+            <div class="col-xxl-7">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card card-height-100">
+                            <div class="card-header align-items-center d-flex">
+                                <h4 class="card-title mb-0 flex-grow-1"> <i class=" bx bx-male-female"></i> Yaklaşan  Randevular</h4>
+
+                            </div><!-- end card header -->
+
+                            <div class="card-body p-0">
+
+                                <div class="align-items-center p-3 justify-content-between d-flex">
+                                    <div class="flex-shrink-0">
+                                        
+                                    </div>
+                                </div><!-- end card header -->
+
+                                <div data-simplebar style="max-height: 257px;">
+                                    <ul class="list-group list-group-flush border-dashed px-3">
+                                        <li class="list-group-item ps-0">
+                                            <div class="d-flex align-items-start">
+                                                <div class="form-check ps-0 flex-sharink-0">
+                                                    <i class=" bx bx-male-female"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <label class="form-check-label mb-0 ps-2" for="task_one">{{ customers_today.1.customer_name }} - {{ customers_today.1.institution_name }}</label>
+                                                </div>
+                                                <div class="flex-shrink-0 ms-2">
+                                                    <p class="text-muted fs-12 mb-0">{{ customers_today.1.joining_date }}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item ps-0">
+                                            <div class="d-flex align-items-start">
+                                                <div class="form-check ps-0 flex-sharink-0">
+                                                    <i class=" bx bx-male-female"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <label class="form-check-label mb-0 ps-2" for="task_two">{{ customers_today.2.customer_name }} - {{ customers_today.2.institution_name }}</label>
+                                                </div>
+                                                <div class="flex-shrink-0 ms-2">
+                                                    <p class="text-muted fs-12 mb-0">{{ customers_today.2.joining_date }}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item ps-0">
+                                            <div class="d-flex align-items-start">
+                                                <div class="form-check flex-sharink-0 ps-0">
+                                                    <i class=" bx bx-male-female"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <label class="form-check-label mb-0 ps-2" for="task_three">{{ customers_today.3.customer_name }} - {{ customers_today.3.institution_name }}</label>
+                                                </div>
+                                                <div class="flex-shrink-0 ms-2">
+                                                    <p class="text-muted fs-12 mb-0">{{ customers_today.3.joining_date }}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item ps-0">
+                                            <div class="d-flex align-items-start">
+                                                <div class="form-check ps-0 flex-sharink-0">
+                                                    <i class=" bx bx-male-female"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <label class="form-check-label mb-0 ps-2" for="task_four">{{ customers_today.4.customer_name }} - {{ customers_today.4.institution_name }}</label>
+                                                </div>
+                                                <div class="flex-shrink-0 ms-2">
+                                                    <p class="text-muted fs-12 mb-0">{{ customers_today.4.joining_date }}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item ps-0">
+                                            <div class="d-flex align-items-start">
+                                                <div class="form-check ps-0 flex-sharink-0">
+                                                    <i class=" bx bx-male-female"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <label class="form-check-label mb-0 ps-2" for="task_five">{{ customers_today.5.customer_name }} - {{ customers_today.5.institution_name }}</label>
+                                                </div>
+                                                <div class="flex-shrink-0 ms-2">
+                                                    <p class="text-muted fs-12 mb-0">{{ customers_today.5.joining_date }}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item ps-0">
+                                            <div class="d-flex align-items-start">
+                                                <div class="form-check ps-0 flex-sharink-0">
+                                                    <i class=" bx bx-male-female"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <label class="form-check-label mb-0 ps-2" for="task_six">{{ customers_today.6.customer_name }} - {{ customers_today.6.institution_name }}</label>
+                                                </div>
+                                                <div class="flex-shrink-0 ms-2">
+                                                    <p class="text-muted fs-12 mb-0">{{ customers_today.6.joining_date }}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul><!-- end ul -->
+                                </div>
+
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+                   
+
+                </div> <!-- end row-->
+            </div> <!-- end col-xl-7-->
+        </div>
+
+        <div class="row">
+            <div class="col-xl-4">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="alert alert-warning border-0 rounded-top rounded-0 m-0 d-flex align-items-center"
+                            role="alert">
+                            <div class="flex-grow-1 text-truncate">
+                                <b> {{ current_datetime }}</b> 
+                            </div>
+                            
+                        </div>
+                        <div class="d-flex p-3">
+                  
+                            <div>
+                                <p class="fs-16 lh-base"><i class="bx bx-calendar"></i>  Toplam görüşme  Sayınız : <span class="fw-semibold">{{toplam_sayı}}</span> 
+                                 </i></p>
+                                
+                            </div>
+                        </div>
+                    </div> <!-- end card-body-->
+                </div>
+            </div> <!-- end col-->
+            <div class="col-xl-4">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="alert alert-warning border-0 rounded-top rounded-0 m-0 d-flex align-items-center"
+                            role="alert">
+                            <div class="flex-grow-1 text-truncate">
+                                Bügünkü Toplantı Sayınız : <b></b> 
+                            </div>
+                            
+                        </div>
+                        <div class="d-flex p-3">
+                            <div class="flex-shrink-0">
+                                <div class="avatar-md me-3">
+                                    <span class="avatar-title bg-danger-subtle rounded-circle fs-1">
+                                        <i class=" bx bx-book-bookmark text-danger"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="fs-16 lh-base">Bugün <span class="fw-semibold">{{todayCount}}</span>  toplantınız var
+                                 </i></p>
+                                <div class="mt-3">
+                                    <a href="{% url 'schedule_appointments' %}" class="btn btn-secondary">Tüm Toplantılara Git</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end card-body-->
+                </div>
+            </div> <!-- end col-->
+    
+
+            <div class="col-xl-4">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="alert alert-warning border-0 rounded-top rounded-0 m-0 d-flex align-items-center"
+                            role="alert">
+                            <div class="flex-grow-1 text-truncate">
+                                Bügünkü Toplantı Sayınız : 
+                            </div>
+                            
+                        </div>
+                        <div class="d-flex p-3">
+                            <div class="flex-shrink-0">
+                                <div class="avatar-md me-3">
+                                    <span class="avatar-title bg-danger-subtle rounded-circle fs-1">
+                                        <i class=" bx bx-book-bookmark text-danger"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="fs-16 lh-base">Bugün  <span class="fw-semibold">{{todayCount}}</span>   Randevunuz var
+                                 </i></p>
+                                <div class="mt-3">
+                                    <a href="{% url 'rapor' %}" class="btn btn-secondary">Tüm Randevulara Git</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end card-body-->
+                </div>
+            </div> <!-- end col-->
+
+        </div>
+
+
+    </div>
+    <!-- container-fluid -->
+</div>
+<!-- End Page-content -->
+
+{% block footer %}
+{% include "partials/footer.html" %}
+{% endblock footer %}
+</div>
+<!-- end main content-->
+{% endblock content %}
+{% block extra_js %}
+<!-- calendar min js -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/locale/tr.js"></script>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            // Diğer takvim ayarları...
+            locale: 'tr', // Türkçe dil ayarı
+            buttonText: {
+                today: 'Bugün'
+            },
+
+            // Tarih üzerine tıklama olayını tanımlama
+            dateClick: function (info) {
+                // Seçilen tarihi modal içinde kullanmak için saklayın
+                var selectedDate = info.date;
+
+                // Modalı aç
+                $('#event-modal').modal('show');
+
+                // Formu submit olayını dinle
+                $('#form-event').submit(function (e) {
+                    e.preventDefault();
+
+                    // Form verilerini alın
+                    var category = $('#event-category').val();
+                    var eventName = $('#event-title').val();
+                    var eventStartDate = $('#event-start-date').val();
+                    var eventStartTime = $('#timepicker1').val();
+                    var eventEndTime = $('#timepicker2').val();
+                    var eventLocation = $('#event-location').val();
+                    var eventDescription = $('#event-description').val();
+
+
+
+                    // İşlem tamamlandıktan sonra modalı kapat
+                    $('#event-modal').modal('hide');
+                });
+            }
+        });
+
+        calendar.render();
+    });
+
+
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // ...
+
+        // Tarih üzerine tıklama olayını tanımlama
+        dateClick: function (info) {
+            // Seçilen tarihi modal içinde kullanmak için saklayın
+            var selectedDate = info.date;
+
+            // Modalı aç
+            $('#event-modal').modal('show');
+
+            // Etkinlik ekleme formunu işleme
+            $('#eventForm').submit(function (e) {
+                e.preventDefault();
+
+                // Form verilerini alın
+                var eventName = $('#eventName').val();
+
+                // Burada etkinlik eklemeyi gerçekleştirebilirsiniz
+
+                // Modalı kapat
+                $('#addEventModal').modal('hide');
+            });
+        }
+    });
+
+</script>
+
+
+
+<!-- jQuery -->
+<script src="{% static 'libs/jquery/jquery.min.js' %}"></script>
+
+<!-- FullCalendar dependencies -->
+<!-- Include any other dependencies here -->
+
+<!-- FullCalendar -->
+<script src="{% static 'libs/fullcalendar/index.global.min.js' %}"></script>
+
+<!-- Calendar init -->
+<script src="{% static 'js/pages/calendar.init.js'%}"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock extra_js %}

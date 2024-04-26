@@ -30,15 +30,81 @@ from openpyxl import Workbook
 from django.http import HttpResponse
 from .forms import EventForm
 from django.core.serializers.json import DjangoJSONEncoder
-
-
-
 from django.shortcuts import render
 from .models import Customer
 from .forms import CustomerForm
+from django.db.models import Q
+
+def all_appointments_view(request):
+    user_id=request.user.id
+    customers = Customer.objects.filter(
+    Q(deleted=False) & Q(user_id=user_id) & ~Q(status='Active')
+).order_by("joining_date")
+    today = timezone.localdate()  # Bugünün tarihini al
+   
+    today_count = Customer.objects.filter(joining_date=today,user_id=user_id,status="Active").count()
+    print(today_count)
+    
+    if request.method == 'POST':
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            
+            cleaned_data = form.cleaned_data
+            
+            for field, value in cleaned_data.items():
+                print(f"{field}: {value}")
+            cleaned_data = form.cleaned_data
+            user_id = request.user.id
+            customer_name = cleaned_data['customer_name']
+            description = cleaned_data['description']
+            start_time = cleaned_data['start_time']
+            end_time = cleaned_data['end_time']
+            joining_date = cleaned_data['joining_date']
+            status = cleaned_data['status']
+            appointment_type = request.POST.get('appointment_type')
+            type = request.POST.get('type')
+            status_description = request.POST.get('status_description')
+            contact = request.POST.get('contact')
+            institution_name = request.POST.get('institution_name')
+            
+            
+            customer = Customer.objects.create(
+                user_id=user_id,
+                customer_name=customer_name,
+                description=description,
+                start_time=start_time,
+                end_time=end_time,
+                joining_date=joining_date,
+                status=status,
+                admin_add_name="MCBU",
+                appointment_type=appointment_type,
+                type=type,
+                status_description=status_description,
+                contact=contact,
+                institution_name=institution_name
+                
+
+
+            )
+            
+            
+            
+            return render(request, 'randevu/all_appointments.html', {'customers': customers, 'form': form,'today': today,'today_count':today_count})
+            
+        else:
+            print(form.errors)
+    else:
+        form = CustomerForm()
+    return render(request, 'randevu/all_appointments.html', {'customers': customers, 'form': form,'today': today,'today_count':today_count})
 
 def rapor_view(request):
-    customers = Customer.objects.filter(deleted=False).order_by("joining_date")
+    user_id=request.user.id
+    customers = Customer.objects.filter(deleted=False,user_id=user_id,status='Active').order_by("joining_date")
+    today = timezone.localdate()  # Bugünün tarihini al
+   
+    today_count = Customer.objects.filter(joining_date=today,user_id=user_id,status="Active",deleted=False).count()
+
+    
     if request.method == 'POST':
         form = CustomerForm(request.POST)
         if form.is_valid():
@@ -61,12 +127,10 @@ def rapor_view(request):
             contact = request.POST.get('contact')
             institution_name = request.POST.get('institution_name')
 
-            customer = Customer.objects.create(
-                user_id=user_id,
+            existing_customers = customers.filter(
+                
                 customer_name=customer_name,
                 description=description,
-                start_time=start_time,
-                end_time=end_time,
                 joining_date=joining_date,
                 status=status,
                 admin_add_name="MCBU",
@@ -75,14 +139,37 @@ def rapor_view(request):
                 status_description=status_description,
                 contact=contact,
                 institution_name=institution_name
-            )
+                )
+            if existing_customers.exists():
+                    messages.error(request, "Bu müşteriye ait aynı türde bir randevunuz var, ekleme yapılmadı")
             
-            return render(request, 'randevu/rapor.html', {'customers': customers, 'form': form})
+            else:
+                customer = Customer.objects.create(
+                    user_id=user_id,
+                    customer_name=customer_name,
+                    description=description,
+                    start_time=start_time,
+                    end_time=end_time,
+                    joining_date=joining_date,
+                    status=status,
+                    admin_add_name="MCBU",
+                    appointment_type=appointment_type,
+                    type=type,
+                    status_description=status_description,
+                    contact=contact,
+                    institution_name=institution_name
+                    
+
+
+                )
+                form = CustomerForm()
+                return render(request, 'randevu/rapor.html', {'customers': customers, 'form': form,'today': today,'today_count':today_count})
+            
         else:
             print(form.errors)
     else:
         form = CustomerForm()
-    return render(request, 'randevu/rapor.html', {'customers': customers, 'form': form})
+    return render(request, 'randevu/rapor.html', {'customers': customers, 'form': form,'today': today,'today_count':today_count})
 
 def is_admin(user):
     return user.is_authenticated and user.is_staff
@@ -136,9 +223,6 @@ def rektördatatable_view(request):
                         status_description = status_description,
                         contact = contact,
                         institution_name = institution_name
-
-
-
                     )
 
                     customer.save()
@@ -167,13 +251,10 @@ def succes_view(request):
     now = timezone.now() 
 
  
-    customers=Customer.objects.filter(deleted=False)
-    events = Event.objects.all()
-    print("heloooo")
-    print(customers)
-
-
-    print('bu 12333')
+    customers=Customer.objects.filter(deleted=False,user_id=user_id,status="Active")
+    events = Event.objects.filter(deleted=False,user_id=user_id)
+  
+  
     face_to_face_customers = Customer.objects.filter(type='Face_to_face')
 
     for customer in face_to_face_customers:
@@ -182,26 +263,22 @@ def succes_view(request):
 
     
 
-    customers_today = customers.filter(joining_date__gte=today,deleted=False).order_by('joining_date')[:10] 
-    events_today = Event.objects.filter(start_date__gte =today).order_by('start_date')[:4] 
+    customers_today = customers.filter(joining_date__gte=today,deleted=False,user_id=user_id,).order_by('joining_date')[:10] 
+    events_today = Event.objects.filter(start_date__gte =today,deleted=False,user_id=user_id).order_by('start_date')[:4] 
     phone_appointment = Event.objects.all()
-    todayCount = customers.filter(joining_date=date.today()).count()
+    todayCount = customers.filter(joining_date=date.today(),user_id=user_id).count()
     allCount = customers.all().count()
     current_hour = now.hour
     current_minute = now.minute
     current_second = now.second
-    today_event_count = events_today.count()
+    today_event_count = Event.objects.filter(start_date =today,deleted=False,user_id=user_id).count()
+    future_events_count = Event.objects.filter(start_date__gte=today,deleted=False,user_id=user_id).count()
+    future_meetings_count = Customer.objects.filter(joining_date__gte=today,deleted=False,user_id=user_id,status="Active").count()
 
     saat = f"{current_hour:02d}:{current_minute:02d}:{current_second:02d}"
     current_datetime = datetime.now()
-    toplam_sayı = todayCount + today_event_count
-
-
-
-    
-
-    
-  
+    toplam_sayı = future_events_count +future_meetings_count
+ 
 
     context = {'customers_today':customers_today,
                'todayCount':todayCount,
@@ -212,7 +289,10 @@ def succes_view(request):
               'saat':saat,
               'current_datetime':current_datetime,
               'toplam_sayı':toplam_sayı,
-              'today_event_count' :today_event_count
+              'today_event_count' :today_event_count,
+              'future_events_count':future_events_count,
+              'future_meetings_count':future_meetings_count
+
               
               }
     
@@ -244,7 +324,7 @@ def chart_view(request):
     elif username == "baharkocer":
         admin_add_name = "user5"
 
-    customers = Customer.objects.filter(user_id=user_id, admin_add_name=admin_add_name, deleted=False)
+    customers = Customer.objects.filter(user_id=user_id, deleted=False)
 
 
     current_month = today.month
@@ -283,13 +363,7 @@ def chart_view(request):
 
     # JSON formatına dönüştürme
     daily_counts_json = json.dumps(formatted_daily_counts, cls=DjangoJSONEncoder)
-    print("mine")
-    print(daily_counts_json)
-    print("mine")
-
-    
-
-
+ 
     try:
         # Aylık müşteri sayısını getir
         monthly_counts = Customer.objects.filter(
@@ -379,7 +453,10 @@ def chart_view(request):
 
         # JSON'a dönüştür
         monthly_counts_json = json.dumps(monthly_counts_list, cls=DjangoJSONEncoder)
-        print(monthly_counts_json)
+       
+        status_counts = Customer.objects.filter(deleted=False).values('status').annotate(count=Count('id'))
+        status_counts_list = list(status_counts)
+        status_counts_json = json.dumps(status_counts_list, cls=DjangoJSONEncoder)
 
         
         context = {
@@ -393,7 +470,7 @@ def chart_view(request):
                     'daily_counts': daily_counts,
                     'month_names' :month_names,
                     'customers': customers,
-                    
+                    'status_counts_json': status_counts_json,
 
                 }
         return render(request, 'randevu/chart.html', context)
@@ -402,6 +479,8 @@ def chart_view(request):
         print(f"Hata: {e}")
         
         return render(request, 'randevu/chart.html')
+    
+
 
 
 @login_required
@@ -410,6 +489,7 @@ def randevu_view(request):
     if request.user.is_staff or request.user.is_authenticated:
         user_id = request.user.id 
         username= request.user.username
+        customers = Customer.objects.all()
 
         today = date.today()
         if(username=="mustakılban"):
@@ -461,18 +541,18 @@ def randevu_view(request):
             end_time = datetime.strptime(end_time_str, '%H:%M')
             
 
-            existing_customers = customers.filter(
-                start_time__gte=start_time,
-                start_time__lte=end_time,
-                joining_date=joining_date,
+            # existing_customers = customers.filter(
+            #     start_time__gte=start_time,
+            #     start_time__lte=end_time,
+            #     joining_date=joining_date,
                 
-            )
+            # )
             
-            if existing_customers.exists():
-                messages.error(request, "Bu saat aralığında aynı tarihe başka bir randevunuz var, ekleme yapılmadı")
-            else:
+            # if existing_customers.exists():
+            #     messages.error(request, "Bu saat aralığında aynı tarihe başka bir randevunuz var, ekleme yapılmadı")
+            # else:
                 # Create a new Customer object
-                customer = Customer.objects.create(
+            customer = Customer.objects.create(
                     user_id=user_id,
                     customer_name=customer_name,
                     description=description,
@@ -480,7 +560,7 @@ def randevu_view(request):
                     end_time=end_time,
                     joining_date=joining_date,
                     status=status,
-                    admin_add_name=admin_add_name,
+                    admin_add_name="MCBÜ",
                     appointment_type=appointment_type,
                     type = type,
                     status_description = status_description,
@@ -491,10 +571,10 @@ def randevu_view(request):
                 )
 
                 # Save the object to the database
-                customer.save()
-                print(customer)
+            customer.save()
+            print(customer)
 
-                messages.success(request, "Randevu başarıyla oluşturuldu.")
+            messages.success(request, "Randevu başarıyla oluşturuldu.")
 
         return render(request, 'randevu/randevu.html', context)
        
@@ -551,16 +631,17 @@ def edit_customer(request, customer_id):
     else:
         form = CustomerForm(instance=customer)
         return redirect(rapor_view)
+    
 
+@login_required
 def delated_page_view(request):
-    customers=Customer.objects.filter(deleted=True)
-    context = {'customer': customers}
-   
-    context = {
-        'customers': customers
-    }
- 
-    return render(request , 'delated_page.html',context)
+    if request.user.is_superuser:
+        customers = Customer.objects.filter(deleted=True)
+    else:
+        user_id = request.user.id
+        customers = Customer.objects.filter(deleted=True, user_id=user_id)
+    context = {'customers': customers}
+    return render(request, 'delated_page.html', context)
 
 def edited_page_view(request):
     customers= Customer.objects.filter()
@@ -577,9 +658,10 @@ from .models import Event  # Event modelinizi içe aktarın
 
 def export_to_excel_randevu(request):
     # Sadece silinmemiş randevuları al
-    queryset = Event.objects.filter(deleted=False)
+    user_id = request.user.id
+    queryset = Event.objects.filter(deleted=False,user_id=user_id)
 
-    selected_fields = ['event_name', 'participations', 'start_date', 'end_date']
+    selected_fields = ['event_name', 'participations', 'start_date', 'end_date','status_description']
     filtered_queryset = queryset.values(*selected_fields)
     print(selected_fields)
 
@@ -588,18 +670,18 @@ def export_to_excel_randevu(request):
     worksheet = workbook.active
 
     # Excel dosyasının başına başlık satırını ekleyin
-    title_row = ['Randevu İsmi', 'Katılımcılar', 'Başlangıç Zamanı', 'Bitiş Zamanı']
+    title_row = ['Randevu İsmi', 'Katılımcılar', 'Başlangıç Zamanı', 'Bitiş Zamanı','Açıklama']
     worksheet.append(title_row)
 
     # Verileri ekleyin
     for item in filtered_queryset:
             # Tarih formatını belirtin (örneğin: '2024-03-11 12:30:00')
             date_format = NamedStyle(name='date_format', number_format='yyyy-mm-dd hh:mm:ss')
-            worksheet.append([item['event_name'], item['participations'], item['start_date'].strftime('%d-%m-%Y'), item['end_date'].strftime('%d-%m-%Y')])
+            worksheet.append([item['event_name'], item['participations'], item['start_date'].strftime('%d-%m-%Y'), item['end_date'].strftime('%d-%m-%Y'),item['status_description']])
 
     # Oluşturulan Excel dosyasını HttpResponse kullanarak kullanıcıya geri gönderin
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename="randevular.xlsx"'
+    response['Content-Disposition'] = 'attachment; filename="Toplantı.xlsx"'
     
     # Excel dosyasını HttpResponse'a kaydedin
     workbook.save(response)
@@ -608,16 +690,18 @@ def export_to_excel_randevu(request):
 
 def export_to_excel(request):
      # Sadece silinmemiş randevuları al
-    queryset = Customer.objects.filter(deleted=False)
+    user_id = request.user.id
+     
+    queryset = Customer.objects.filter(deleted=False,user_id=user_id,status="Active")
 
-    selected_fields = ['customer_name', 'description', 'institution_name', 'contact', 'joining_date', 'status', 'status_description','type','appointment_type']
+    selected_fields = ['customer_name', 'description', 'institution_name', 'contact', 'joining_date', 'status','type','appointment_type']
     filtered_queryset = queryset.values(*selected_fields)
 
     workbook = Workbook()
     worksheet = workbook.active
 
     # Başlık satırını ekle
-    title_row = ['Talep Eden Kişi', 'Konu', 'Birimi-Kurumu', 'İletişim', 'Randevu Tarihi', 'Durumu', 'Durum Açıklaması','Tipi','Türü']
+    title_row = ['Talep Eden Kişi', 'Konu', 'Birimi-Kurumu', 'İletişim', 'Randevu Tarihi', 'Durumu','Randevu Tipi','Randevu Türü']
     worksheet.append(title_row)
 
       # Verileri ekleyin
@@ -629,6 +713,9 @@ def export_to_excel(request):
                 status_display = {
                     'Active': 'Aktif',
                     'Block': 'İptal Edildi',
+                   
+
+                    
                     # Diğer durumlar için gerektiği gibi ekleyin
                 }.get(customer.status, customer.status)
                 print(status_display)
@@ -643,7 +730,25 @@ def export_to_excel(request):
                     'user5': 'Bahar Koçer',
                 }.get(customer.admin_add_name, customer.admin_add_name)
 
-                row[field] = admin_add_name_display
+                row[type] = type_display
+            elif field == 'type':
+                # admin_add_name için özel dönüşüm
+                type_display = {
+                    'Phone':'Telefon',
+                    'Face_to_face' :'Yüz yüze',
+                }.get(customer.type, customer.type)
+
+                row[field] = type_display
+
+            elif field == 'appointment_type':
+                # admin_add_name için özel dönüşüm
+                appointment_type_display = {
+                    'İnside' :'İç Randevu',
+                    'Outside':'Dış Randevu',
+                }.get(customer.appointment_type, customer.appointment_type)
+
+                row[field] = appointment_type_display
+                print(appointment_type_display)
             else:
                 row[field] = str(getattr(customer, field))
         worksheet.append([row[field] for field in selected_fields])
@@ -652,7 +757,154 @@ def export_to_excel(request):
 
     # HttpResponse kullanarak dosyayı kullanıcıya geri döndürün
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename="radevularım.xlsx"'
+    response['Content-Disposition'] = 'attachment; filename="Randevular.xlsx"'
+    workbook.save(response)
+
+    return response
+
+def export_to_excel_all_appointments(request):
+     # Sadece silinmemiş randevuları al
+    user_id = request.user.id
+     
+    queryset = Customer.objects.filter(Q(deleted=False) & ~Q(status='active'), user_id=user_id)
+
+    selected_fields = ['customer_name', 'description', 'institution_name', 'contact', 'joining_date', 'status', 'status_description','type','appointment_type']
+    filtered_queryset = queryset.values(*selected_fields)
+
+    workbook = Workbook()
+    worksheet = workbook.active
+
+    # Başlık satırını ekle
+    title_row = ['Talep Eden Kişi', 'Konu', 'Birimi-Kurumu', 'İletişim', 'Randevu Tarihi', 'Durumu', 'Durum Açıklaması','Randevu Tipi','Randevu Türü']
+    worksheet.append(title_row)
+
+      # Verileri ekleyin
+    for customer in queryset:
+        row = {}
+        for field in selected_fields:
+            if field == 'status':
+                # Burada status'a özel bir dönüşüm yapın
+                status_display = {
+                    'Active': 'Aktif',
+                    'Block': 'İptal Edildi',
+                    'Pasive': 'Pasife Çekildi',
+
+                    
+                    # Diğer durumlar için gerektiği gibi ekleyin
+                }.get(customer.status, customer.status)
+                print(status_display)
+                row[field] = status_display
+            elif field == 'admin_add_name':
+                # admin_add_name için özel dönüşüm
+                admin_add_name_display = {
+                    'user1': 'M.Müştak İLBAN',
+                    'user2': 'Nurdagül ERTÜRK',
+                    'user3': 'Pelin KOŞAN',
+                    'user4': 'Aysun OKUMUŞ',
+                    'user5': 'Bahar Koçer',
+                }.get(customer.admin_add_name, customer.admin_add_name)
+
+                row[type] = type_display
+            elif field == 'type':
+                # admin_add_name için özel dönüşüm
+                type_display = {
+                    'Phone':'Telefon',
+                    'Face_to_face' :'Yüz yüze',
+                }.get(customer.type, customer.type)
+
+                row[field] = type_display
+
+            elif field == 'appointment_type':
+                # admin_add_name için özel dönüşüm
+                appointment_type_display = {
+                    'İnside' :'İç Randevu',
+                    'Outside':'Dış Randevu',
+                }.get(customer.appointment_type, customer.appointment_type)
+
+                row[field] = appointment_type_display
+                print(appointment_type_display)
+            else:
+                row[field] = str(getattr(customer, field))
+        worksheet.append([row[field] for field in selected_fields])
+
+        
+
+    # HttpResponse kullanarak dosyayı kullanıcıya geri döndürün
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="Randevular.xlsx"'
+    workbook.save(response)
+
+    return response
+def export_to_excel_admin_datatable(request):
+     # Sadece silinmemiş randevuları al
+    user_id = request.user.id
+     
+    queryset = Customer.objects.filter(deleted=False, user_id=user_id)
+
+    selected_fields = ['user','customer_name', 'description', 'institution_name', 'contact', 'joining_date', 'status', 'status_description','type','appointment_type']
+    filtered_queryset = queryset.values(*selected_fields)
+
+    workbook = Workbook()
+    worksheet = workbook.active
+
+    # Başlık satırını ekle
+    title_row = ['Randevuyu Oluşturan','Talep Eden Kişi', 'Konu', 'Birimi-Kurumu', 'İletişim', 'Randevu Tarihi', 'Durumu', 'Durum Açıklaması','Randevu Tipi','Randevu Türü']
+    worksheet.append(title_row)
+
+      # Verileri ekleyin
+    for customer in queryset:
+        row = {}
+        for field in selected_fields:
+            if field == 'status':
+                # Burada status'a özel bir dönüşüm yapın
+                status_display = {
+                    'Active': 'Aktif',
+                    'Block': 'İptal Edildi',
+                    'Pasive': 'Pasife Çekildi',
+
+                    
+                    # Diğer durumlar için gerektiği gibi ekleyin
+                }.get(customer.status, customer.status)
+                print(status_display)
+                row[field] = status_display
+            elif field == 'admin_add_name':
+                # admin_add_name için özel dönüşüm
+                admin_add_name_display = {
+                    'user1': 'M.Müştak İLBAN',
+                    'user2': 'Nurdagül ERTÜRK',
+                    'user3': 'Pelin KOŞAN',
+                    'user4': 'Aysun OKUMUŞ',
+                    'user5': 'Bahar Koçer',
+                }.get(customer.admin_add_name, customer.admin_add_name)
+
+                row[type] = type_display
+            elif field == 'type':
+                # admin_add_name için özel dönüşüm
+                type_display = {
+                    'Phone':'Telefon',
+                    'Face_to_face' :'Yüz yüze',
+                }.get(customer.type, customer.type)
+
+                row[field] = type_display
+
+            elif field == 'appointment_type':
+                # admin_add_name için özel dönüşüm
+                appointment_type_display = {
+                    'İnside' :'İç Randevu',
+                    'Outside':'Dış Randevu',
+                }.get(customer.appointment_type, customer.appointment_type)
+
+                row[field] = appointment_type_display
+                print(appointment_type_display)
+            else:
+                row[field] = str(getattr(customer, field))
+        worksheet.append([row[field] for field in selected_fields])
+
+        
+
+    # HttpResponse kullanarak dosyayı kullanıcıya geri döndürün
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="Randevular.xlsx"'
     workbook.save(response)
 
     return response
@@ -672,12 +924,15 @@ def schedule_appointment_view(request):
         participations = request.POST.get('participations')
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
+        status_description =request.POST.get('status_description')
 
         # Check if the event already exists
         existing_event = Event.objects.filter(
             event_name=event_name,
             start_date=start_date,
             end_date=end_date,
+            status_description = status_description,
+
             user=request.user
         )
 
@@ -691,6 +946,7 @@ def schedule_appointment_view(request):
                 participations=participations,
                 start_date=start_date,
                 end_date=end_date,
+                status_description = status_description,
                 user=request.user
             )
             messages.success(request, 'Event created successfully.')
@@ -711,7 +967,7 @@ def edit_events(request, event_id):
     else:
         form = EventForm(instance=event)
 
-    return render(request, 'your_template.html', {'form': form, 'event': event})
+    return render(request, 'schedule_appointment.html', {'form': form, 'event': event})
 
 def delete_event(request, event_id):
     try:

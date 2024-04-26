@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" {% block html %}data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"{% endblock html %}>
+<head>
+    <meta charset="utf-8" />
+    <title>Özel Kalem Randevu Takip Sistemi | BAUM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="{% static 'images/logo/mcbu-baum-logo-2-kopya.png'%}">
+
+    <!-- Layout config Js -->
+    <script src="{% static 'js/layout.js'%}"></script>
+    <!-- Bootstrap Css -->
+    <link href="{% static 'css/bootstrap.min.css'%}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="{% static 'css/icons.min.css'%}" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="{% static 'css/app.min.css'%}" id="app-style" rel="stylesheet" type="text/css" />
+    <!-- custom Css-->
+    <link href="{% static 'css/custom.min.css'%}" id="app-style" rel="stylesheet" type="text/css" />
+    <style>/* Custom Styles */
+.elementor-heading-title {
+    font-size: 21px;
+    font-weight: bold;
+    color: #ffffff; /* You can adjust the color as needed */
+    margin-top: 0px; /* Adjust spacing from the top as needed */
+    margin-bottom: 1px;
+}</style>
+</head>
+<body>
+    <div class="auth-page-wrapper pt-5">
+
+        <!-- auth page bg -->
+        <div class="auth-one-bg-position auth-one-bg"  id="auth-particles" style="background-image: url({% static 'images/3d-abstract-polygonal-blue-background.jpg' %})">
+            <div class="bg-overlay"></div>
+
+            <div class="shape">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
+                    <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
+                </svg>
+            </div>
+        </div>
+
+        <!-- auth page content -->
+        <div class="auth-page-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center mt-sm-0 mb-0 text-white-50">
+                            <div>
+                                <a href="{% url 'login'%}" class="d-inline-block auth-logo mt-0">
+                                    <img src="https://baum.mcbu.edu.tr/wp-content/uploads/sites/9/2023/09/mcbu-logo-beyaz.png" alt="" height="250">
+                                    <h3 class="elementor-heading-title mt-0">Manisa Celal Bayar Üniversitesi<br>Özel Kalem Randevu Takip Sistemi</h3>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6 col-xl-5">
+                           {% for message in messages %}
+                                <div class="alert {{ message.tags }} mb-4" role="alert">
+                                    <strong>{{ message }}</strong>
+                                </div>
+                                {% endfor %}
+                        <div class="card mt-4">
+                              
+
+                            <div class="card-body p-4">
+                                <div class="p-2 mt-2">
+                                    <form action="{% url 'login' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="e-mail" class="form-label">Kullanıcı Adı :</label>
+                                        <input type="text" class="form-control" name="username" id="e-mail"
+                                            placeholder="Kullanıcı adı">
+                                    </div>
+
+                                    <div class="mb-3">
+                                              
+                                        <label class="form-label" for="password-input">Şifre :</label>
+                                        <div class="position-relative auth-pass-inputgroup mb-3">
+                                            <input type="password" class="form-control pe-5 password-input" name="password"
+                                                placeholder="Şifrenizi giriniz" id="password-input">
+                                            <button
+                                                class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+                                                type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                                        </div>
+                                        
+                                    </div>
+
+                         
+
+                                        <div class="mt-4">
+                                            <button class="btn btn-info w-100" type="submit">Giriş Yap</button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
+
+                        <div class="mt-4 text-center">
+                            <p class="mb-0"><a href="https://baum.mcbu.edu.tr/" class="fw-semibold text-primary text-decoration-underline"> </a> </p>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end auth page content -->
+
+        <!-- footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <p class="mb-0 text-muted">&copy; <script>document.write(new Date().getFullYear())</script> Bilgisayar Araştırma ve Uygulama Merkezi <i class=" bx bx-calendar"></i> Özel Kalem Randevu Sistemi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- end Footer -->
+    </div>
+    <!-- JAVASCRIPT -->
+    <script src="{% static 'libs/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+    <script src="{% static 'libs/simplebar/simplebar.min.js'%}"></script>
+    <script src="{% static 'libs/node-waves/waves.min.js'%}"></script>
+    <script src="{% static 'libs/feather-icons/feather.min.js'%}"></script>
+    <script src="{% static 'js/pages/plugins/lord-icon-2.1.0.js'%}"></script>
+    <script src="{% static 'js/plugins.js'%}"></script>
+    <!-- particles js -->
+    <script src="{% static 'libs/particles.js/particles.js'%}"></script>
+    <!-- particles app js -->
+    <script src="{% static 'js/pages/particles.app.js'%}"></script>
+    <!-- password-addon init -->
+    <script src="{% static 'js/pages/password-addon.init.js'%}"></script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block title %}Listjs{% endblock title %}
+{% block extra_css %}
+<!-- Sweet Alert css-->
+<link href="{% static 'libs/sweetalert2/dist/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock extra_css %}
+{% block content %}
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<style>
+    #customerTable {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    #customerTable th,
+    #customerTable td {
+        border: 1px solid #dddddd;
+        /* İstenen kenarlık rengini belirtin */
+        padding: 8px;
+        text-align: left;
+    }
+</style>
+<style>
+    /* ... diğer stiller */
+
+    .edited-row {
+        background-color: #a9dfbf;  /* Yeşil arka plan rengi */
+    }
+</style>
+<div class="main-content">
+
+
+    <div class="page-content">
+        <div class="container-fluid">
+
+            {% block pagetitle %}
+
+            {% endblock pagetitle %}
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title mb-0">Değişiklik Yapılan Randevular</h4>
+                         
+                        </div><!-- end card header -->
+
+                        <div class="card-body">
+                      
+                            <div id="customerList">
+                              
+
+                                    <table class="table align-middle table-nowrap" id="customerTable">
+                                        <thead class="table-light">
+                                            <tr>
+
+                                                <th class="" data-sort="customer_name">Randevuyu Oluşturan Kişi</th>
+                                                <th class="" data-sort="customer_name">Randevu Oluşturulacak Kişi</th>
+                                                <th class="" data-sort="konu">Randevu Talep eden</th>
+                                                <th class="" data-sort="action">Konusu</th>
+                                                <th class="" data-sort="joining_date">Tarih</th>
+                                                <th class="" data-sort="start_time">Başlangıç saati </th>
+                                                <th class="" data-sort="end_time">Bitiş saati</th>  
+                                                <th class="" data-sort="status">Durum</th>
+                                                <th class="" data-sort="status">Oluşturulma Zamanı</th>
+
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody class="list form-check-all">
+                                            {% for customer in customers %}
+
+                                            <tr class="{% if customer.edited %}edited-row{% endif %}">
+                                                <td>{{ customer.user.get_full_name }}</td>
+
+                                                {% if customer.admin_add_name == "user1" %}
+                                                <td>Prof. Dr. Rana KİBAR -M </td>
+                                                {% elif customer.admin_add_name == "user2" %}
+                                                <td>Prof. Dr. Ahmet ÇETİN </td>
+                                                {% elif customer.admin_add_name == "user3" %}
+                                                <td>Prof. Dr. Kadir AY </td>
+                                                
+                                                {% elif customer.admin_add_name == "user5" %}
+                                                <td>Prof. Dr. Oktay ÜÇER</td>
+                                                {% else %}
+                                                <td>Prof. Dr.Rana KİBAR -A</td>
+                                                {% endif %}
+                                                <td>{{ customer.customer_name }}</td>
+                                                
+                                                <td>{{ customer.konu }}</td>
+                                                <td>{{ customer.joining_date }}</td>
+                                                <td>{{ customer.start_time }}</td>
+                                                <td>{{ customer.end_time }}</td>
+                                                {% if customer.status == "Active" %}
+                                                <td>Aktif</td>
+                                                {% else %}
+                                                <td>İptal</td>
+                                                {% endif %}
+                                                <td>{{customer.created_at}}</td>
+                                           
+
+                                            </tr>
+                                            {% endfor %}
+                                         
+                                        </tbody>
+                                    </table>
+                                    
+                                    
+
+                            
+                                     
+                                    
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div><!-- end card -->
+                    </div>
+                    <!-- end col -->
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+
+
+
+
+            <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info-subtle p-4">
+                            <h5 class="modal-title" id="exampleModalLabel">Randevu Ekle</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                id="close-modal"></button>
+                        </div>
+                        <form method="post" action="{% url 'rektör_datatable' %}">
+                            {% csrf_token %}
+
+                            <div class="row mb-3">
+                                <input type="hidden" name="user" value="{{ request.user.id }}">
+                                <div class="col-lg-3">
+                                    <label for="nameInput" style="margin-left: 10px ;" class="form-label">Randevu
+                                        Oluşturulacak İsim</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <select class="form-control" data-trigger name="admin_add_name" required>
+
+                                        <option value="user1">Prof. Dr. Rana KİBAR -M</option>
+                                        <option value="user2">Prof. Dr. Ahmet ÇETİN</option>
+                                        <option value="user3">Prof. Dr. Kadir Ay </option>
+                                        <option value="user4">Prof. Dr. Rana KİBAR -A </option>
+                                        <option value="user5">>Prof. Dr. Oktay ÜÇER</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="nameInput" class="form-label"
+                                        style="margin-left: 10px;margin-top: 10px;">İsim Soyisim</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input style="margin-bottom: 10px;" type="text" class="form-control" required
+                                        name="customer_name" placeholder="Randevuyu talep eden kişi">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="topInput" class="form-label" style="margin-left: 10px;">Konusu</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control" required name="konu"
+                                        placeholder="Talep Konusu">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="dateInput" class="form-label" style="margin-left: 10px;">Tarih</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="date" required name="joining_date" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label" style="margin-left: 10px;"> Başlangıç
+                                        Saati</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="time" class="form-control" required name="start_time">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="timeInput" class="form-label" style="margin-left: 10px;">Bitiş
+                                        Saati</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input type="time" required class="form-control" name="end_time">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3">
+                                    <label for="status-field" class="form-label"
+                                        style="margin-left: 10px;">Durum</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <select class="form-control" data-trigger name="status" required>
+
+                                        <option value="Active">Aktif</option>
+                                        <option value="Block">İptal Edildi</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Kaydet</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                id="btn-close"></button>
+                        </div>
+
+                        -
+                    </div>
+                </div>
+            </div>
+            <!--end modal -->
+
+        </div>
+        <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+
+    {% block footer %}
+    {% include "partials/footer.html" %}
+    {% endblock footer %}
+</div>
+<!-- end main content-->
+{% endblock content %}
+{% block extra_js %}
+<!-- prismjs plugin -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+<!-- DataTables JS -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+<!-- DataTables script -->
+<script>
+    var table = new DataTable('#customerTable', {
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/tr.json',
+        },
+        
+
+
+    });
+</script>
+
+<script src="{% static 'libs/prismjs/prism.js'%}"></script>
+<script src="{% static 'libs/list.js/dist/list.min.js'%}"></script>
+
+
+
+<script>
+    // 4 saniye sonra alert'i kapat
+    setTimeout(function() {
+        $('#errorAlert').alert('close');
+    }, 4000);
+</script>
+
+<!-- Sweet Alerts js -->
+<script src="{% static 'libs/sweetalert2/sweetalert2.min.js' %}"></script>
+{% endblock extra_js %}

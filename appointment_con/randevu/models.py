@@ -13,7 +13,7 @@ class Customer(models.Model):
     start_time = models.TimeField(null=True, blank=True, default=None)
     end_time = models.TimeField(null=True, blank=True, default=None)
     joining_date = models.DateField()
-    status = models.CharField(max_length=20, choices=[('Active', 'Aktif'), ('Block', 'İptal Edildi')])
+    status = models.CharField(max_length=20, choices=[('Active', 'Aktif'), ('Block', 'İptal Edildi'),('Pasive', 'Pasife Çekildi')])
     admin_add_name = models.CharField(max_length=200,choices=[('mustakilban', 'M.Müştak İLBAN'),('nurdagülertürk','Nurdagül ERTÜRK'),('pelinkosan','Pelin KOŞAN'),('aysunokumus','Aysun OKUMUŞ'),('baharkocer','Bahar Koçer')])
     admin_group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True)
     deleted = models.BooleanField(default=False)
@@ -22,7 +22,7 @@ class Customer(models.Model):
     deleted_time = models.DateTimeField(null=True, blank=True)
     institution_name = models.CharField(max_length=200)
     contact= models.TextField()
-    status_description = models.TextField()
+    status_description = models.TextField(blank=True)
     type = models.CharField(max_length=20, choices=[('Face_to_face', 'Yüz Yüze'), ('Phone', 'Telefon')])
     appointment_type= models.CharField(max_length=20, choices=[('İnside', 'İç Randevu'), ('Outside', 'Dış Randevu')])
     
@@ -39,7 +39,7 @@ class Event(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     deleted = models.BooleanField(default=False)
-    
+    status_description = models.TextField()    
 
     def __str__(self):
         return f"{self.event_name} "
@@ -49,7 +49,7 @@ class Meet (models.Model):
     institution_name = models.TextField()
     contact = models.DateField()
     konu = models.DateField()
-    status = models.CharField(max_length=20, choices=[('Active', 'Aktif'), ('Block', 'İptal Edildi')])
+    status = models.CharField(max_length=20, choices=[('Active', 'Aktif'), ('Block', 'İptal Edildi'),('Block', 'İptal Edildi')])
     status_description = models.TextField()
     
 

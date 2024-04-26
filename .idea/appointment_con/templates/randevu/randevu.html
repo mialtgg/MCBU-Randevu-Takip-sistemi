@@ -1,0 +1,251 @@
+{% extends "partials/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<!-- Sweet Alert css-->
+<link href="{% static 'libs/sweetalert2/dist/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock extra_css %}
+{% block content %}
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+
+<style>
+    body {
+        overflow: hidden;
+    }
+</style>
+<!-- customer_count.html -->
+<div class="main-content d-flex justify-content-center mt-4  " style="margin-bottom: 0%;">
+    <div class="col-xl-3 col-md-6">
+        <div class="card card-animate bg-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="fw-medium text-white-50 mb-0">Bugünkü Toplantı sayınız :</p>
+                        <h2 class="mt-4 ff-secondary fw-semibold text-white">Bugün {{ todayCount }} toplantınız var</h2>
+                    </div>
+                    <div>
+                        <div class="avatar-sm flex-shrink-0">
+                            <span class="avatar-title bg-white bg-opacity-25 rounded-circle fs-2">
+                                <i data-feather="clock" class="text-white"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end card body -->
+        </div> <!-- end card-->
+    </div> <!-- end col-->
+
+</div>
+<div class="main-content" style="margin-bottom: 0% margirn-bottom=0;">
+ 
+    <div class="page-content" style="margin-bottom: 0%;">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title mb-0"><b>Randevu Oluştur</b></h4>
+                        </div><!-- end card header -->
+
+
+
+                        <form method="post" action="{% url 'randevu' %}">
+                            {% csrf_token %}
+                            {% if messages %}
+                            <div id="errorAlert" class="alert alert-primary"col-lg-9 role="alert">
+                                <ul class="list-unstyled mb-0">
+                                    {% for message in messages %}
+                                        <li>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                               
+                            </div>
+                        {% endif %}
+                            
+
+
+                            <input type="hidden" name="admin_add_name" value="{{ request.user.get_full_name }}">
+
+                            <!-- İsim Soyisim -->
+                            <div class="row mb-3 mt-3" style="margin-left: 10px;">
+                                <div class="col-lg-2">
+                                    <label for="nameInput" class="form-label">İsim Soyisim</label>
+                                </div>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" name="customer_name"
+                                        placeholder="Randevu Talep Eden Kişi" required>
+                                </div>
+                            </div>
+
+                            <!-- Talep Konusu -->
+                            <div class="row mb-3 mt-3" style="margin-left: 10px;">
+                                <div class="col-lg-2">
+                                    <label for="topInput" class="form-label">Talep Konusu</label>
+                                </div>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" name="description" placeholder="Talep Konusu"
+                                        required>
+                                </div>
+                            </div>
+
+                            <!-- Tarih -->
+                            <div class="row mb-3" style="margin-left: 10px;">
+                                <div class="col-lg-2">
+                                    <label for="dateInput" class="form-label">Tarih</label>
+                                </div>
+                                <div class="col-lg-10">
+                                    <input type="date" name="joining_date" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <!-- Başlangıç Saati -->
+                            <div class="row mb-3" style="margin-left: 10px;">
+                                <div class="col-lg-2">
+                                    <label for="timeInput" class="form-label">Başlangıç Saati</label>
+                                </div>
+                                <div class="col-lg-10">
+                                    <input type="time" class="form-control" name="start_time" required>
+                                </div>
+                            </div>
+
+                            <!-- Bitiş Saati -->
+                            <div class="row mb-3" style="margin-left: 10px;">
+                                <div class="col-lg-2">
+                                    <label for="timeInput" class="form-label">Bitiş Saati</label>
+                                </div>
+                                <div class="col-lg-10">
+                                    <input type="time" class="form-control" name="end_time" required>
+                                </div>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="row mb-3" style="margin-left: 10px;">
+                                <div class="col-lg-2">
+                                    <label for="status-field" class="form-label">Durum</label>
+                                </div>
+                                <div class="col-lg-10">
+                                    <select class="form-control" data-trigger name="status" required>
+                                        <option value="Active">Aktif</option>
+                                        <option value="Block">İptal Edildi</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+                            <!-- Submit Button -->
+                            <div class="text-center mb-3">
+                                <button type="submit" class="btn btn-primary">Randevu Oluştur</button>
+                            </div>
+                        </form>
+
+
+
+                    </div>
+                    <!-- end col -->
+                </div>
+                <!-- end col -->
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    var form = document.getElementById('customerForm'); // Formun ID'si ile değiştirin
+                    if (form) {
+                        form.addEventListener('submit', function (event) {
+                            event.preventDefault();
+
+                            var modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+                            modal.show();
+                        });
+                    }
+                });
+            </script>
+            <!-- end row -->
+
+            <!-- end row -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!--end modal -->
+
+        </div>
+        <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+
+    {% block footer %}
+    {% include "partials/footer.html" %}
+    {% endblock footer %}
+</div>
+<!-- end main content-->
+{% endblock content %}
+{% block extra_js %}
+<!-- jQuery kütüphanesini ekleyin -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+
+
+<!-- JavaScript kodlarınız -->
+<script>
+    $(document).ready(function () {
+        // Müşteri Ekle butonuna tıklandığında
+        $("#add-btn").click(function () {
+            // Form verilerini al
+            var formData = $(".tablelist-form").serialize();
+            console.log(data)
+            // AJAX isteği gönder
+            $.ajax({
+
+                type: "POST",
+                url: "/django-view-url/",  // Django görünüm URL'nizi buraya ekleyin
+
+                data: formData,
+                success: function (data) {
+                    console.log(data);  // Sunucudan gelen yanıtı konsola yazdır
+                    // İsteğe bağlı olarak yanıtı işleyebilir veya kullanıcıyı yönlendirebilirsiniz
+                },
+                error: function (error) {
+                    console.log("Hata:", error);
+                }
+            });
+        });
+    });
+
+</script>
+
+<!-- prismjs plugin -->
+<script src="{% static 'libs/prismjs/prism.js'%}"></script>
+<script src="{% static 'libs/list.js/list.min.js'%}"></script>
+<script src="{% static 'libs/list.pagination.js/dist/list.pagination.min.js'%}"></script>
+
+<!-- listjs init -->
+<script src="{% static 'js/pages/listjs.init.js' %}"></script>
+<!-- Sweet Alerts js -->
+<script src="{% static 'libs/sweetalert2/dist/sweetalert2.min.js' %}"></script>
+
+<script>
+    // 4 saniye sonra alert'i kapat
+    setTimeout(function() {
+        $('#errorAlert').alert('close');
+    }, 4000);
+</script>
+{% endblock extra_js %}
