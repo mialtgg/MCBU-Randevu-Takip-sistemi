@@ -73,7 +73,7 @@
                       
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{% url 'schedule_appointments' %}" >
-                                <i class=" bx bx-list-ol"></i> <span data-key="t-widgets">Planlanacak Toplantlar</span>
+                                <i class=" bx bx-list-ol"></i> <span data-key="t-widgets">Planlanacak Toplantılar</span>
                             </a>
                         </li>
                        
@@ -95,7 +95,13 @@
                                 <i class=" bx bx-street-view"></i> <span data-key="t-widgets">Log Kayıtları</span>
                             </a>
                         </li>
-                    {% endif %}
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link menu-link"  href="{% url 'password_change' %}" >
+                                <i class="  bx bx-cog"></i> <span data-key="t-widgets">Şifremi Değiştir</span>
+                            </a>
+                        </li>
+                    
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{% url 'logout' %}" >
                                 <i class=" bx bx-log-out-circle"></i> <span data-key="t-widgets">Çıkış Yap</span>

@@ -1,5 +1,7 @@
 import json
 import calendar
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from datetime import date, timezone
@@ -34,6 +36,10 @@ from django.shortcuts import render
 from .models import Customer
 from .forms import CustomerForm
 from django.db.models import Q
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 
 def all_appointments_view(request):
     user_id=request.user.id
@@ -839,7 +845,7 @@ def export_to_excel_admin_datatable(request):
      # Sadece silinmemiş randevuları al
     user_id = request.user.id
      
-    queryset = Customer.objects.filter(deleted=False, user_id=user_id)
+    queryset = Customer.objects.filter(deleted=False)
 
     selected_fields = ['user','customer_name', 'description', 'institution_name', 'contact', 'joining_date', 'status', 'status_description','type','appointment_type']
     filtered_queryset = queryset.values(*selected_fields)
@@ -988,4 +994,8 @@ def delete_event(request, event_id):
 
 def is_admin(user):
     return user.is_authenticated and user.is_staff
+
+
+
+    
    

@@ -1,6 +1,10 @@
 from . import views
 from django.urls import path
 from .views import *
+from django.urls import path
+
+
+
 
 urlpatterns = [
     path('randevuekle/', randevu_view, name='randevu'),
@@ -21,6 +25,7 @@ urlpatterns = [
     path('schedule_appointment/',schedule_appointment_view,name='schedule_appointments'),
     path('edit_events/<int:event_id>/', edit_events, name='edit_events'),
     path('delete_event/<int:event_id>/', delete_event, name='delete_event'),
+   
     
 ]
 

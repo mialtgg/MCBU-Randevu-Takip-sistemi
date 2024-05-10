@@ -271,9 +271,10 @@
                                     <label for="status_descriptionInput" class="form-label">Açıklama</label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control" name="status_description"  value="{{ event2.status_description }}" placeholder="Açıklama">
+                                    <input type="text" class="form-control" name="status_description" value="{{ event2.status_description }}" placeholder="Açıklama">
                                 </div>
                             </div>
+                            
                             
                             <div class="text-center">
                                 <button type="submit" class="btn btn-success">Kaydet</button>
@@ -285,66 +286,7 @@
             {%endfor%}
 
 
-            {% for event2 in events %}
-            <div class="modal fade" id="showModal{{event2.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header bg-light p-3">
-                            <h5 class="modal-title" id="exampleModalLabel"></h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
-                        </div>
-                        <form method="post" action="{% url 'edit_events' event2.id %}">
-                            {% csrf_token %}
-        
-                            <div class="row mb-3">
-                                <div class="col-lg-3">
-                                    <label for="nameInput" class="form-label">Toplantı İsmi</label>
-                                </div>
-                                <div class="col-lg-9">
-                                    <input type="text" class="form-control" name="event_name" value="{{ event2.event_name }}" placeholder="Enter your name">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-lg-3">
-                                    <label for="participationsInput" class="form-label">Katılımcılar</label>
-                                </div>
-                                <div class="col-lg-9">
-                                    <input type="text" class="form-control" name="participations" value="{{ event2.participations }}" placeholder="Enter participations">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-lg-3">
-                                    <label for="startDateInput" class="form-label"> Başlangıç Tarihi</label>
-                                </div>
-                                <div class="col-lg-9">
-                                    <input type="date" name="start_date" value="{{ event2.start_date }}">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-lg-3">
-                                    <label for="endDateInput" class="form-label">Bitiş Tarihi</label>
-                                </div>
-                                <div class="col-lg-9">
-                                    <input type="date" name="end_date" value="{{ event2.end_date }}">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-lg-3">
-                                    <label for="status_descriptionInput" class="form-label">Açıklama</label>
-                                </div>
-                                <div class="col-lg-9">
-                                    <input type="date" name="status_description" value="{{ event2.status_description}}">
-                                </div>
-                            </div>
-        
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-success">Kaydet</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
+         
         
 
             <!-- Modal -->
